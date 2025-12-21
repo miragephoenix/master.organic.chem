@@ -138,4 +138,16 @@ const reactionDatabase = [
     warning: "⚠️ Stronger base than alc. KOH. Necessary to pull off the second Hydrogen to form the triple bond.",
     notes: ["Used to 'Step-up' to an alkyne from an alkene (after bromination).", "Commonly used in conversion sequences."]
   },
+  { 
+  reagent: "Acidic Strength Orders", 
+  name: "GOC Concept",
+  function: "Comparing Stability of Conjugate Bases", 
+  warning: "⚠️ Remember: -I and -M groups increase acidity; +I and +M groups decrease it.",
+  notes: [
+    "Picric Acid > Formic Acid > Benzoic Acid > Acetic Acid",
+    "Phenol is more acidic than Alcohols due to resonance in Phenoxide ion.",
+    "Ortho-effect: Ortho-substituted benzoic acids are usually stronger than benzoic acid."
+  ]
+}
 ];
+
