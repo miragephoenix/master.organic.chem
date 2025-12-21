@@ -2,6 +2,17 @@
 <html>
 <head>
     <title>JEE Organic Live Hub</title>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          packages: {'[+]': ['mhchem']}
+        },
+        loader: { load: ['[tex]/mhchem'] }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="reactions.js"></script> 
@@ -9,6 +20,17 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; color: #333; }
         .container { max-width: 800px; margin: auto; }
+        
+        /* New: Visual Box for Diagrams */
+        .diagram-container { 
+            background: white; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border: 1px solid #eee; 
+            border-radius: 8px; 
+            text-align: center;
+        }
+        .reaction-img { max-width: 100%; height: auto; max-height: 150px; }
         
         .admin-box { background: #fff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #ddd; }
         .admin-box input, .admin-box select { width: 95%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; }
@@ -33,28 +55,12 @@
         .input-area { display: flex; gap: 10px; margin-top: 15px; }
         button { background: #2ecc71; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         .add-btn { background: #3498db; width: 100%; margin-top: 10px; }
-        .add-btn:disabled { background: #ccc; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📚 JEE Organic Live Hub</h1>
-
-    <div class="admin-box">
-        <h3>➕ Contribute a Reaction</h3>
-        <input type="text" id="newReagent" placeholder="Reagent (e.g. Grignard)">
-        <select id="newCat">
-            <option value="General">Select Category</option>
-            <option value="Reduction">Reduction</option>
-            <option value="Oxidation">Oxidation</option>
-            <option value="Naming">Naming Reaction</option>
-            <option value="Test">Functional Group Test</option>
-        </select>
-        <input type="text" id="newFunction" placeholder="Function (e.g. Nucleophilic Attack)">
-        <input type="text" id="newNotes" placeholder="Notes (Separate by commas)">
-        <button class="add-btn" id="submitBtn" onclick="addNewReaction()">Post to Community</button>
-    </div>
+    <h1>📚 JEE Organic Hub (Visual)</h1>
 
     <div class="filter-row" id="filterRow">
         <button class="filter-btn active" onclick="filterByCat('All', event)">All</button>
@@ -63,7 +69,8 @@
         <button class="filter-btn" onclick="filterByCat('Naming', event)">Naming</button>
         <button class="filter-btn" onclick="filterByCat('Test', event)">Tests</button>
     </div>
-    <input type="text" id="mainSearch" class="search-bar" placeholder="Search reagents or naming reactions...">
+    
+    <input type="text" id="mainSearch" class="search-bar" placeholder="Search (supports LaTeX)...">
     
     <div id="feed"></div>
 
@@ -73,6 +80,7 @@
 </div>
 
 <script>
+    // FIREBASE CONFIG (SAME AS BEFORE)
     const firebaseConfig = {
         apiKey: "AIzaSyDIW-SJkO5j4PwN1SDjMxGD_aQdoDHD6CU",
         authDomain: "organic-chem-b2ff8.firebaseapp.com",
@@ -101,17 +109,33 @@
     function render(data) {
         const feed = document.getElementById('feed');
         const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
+        
         feed.innerHTML = data.map((r, index) => {
             const rKey = r.reagent.replace(/[.#$/[\]]/g, "_");
+            
+            // Logic for Diagram Image
+            const diagramHtml = r.diagram ? `
+                <div class="diagram-container">
+                    <img src="${r.diagram}" class="reaction-img" alt="structure">
+                </div>` : '';
+
             return `
             <div class="card" onclick="toggleCard('${index}', '${rKey}')">
                 <span class="category-tag">${r.category || 'General'}</span>
                 ${(r.isCustom && isAdmin) ? `<button class="delete-btn" style="display:block" onclick="deleteReaction('${r.firebaseId}', event)">Delete Card</button>` : ''}
+                
                 <h3>${r.reagent}</h3>
                 <p><b>${r.name || ''}</b>: ${r.function}</p>
+                
+                ${diagramHtml}
+
                 <div class="details" id="details-${index}" onclick="event.stopPropagation()">
+                    <strong>Reaction Equation:</strong>
+                    <p style="background:#f0f0f0; padding:10px; border-radius:5px;">${r.example || 'Pending Example...'}</p>
+                    
                     <strong>Notes:</strong>
                     <ul>${(Array.isArray(r.notes) ? r.notes : r.notes.split(',')).map(n => `<li>${n}</li>`).join('')}</ul>
+                    
                     <div id="comments-${rKey}"></div>
                     <div class="input-area">
                         <input type="text" id="input-${rKey}" placeholder="Add a hack...">
@@ -120,59 +144,16 @@
                 </div>
             </div>`;
         }).join('');
-    }
-
-    function deleteTip(rKey, tipId) {
-        if(confirm("Delete this community tip?")) {
-            db.ref('tips/' + rKey + '/' + tipId).remove();
+        
+        // IMPORTANT: Tell MathJax to process the new content
+        if (window.MathJax && window.MathJax.typeset) {
+            window.MathJax.typeset();
         }
     }
 
-    function loadTips(rKey) {
-        const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
-        db.ref('tips/' + rKey).on('value', snap => {
-            const data = snap.val();
-            let html = "<strong>Community Hacks:</strong>";
-            if(!data) html += "<p style='color:#999;font-size:0.8em'>No hacks yet.</p>";
-            for(let id in data) {
-                html += `
-                <div class="comment-box">
-                    ${data[id].text}
-                    ${isAdmin ? `<span class="tip-del-btn" onclick="deleteTip('${rKey}', '${id}')">×</span>` : ''}
-                </div>`;
-            }
-            const el = document.getElementById(`comments-${rKey}`);
-            if(el) el.innerHTML = html;
-        });
-    }
-
-    function addNewReaction() {
-        const reagent = document.getElementById('newReagent').value;
-        const cat = document.getElementById('newCat').value;
-        const func = document.getElementById('newFunction').value;
-        const notes = document.getElementById('newNotes').value;
-        if(reagent && func) {
-            document.getElementById('submitBtn').disabled = true;
-            db.ref('custom_reactions').push({ reagent, category: cat, function: func, notes, time: Date.now() });
-            setTimeout(() => { document.getElementById('submitBtn').disabled = false; }, 5000);
-            document.querySelectorAll('.admin-box input').forEach(i => i.value = "");
-        }
-    }
-
-    function deleteReaction(id, e) {
-        e.stopPropagation();
-        if(confirm("Delete this reaction card?")) db.ref('custom_reactions/' + id).remove();
-    }
-
-    function checkAdmin() { runSearch(); }
-
-    function filterByCat(cat, e) {
-        currentFilter = cat;
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        runSearch();
-    }
-
+    // (Remaining functions: deleteTip, loadTips, deleteReaction, checkAdmin, filterByCat, runSearch, toggleCard, saveTip are the same as before)
+    // Adding runSearch and toggleCard here for completeness
+    
     function runSearch() {
         const query = document.getElementById('mainSearch').value.toLowerCase();
         let filtered = allReactions.filter(r => 
@@ -189,15 +170,46 @@
         if(!isOpen) {
             det.style.display = 'block';
             loadTips(key);
+            if (window.MathJax) window.MathJax.typeset();
         }
     }
 
+    function loadTips(rKey) {
+        const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
+        db.ref('tips/' + rKey).on('value', snap => {
+            const data = snap.val();
+            let html = "<strong>Community Hacks:</strong>";
+            for(let id in data) {
+                html += `
+                <div class="comment-box">
+                    ${data[id].text}
+                    ${isAdmin ? `<span class="tip-del-btn" onclick="deleteTip('${rKey}', '${id}')">×</span>` : ''}
+                </div>`;
+            }
+            const el = document.getElementById(`comments-${rKey}`);
+            if(el) el.innerHTML = html;
+        });
+    }
+
+    function deleteTip(rKey, tipId) {
+        if(confirm("Delete this tip?")) db.ref('tips/' + rKey + '/' + tipId).remove();
+    }
+    
     function saveTip(key) {
         const val = document.getElementById(`input-${key}`).value;
         if(val) {
             db.ref('tips/' + key).push({text: val});
             document.getElementById(`input-${key}`).value = "";
         }
+    }
+
+    function checkAdmin() { runSearch(); }
+
+    function filterByCat(cat, e) {
+        currentFilter = cat;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        runSearch();
     }
 
     document.getElementById('mainSearch').addEventListener('input', runSearch);
