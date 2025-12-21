@@ -146,5 +146,15 @@ const reactionDatabase = [
       "Anti-aromatic: 4n pi electrons (4, 8, 12...).",
       "Non-aromatic: If planarity/conjugation fails."
     ]
-  }
+  },
+  { 
+  reagent: "\\(\\ce{NaOH + CO2}\\)", 
+  name: "Kolbe's Reaction",
+  category: "Naming",
+  function: "Phenol \\(\\rightarrow\\) Salicylic Acid", 
+  example: "\\(\\ce{C6H5OH ->[NaOH] C6H5ONa ->[CO2][H+] C6H4(OH)COOH}\\)",
+  diagram: "https://upload.wikimedia.org/wikipedia/commons/b/b8/Salicylic_acid_structure.svg",
+  notes: ["Occurs at 125°C and 4-7 atm.", "Intermediate is Sodium Phenoxide."]
+}
 ];
+
