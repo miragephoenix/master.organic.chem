@@ -149,5 +149,17 @@ const reactionDatabase = [
     "Ortho-effect: Ortho-substituted benzoic acids are usually stronger than benzoic acid."
   ]
 }
+  { 
+  reagent: "Huckel's Rule (4n + 2)", 
+  name: "Aromaticity Test",
+  function: "Is it Aromatic, Anti-aromatic, or Non-aromatic?", 
+  warning: "⚠️ Must be Planar, Cyclic, and fully Conjugated first!",
+  notes: [
+    "Aromatic: 4n + 2 pi electrons (2, 6, 10, 14...). Extremely stable.",
+    "Anti-aromatic: 4n pi electrons (4, 8, 12...). Very unstable.",
+    "Non-aromatic: If any condition (planarity/conjugation) fails."
+  ]
+}
 ];
+
 
