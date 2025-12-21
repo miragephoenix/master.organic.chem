@@ -153,8 +153,9 @@ const reactionDatabase = [
   category: "Naming",
   function: "Phenol \\(\\rightarrow\\) Salicylic Acid", 
   example: "\\(\\ce{C6H5OH ->[NaOH] C6H5ONa ->[CO2][H+] C6H4(OH)COOH}\\)",
-  diagram: "https://upload.wikimedia.org/wikipedia/commons/b/b8/Salicylic_acid_structure.svg",
+  diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=338&t=l",
   notes: ["Occurs at 125°C and 4-7 atm.", "Intermediate is Sodium Phenoxide."]
 }
 ];
+
 
