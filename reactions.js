@@ -147,8 +147,8 @@ const reactionDatabase = [
     "Picric Acid > Formic Acid > Benzoic Acid > Acetic Acid",
     "Phenol is more acidic than Alcohols due to resonance in Phenoxide ion.",
     "Ortho-effect: Ortho-substituted benzoic acids are usually stronger than benzoic acid."
-  ]
-}
+  
+},
   { 
   reagent: "Huckel's Rule (4n + 2)", 
   name: "Aromaticity Test",
@@ -158,8 +158,9 @@ const reactionDatabase = [
     "Aromatic: 4n + 2 pi electrons (2, 6, 10, 14...). Extremely stable.",
     "Anti-aromatic: 4n pi electrons (4, 8, 12...). Very unstable.",
     "Non-aromatic: If any condition (planarity/conjugation) fails."
-  ]
-}
+
+},
 ];
+
 
 
