@@ -27,7 +27,6 @@ const reactionDatabase = [
     warning: "⚠️ Avoid if the molecule has base-sensitive groups.",
     notes: ["The 'Base' version of Clemmensen.", "High temperature is required."]
   },
-  // ... keep your previous entries and add these:
   { 
     reagent: "CHCl3 + aq. NaOH", 
     name: "Reimer-Tiemann Reaction",
@@ -49,7 +48,6 @@ const reactionDatabase = [
     warning: "⚠️ Temperature must be below 5°C. If it gets warm, Phenol is formed instead!",
     notes: ["The diazonium salt is a 'gateway' to Chlorobenzene, Iodobenzene, etc.", "Crucial for Sandmeyer and Gattermann reactions."]
   },
- 
   { 
     reagent: "Br2 + NaOH (or NaOBr)", 
     name: "Hoffmann Bromamide Degradation",
@@ -71,8 +69,6 @@ const reactionDatabase = [
     warning: "⚠️ If you use Cu powder instead of CuCl, it's called the Gattermann Reaction.",
     notes: ["Better yield than Gattermann.", "Can be used to introduce Cl, Br, or CN into the ring."]
   },
- 
-  // ... your existing entries
   { 
     reagent: "FeCl3 (Neutral)", 
     name: "Ferric Chloride Test",
@@ -92,78 +88,63 @@ const reactionDatabase = [
     name: "Sodium Metal Test",
     function: "Active H (Alcohols/Acids) → H2 Gas (Effervescence)", 
     warning: "⚠️ Dangerous! Reacts violently with moisture. Don't use for wet samples.",
-    notes: ["Tests for any acidic hydrogen (Alcohols, Phenols, Carboxylic acids, Terminal alkynes).", "Bubbles of Hydrogen gas confirm the presence of active H."]
+    notes: ["Tests for any acidic hydrogen.", "Bubbles of Hydrogen gas confirm the presence of active H."]
   },
-
-  // ... your existing entries
   { 
     reagent: "Dilute NaOH", 
     name: "Aldol Condensation",
     function: "Aldehyde/Ketone → Beta-Hydroxy Carbonyl", 
-    warning: "⚠️ Requires at least one Alpha-Hydrogen! If there is no alpha-H, it won't work.",
+    warning: "⚠️ Requires at least one Alpha-Hydrogen!",
     notes: ["Intermediate is an Enolate ion.", "On heating, it loses water to give an unsaturated product."]
   },
   { 
     reagent: "Conc. NaOH (50%)", 
     name: "Cannizzaro Reaction",
     function: "Aldehyde → Alcohol + Carboxylic Acid Salt", 
-    warning: "⚠️ Only for Aldehydes with NO Alpha-Hydrogen (like Benzaldehyde or Formaldehyde).",
-    notes: ["Disproportionation reaction: one molecule is oxidized, one is reduced.", "No Beta-hydroxy product here."]
-  },
-  { 
-    reagent: "CHCl3 + NaOH + Phenol", 
-    name: "Reimer-Tiemann Reaction",
-    function: "Phenol → Salicylaldehyde", 
-    warning: "⚠️ Active species is Dichlorocarbene (:CCl2). High yield of ortho-isomer.",
-    notes: ["Used to introduce a -CHO group onto a phenol ring.", "One of the most important reactions for JEE."]
+    warning: "⚠️ Only for Aldehydes with NO Alpha-Hydrogen.",
+    notes: ["Disproportionation reaction.", "One molecule is oxidized, one is reduced."]
   },
   { 
     reagent: "Lindlar's Catalyst (Pd/CaCO3 + Quinoline)", 
     name: "Partial Hydrogenation",
     function: "Alkyne → Cis-Alkene", 
-    warning: "⚠️ Only gives the CIS isomer. If you want the TRANS isomer, use Na/Liquid NH3 (Birch Reduction).",
-    notes: ["Controlled reduction—doesn't go all the way to Alkane.", "Quinoline acts as a poison to stop the reaction at the alkene stage."]
+    warning: "⚠️ Only gives the CIS isomer.",
+    notes: ["Controlled reduction.", "Quinoline acts as a poison to stop the reaction."]
   },
   { 
     reagent: "Hot Acidic KMnO4", 
     name: "Oxidative Ozonolysis Equivalent",
     function: "Alkene → Carboxylic Acid / Ketone", 
-    warning: "⚠️ Very strong! It breaks the C=C bond completely and oxidizes the carbons to their highest state.",
+    warning: "⚠️ Very strong oxidative cleavage!",
     notes: ["Terminal =CH2 becomes CO2.", "Internal -CH= becomes -COOH."]
   },
   { 
     reagent: "NaNH2 (2 equivalents)", 
     name: "Dehydrohalogenation",
     function: "Vicinal Dihalide → Alkyne", 
-    warning: "⚠️ Stronger base than alc. KOH. Necessary to pull off the second Hydrogen to form the triple bond.",
-    notes: ["Used to 'Step-up' to an alkyne from an alkene (after bromination).", "Commonly used in conversion sequences."]
+    warning: "⚠️ Stronger base than alc. KOH.",
+    notes: ["Used to 'Step-up' to an alkyne.", "Commonly used in conversion sequences."]
   },
   { 
-  reagent: "Acidic Strength Orders", 
-  name: "GOC Concept",
-  function: "Comparing Stability of Conjugate Bases", 
-  warning: "⚠️ Remember: -I and -M groups increase acidity; +I and +M groups decrease it.",
-  notes: [
-    "Picric Acid > Formic Acid > Benzoic Acid > Acetic Acid",
-    "Phenol is more acidic than Alcohols due to resonance in Phenoxide ion.",
-    "Ortho-effect: Ortho-substituted benzoic acids are usually stronger than benzoic acid."
-  
-},
-{ 
-  reagent: "Huckel's Rule (4n + 2)", 
-  name: "Aromaticity Test",
-  function: "Is it Aromatic, Anti-aromatic, or Non-aromatic?", 
-  warning: "⚠️ Must be Planar, Cyclic, and fully Conjugated first!",
-  notes: [
-    "Aromatic: 4n + 2 pi electrons (2, 6, 10, 14...). Extremely stable.",
-    "Anti-aromatic: 4n pi electrons (4, 8, 12...). Very unstable.",
-    "Non-aromatic: If any condition (planarity/conjugation) fails."
-
-}
+    reagent: "Acidic Strength Orders", 
+    name: "GOC Concept",
+    function: "Comparing Stability of Conjugate Bases", 
+    warning: "⚠️ Remember: -I and -M groups increase acidity.",
+    notes: [
+      "Picric Acid > Formic Acid > Benzoic Acid > Acetic Acid",
+      "Phenol is more acidic than Alcohols due to resonance.",
+      "Ortho-effect: Substituted benzoic acids are usually stronger."
+    ]
+  },
+  { 
+    reagent: "Huckel's Rule (4n + 2)", 
+    name: "Aromaticity Test",
+    function: "Is it Aromatic, Anti-aromatic, or Non-aromatic?", 
+    warning: "⚠️ Must be Planar, Cyclic, and fully Conjugated first!",
+    notes: [
+      "Aromatic: 4n + 2 pi electrons (2, 6, 10, 14...).",
+      "Anti-aromatic: 4n pi electrons (4, 8, 12...).",
+      "Non-aromatic: If planarity/conjugation fails."
+    ]
+  }
 ];
-
-
-
-
-
-
