@@ -159,8 +159,10 @@ const reactionDatabase = [
     "Anti-aromatic: 4n pi electrons (4, 8, 12...). Very unstable.",
     "Non-aromatic: If any condition (planarity/conjugation) fails."
 
-},
+}
 ];
+
+
 
 
 
