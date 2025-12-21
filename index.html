@@ -74,5 +74,133 @@
 
 <script>
     const firebaseConfig = {
-        apiKey: "AIzaSy
-            
+        apiKey: "AIzaSyDIW-SJkO5j4PwN1SDjMxGD_aQdoDHD6CU",
+        authDomain: "organic-chem-b2ff8.firebaseapp.com",
+        projectId: "organic-chem-b2ff8",
+        databaseURL: "https://organic-chem-b2ff8-default-rtdb.firebaseio.com",
+        storageBucket: "organic-chem-b2ff8.firebasestorage.app",
+        messagingSenderId: "799844686854",
+        appId: "1:799844686854:web:b9014316afd5ba5233f787"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let allReactions = [];
+    let currentFilter = 'All';
+    const MY_SECRET = "JEE2025"; 
+
+    db.ref('custom_reactions').on('value', (snapshot) => {
+        const data = snapshot.val();
+        const customOnes = [];
+        for(let id in data) customOnes.push({...data[id], firebaseId: id, isCustom: true});
+        allReactions = [...reactionDatabase.map(r => ({...r, isCustom: false})), ...customOnes];
+        runSearch();
+    });
+
+    function render(data) {
+        const feed = document.getElementById('feed');
+        const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
+        feed.innerHTML = data.map((r, index) => {
+            const rKey = r.reagent.replace(/[.#$/[\]]/g, "_");
+            return `
+            <div class="card" onclick="toggleCard('${index}', '${rKey}')">
+                <span class="category-tag">${r.category || 'General'}</span>
+                ${(r.isCustom && isAdmin) ? `<button class="delete-btn" style="display:block" onclick="deleteReaction('${r.firebaseId}', event)">Delete Card</button>` : ''}
+                <h3>${r.reagent}</h3>
+                <p><b>${r.name || ''}</b>: ${r.function}</p>
+                <div class="details" id="details-${index}" onclick="event.stopPropagation()">
+                    <strong>Notes:</strong>
+                    <ul>${(Array.isArray(r.notes) ? r.notes : r.notes.split(',')).map(n => `<li>${n}</li>`).join('')}</ul>
+                    <div id="comments-${rKey}"></div>
+                    <div class="input-area">
+                        <input type="text" id="input-${rKey}" placeholder="Add a hack...">
+                        <button onclick="saveTip('${rKey}')">Post</button>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function deleteTip(rKey, tipId) {
+        if(confirm("Delete this community tip?")) {
+            db.ref('tips/' + rKey + '/' + tipId).remove();
+        }
+    }
+
+    function loadTips(rKey) {
+        const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
+        db.ref('tips/' + rKey).on('value', snap => {
+            const data = snap.val();
+            let html = "<strong>Community Hacks:</strong>";
+            if(!data) html += "<p style='color:#999;font-size:0.8em'>No hacks yet.</p>";
+            for(let id in data) {
+                html += `
+                <div class="comment-box">
+                    ${data[id].text}
+                    ${isAdmin ? `<span class="tip-del-btn" onclick="deleteTip('${rKey}', '${id}')">×</span>` : ''}
+                </div>`;
+            }
+            const el = document.getElementById(`comments-${rKey}`);
+            if(el) el.innerHTML = html;
+        });
+    }
+
+    function addNewReaction() {
+        const reagent = document.getElementById('newReagent').value;
+        const cat = document.getElementById('newCat').value;
+        const func = document.getElementById('newFunction').value;
+        const notes = document.getElementById('newNotes').value;
+        if(reagent && func) {
+            document.getElementById('submitBtn').disabled = true;
+            db.ref('custom_reactions').push({ reagent, category: cat, function: func, notes, time: Date.now() });
+            setTimeout(() => { document.getElementById('submitBtn').disabled = false; }, 5000);
+            document.querySelectorAll('.admin-box input').forEach(i => i.value = "");
+        }
+    }
+
+    function deleteReaction(id, e) {
+        e.stopPropagation();
+        if(confirm("Delete this reaction card?")) db.ref('custom_reactions/' + id).remove();
+    }
+
+    function checkAdmin() { runSearch(); }
+
+    function filterByCat(cat, e) {
+        currentFilter = cat;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        runSearch();
+    }
+
+    function runSearch() {
+        const query = document.getElementById('mainSearch').value.toLowerCase();
+        let filtered = allReactions.filter(r => 
+            (currentFilter === 'All' || r.category === currentFilter || (currentFilter === 'Naming' && r.name)) &&
+            (r.reagent.toLowerCase().includes(query) || r.function.toLowerCase().includes(query))
+        );
+        render(filtered);
+    }
+
+    function toggleCard(id, key) {
+        const det = document.getElementById(`details-${id}`);
+        const isOpen = det.style.display === 'block';
+        document.querySelectorAll('.details').forEach(d => d.style.display = 'none');
+        if(!isOpen) {
+            det.style.display = 'block';
+            loadTips(key);
+        }
+    }
+
+    function saveTip(key) {
+        const val = document.getElementById(`input-${key}`).value;
+        if(val) {
+            db.ref('tips/' + key).push({text: val});
+            document.getElementById(`input-${key}`).value = "";
+        }
+    }
+
+    document.getElementById('mainSearch').addEventListener('input', runSearch);
+</script>
+</body>
+</html>
