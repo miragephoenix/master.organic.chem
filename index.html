@@ -71,7 +71,24 @@
     </div>
     
     <input type="text" id="mainSearch" class="search-bar" placeholder="Search (supports LaTeX)...">
-    
+    <div id="adminPanel" style="display:none;" class="admin-box">
+    <h3>🛠️ Add New JEE Reaction</h3>
+    <input type="text" id="newName" placeholder="Reaction Name (e.g. Wurtz)">
+    <input type="text" id="newReagent" placeholder="Reagent (e.g. Na/Dry Ether)">
+    <input type="text" id="newFunction" placeholder="Function (e.g. Alkyl Halide -> Alkane)">
+    <input type="text" id="newExample" placeholder="LaTeX Equation (e.g. $\ce{R-X -> R-R}$)">
+    <input type="text" id="newWarning" placeholder="Warning (e.g. Fails for 3° halides)">
+    <input type="text" id="newDiagram" placeholder="Diagram URL (PubChem Link)">
+    <input type="text" id="newNotes" placeholder="Hacks (comma separated)">
+    <select id="newCat">
+        <option value="General">General</option>
+        <option value="Reduction">Reduction</option>
+        <option value="Oxidation">Oxidation</option>
+        <option value="Naming">Naming</option>
+        <option value="Tests">Tests</option>
+    </select>
+    <button class="add-btn" onclick="addReaction()">Upload to Firebase</button>
+</div>
     <div id="feed"></div>
 
     <div style="text-align: center; padding: 40px 20px;">
@@ -80,6 +97,38 @@
 </div>
 
 <script>
+    function addReaction() {
+    const reaction = {
+        name: document.getElementById('newName').value,
+        reagent: document.getElementById('newReagent').value,
+        function: document.getElementById('newFunction').value,
+        example: document.getElementById('newExample').value,
+        warning: document.getElementById('newWarning').value,
+        diagram: document.getElementById('newDiagram').value,
+        notes: document.getElementById('newNotes').value.split(','),
+        category: document.getElementById('newCat').value,
+        timestamp: Date.now()
+    };
+
+    db.ref('custom_reactions').push(reaction).then(() => {
+        alert("Reaction added successfully!");
+        // Clear inputs
+        ["newName", "newReagent", "newFunction", "newExample", "newWarning", "newDiagram", "newNotes"].forEach(id => {
+            document.getElementById(id).value = "";
+        });
+    });
+}
+
+// Ensure the Admin Panel shows up when the key is correct
+function checkAdmin() {
+    const panel = document.getElementById('adminPanel');
+    if (document.getElementById('adminKey').value === MY_SECRET) {
+        panel.style.display = 'block';
+    } else {
+        panel.style.display = 'none';
+    }
+    runSearch();
+}
     // FIREBASE CONFIG
     const firebaseConfig = {
         apiKey: "AIzaSyDIW-SJkO5j4PwN1SDjMxGD_aQdoDHD6CU",
@@ -237,6 +286,7 @@
 </script>
 </body>
 </html>
+
 
 
 
