@@ -1,0 +1,61 @@
+/* style.css */
+:root {
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-main: #333333;
+    --text-sub: #7f8c8d;
+    --border-color: #dddddd;
+    --accent: #2ecc71;
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-main: #e0e0e0;
+    --text-sub: #b0b0b0;
+    --border-color: #333333;
+}
+
+body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: var(--text-main); transition: 0.3s; margin: 0; padding: 20px; }
+.container { max-width: 800px; margin: auto; padding-bottom: 100px; position: relative; }
+
+/* The Modern Pill Buttons */
+.filter-row { 
+    display: flex; 
+    gap: 15px; 
+    margin-top: 20px; 
+    margin-bottom: 30px; 
+    overflow-x: auto; 
+    padding: 10px 5px;
+    scrollbar-width: none; 
+}
+.filter-row::-webkit-scrollbar { display: none; }
+
+.filter-btn { 
+    background: var(--card-bg); 
+    border: 2px solid var(--accent);
+    color: var(--accent); 
+    padding: 12px 24px;
+    border-radius: 50px;
+    cursor: pointer; 
+    white-space: nowrap; 
+    font-weight: 700; 
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.filter-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(46, 204, 113, 0.3);
+}
+
+.filter-btn.active { 
+    background: var(--accent); 
+    color: white; 
+}
+
+.card { background: var(--card-bg); color: var(--text-main); padding: 20px; margin-bottom: 15px; border-radius: 12px; border-left: 6px solid var(--accent); box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; position: relative; transition: 0.2s; }
+.search-bar { width: 100%; padding: 15px; border: 2px solid var(--border-color); background: var(--card-bg); color: var(--text-main); border-radius: 12px; margin-bottom: 25px; box-sizing: border-box; outline: none; }
+
+/* ... include all other styles (admin-box, fab, theme-switch, etc) here ... */
