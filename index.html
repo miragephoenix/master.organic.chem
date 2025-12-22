@@ -107,49 +107,60 @@
     });
 
     function render(data) {
-        const feed = document.getElementById('feed');
-        const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
+    const feed = document.getElementById('feed');
+    const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
+    
+    feed.innerHTML = data.map((r, index) => {
+        const rKey = r.reagent.replace(/[.#$/[\]]/g, "_");
         
-        feed.innerHTML = data.map((r, index) => {
-            const rKey = r.reagent.replace(/[.#$/[\]]/g, "_");
-            
-            // Logic for Diagram Image
-            const diagramHtml = r.diagram ? `
-                <div class="diagram-container">
-                    <img src="${r.diagram}" class="reaction-img" alt="structure">
-                </div>` : '';
+        // Logic for Image + Caption (Only shows if link exists)
+        const diagramHtml = r.diagram ? `
+            <div class="diagram-container">
+                <img src="${r.diagram}" class="reaction-img" alt="structure">
+                <div style="font-size: 0.85em; color: #666; font-style: italic; margin-top: 5px;">
+                    ${r.caption || 'Product Structure'}
+                </div>
+            </div>` : '';
 
-            return `
-            <div class="card" onclick="toggleCard('${index}', '${rKey}')">
-                <span class="category-tag">${r.category || 'General'}</span>
-                ${(r.isCustom && isAdmin) ? `<button class="delete-btn" style="display:block" onclick="deleteReaction('${r.firebaseId}', event)">Delete Card</button>` : ''}
+        return `
+        <div class="card" onclick="toggleCard('${index}', '${rKey}')">
+            <span class="category-tag">${r.category || 'General'}</span>
+            ${(r.isCustom && isAdmin) ? `<button class="delete-btn" style="display:block" onclick="deleteReaction('${r.firebaseId}', event)">Delete Card</button>` : ''}
+            
+            <h3 style="margin: 0; color: #2c3e50;">${r.reagent}</h3>
+            <p style="margin: 5px 0; font-weight: bold; color: #27ae60;">${r.name || ''}</p>
+            <small style="color: #7f8c8d;">${r.function}</small>
+            
+            <div class="details" id="details-${index}" onclick="event.stopPropagation()">
+                <hr style="border: 0.5px solid #eee; margin: 15px 0;">
                 
-                <h3>${r.reagent}</h3>
-                <p><b>${r.name || ''}</b>: ${r.function}</p>
+                <strong>Reaction Equation:</strong>
+                <p style="background:#f9f9f9; padding:12px; border-radius:8px; border: 1px solid #eee;">
+                    ${r.example || 'Equation loading...'}
+                </p>
                 
                 ${diagramHtml}
 
-                <div class="details" id="details-${index}" onclick="event.stopPropagation()">
-                    <strong>Reaction Equation:</strong>
-                    <p style="background:#f0f0f0; padding:10px; border-radius:5px;">${r.example || 'Pending Example...'}</p>
-                    
-                    <strong>Notes:</strong>
-                    <ul>${(Array.isArray(r.notes) ? r.notes : r.notes.split(',')).map(n => `<li>${n}</li>`).join('')}</ul>
-                    
-                    <div id="comments-${rKey}"></div>
-                    <div class="input-area">
-                        <input type="text" id="input-${rKey}" placeholder="Add a hack...">
-                        <button onclick="saveTip('${rKey}')">Post</button>
-                    </div>
+                <div style="margin-top:15px;">
+                    <strong>Key Hacks:</strong>
+                    <ul style="padding-left: 20px;">
+                        ${(Array.isArray(r.notes) ? r.notes : r.notes.split(',')).map(n => `<li>${n}</li>`).join('')}
+                    </ul>
                 </div>
-            </div>`;
-        }).join('');
-        
-        // IMPORTANT: Tell MathJax to process the new content
-        if (window.MathJax && window.MathJax.typeset) {
-            window.MathJax.typeset();
-        }
+                
+                <div id="comments-${rKey}"></div>
+                <div class="input-area">
+                    <input type="text" id="input-${rKey}" placeholder="Add a memory trick...">
+                    <button onclick="saveTip('${rKey}')">Post</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+    
+    if (window.MathJax && window.MathJax.typeset) {
+        window.MathJax.typeset();
     }
+}
 
     // (Remaining functions: deleteTip, loadTips, deleteReaction, checkAdmin, filterByCat, runSearch, toggleCard, saveTip are the same as before)
     // Adding runSearch and toggleCard here for completeness
@@ -216,3 +227,4 @@
 </script>
 </body>
 </html>
+
