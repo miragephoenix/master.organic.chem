@@ -2,134 +2,227 @@ const reactionDatabase = [
   { 
     reagent: "Na / dry ether", 
     name: "Wurtz Reaction",
+    category: "Alkanes",
+    tags: ["Hydrocarbon", "Alkyl Halide", "Symmetrical", "Step-up"],
     function: "Alkyl Halide → Alkane (Double Carbons)", 
+    example: "$\\ce{2R-X + 2Na ->[dry ether] R-R + 2NaX}$",
     warning: "⚠️ Fails for 3° alkyl halides (Elimination occurs instead).",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6324&t=l",
+    caption: "Product: Ethane (from Methyl Chloride)",
     notes: ["Used to prepare symmetrical alkanes.", "Methane cannot be prepared this way."]
   },
   { 
     reagent: "R2CuLi (Gilman Reagent)", 
     name: "Corey-House Synthesis",
+    category: "Alkanes",
+    tags: ["Alkane", "Coupling", "Unsymmetrical", "Gilman"],
     function: "Alkyl Halide + R2CuLi → Alkane", 
+    example: "$\\ce{R2CuLi + R'-X -> R-R' + RCu + LiX}$",
     warning: "⚠️ Better than Wurtz for unsymmetrical alkanes.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6334&t=l",
+    caption: "Product: Propane",
     notes: ["Works with 1°, 2°, and even aryl/vinyl halides.", "Highly efficient for making long chains."]
   },
   { 
     reagent: "Zn-Hg / conc. HCl", 
     name: "Clemmensen Reduction",
+    category: "Reduction",
+    tags: ["Carbonyl", "Alkane", "Acidic", "Deoxygenation"],
     function: "C=O (Carbonyl) → CH2 (Alkane)", 
+    example: "$\\ce{R-CO-R ->[Zn-Hg][HCl] R-CH2-R}$",
     warning: "⚠️ Avoid if the molecule has acid-sensitive groups like -OH.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=10340&t=l",
+    caption: "Product: Propane (from Acetone)",
     notes: ["Mechanism involves zinc carbenoids.", "Best for ketones that are stable in acid."]
   },
   { 
     reagent: "NH2NH2 / KOH / Ethylene Glycol", 
     name: "Wolff-Kishner Reduction",
+    category: "Reduction",
+    tags: ["Carbonyl", "Alkane", "Basic", "Hydrazine"],
     function: "C=O (Carbonyl) → CH2 (Alkane)", 
+    example: "$\\ce{R-CO-R ->[NH2NH2][KOH, \Delta] R-CH2-R + N2}$",
     warning: "⚠️ Avoid if the molecule has base-sensitive groups.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=10340&t=l",
+    caption: "Product: Propane",
     notes: ["The 'Base' version of Clemmensen.", "High temperature is required."]
   },
   { 
     reagent: "CHCl3 + aq. NaOH", 
     name: "Reimer-Tiemann Reaction",
+    category: "Phenols",
+    tags: ["Phenol", "Aldehyde", "Carbene", "Naming"],
     function: "Phenol → Salicylaldehyde", 
+    example: "$\\ce{C6H5OH + CHCl3 + 3NaOH -> C6H4(OH)CHO + 3NaCl + 2H2O}$",
     warning: "⚠️ The active electrophile is Dichlorocarbene (:CCl2). Watch out for the ortho-product!",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6527&t=l",
+    caption: "Product: Salicylaldehyde",
     notes: ["If CCl4 is used instead of CHCl3, Salicylic acid is formed.", "Major product is ortho due to H-bonding."]
   },
   { 
     reagent: "CO2 + NaOH (High P & T)", 
     name: "Kolbe's Reaction",
+    category: "Phenols",
+    tags: ["Phenol", "Carboxylic Acid", "Aspirin"],
     function: "Phenol → Salicylic Acid", 
+    example: "$\\ce{C6H5OH ->[NaOH] C6H5ONa ->[CO2, \Delta, P][H+] C6H4(OH)COOH}$",
     warning: "⚠️ Requires high pressure (4-7 atm) to force CO2 to react.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=338&t=l",
+    caption: "Product: Salicylic Acid",
     notes: ["Followed by acidification (H+).", "Used industrially to make Aspirin."]
   },
   { 
     reagent: "NaNO2 + HCl (0-5°C)", 
     name: "Diazotization",
+    category: "Amines",
+    tags: ["Aniline", "Diazonium", "Ice-cold"],
     function: "Aniline → Benzene Diazonium Chloride", 
+    example: "$\\ce{C6H5NH2 ->[NaNO2 + HCl][0-5 ^oC] C6H5N2+Cl-}$",
     warning: "⚠️ Temperature must be below 5°C. If it gets warm, Phenol is formed instead!",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=11162&t=l",
+    caption: "Product: Benzene Diazonium Chloride",
     notes: ["The diazonium salt is a 'gateway' to Chlorobenzene, Iodobenzene, etc.", "Crucial for Sandmeyer and Gattermann reactions."]
   },
   { 
     reagent: "Br2 + NaOH (or NaOBr)", 
     name: "Hoffmann Bromamide Degradation",
+    category: "Amines",
+    tags: ["Amide", "Amine", "Step-down", "Nitrene"],
     function: "Amide → 1° Amine (One less Carbon)", 
+    example: "$\\ce{R-CONH2 + Br2 + 4NaOH -> R-NH2 + Na2CO3 + 2NaBr + 2H2O}$",
     warning: "⚠️ The carbon chain shortens! It's a 'Step-down' reaction. Intermediate is Nitrene.",
-    notes: ["Only for primary amides.", "R-NH2 is the product, the C=O group is lost as CO3^2-."]
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6328&t=l",
+    caption: "Product: Methylamine",
+    notes: ["Only for primary amides.", "R-NH2 is the product, the C=O group is lost as carbonate."]
   },
   { 
     reagent: "C6H5SO2Cl", 
     name: "Hinsberg Reagent Test",
+    category: "Tests",
+    tags: ["Amine", "Identification", "Hinsberg"],
     function: "Distinguish 1°, 2°, 3° Amines", 
-    warning: "⚠️ 1° Amine: Soluble in alkali; 2° Amine: Insoluble in alkali; 3° Amine: No reaction.",
+    example: "$\\ce{R-NH2 + C6H5SO2Cl -> C6H5SO2NHR}$ (Soluble in NaOH)",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=7394&t=l",
+    caption: "Reagent: Benzenesulphonyl chloride",
     notes: ["Used to separate a mixture of amines.", "The reagent is Benzenesulphonyl chloride."]
   },
   { 
     reagent: "NaNO2 + HCl / CuCl", 
     name: "Sandmeyer Reaction",
+    category: "Amines",
+    tags: ["Diazonium", "Chlorobenzene", "Copper"],
     function: "Diazonium Salt → Chlorobenzene", 
+    example: "$\\ce{C6H5N2+Cl- ->[CuCl/HCl] C6H5Cl + N2}$",
     warning: "⚠️ If you use Cu powder instead of CuCl, it's called the Gattermann Reaction.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=7285&t=l",
+    caption: "Product: Chlorobenzene",
     notes: ["Better yield than Gattermann.", "Can be used to introduce Cl, Br, or CN into the ring."]
   },
   { 
     reagent: "FeCl3 (Neutral)", 
     name: "Ferric Chloride Test",
+    category: "Tests",
+    tags: ["Phenol", "Enol", "Violet"],
     function: "Phenol/Enol → Violet Coloration", 
+    example: "$\\ce{6C6H5OH + Fe^3+ -> [Fe(OC6H5)6]^3- + 6H+}$",
     warning: "⚠️ Only works with neutral FeCl3. If it's acidic, the color might not appear.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=996&t=l",
+    caption: "Target: Phenol",
     notes: ["Used to distinguish Phenol from Alcohols.", "Forms a complex: [Fe(OC6H5)6]^3-."]
   },
   { 
     reagent: "I2 + NaOH (Warm)", 
     name: "Iodoform Test",
+    category: "Tests",
+    tags: ["Methyl Ketone", "Yellow ppt", "CHI3"],
     function: "Methyl Ketones/Alcohols → Yellow ppt", 
+    example: "$\\ce{R-CO-CH3 ->[I2][NaOH] CHI3 v + R-COONa}$",
     warning: "⚠️ Positive for Ethanol, Propan-2-ol, Acetone, and Acetaldehyde.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6374&t=l",
+    caption: "Product: Iodoform (Yellow Precipitate)",
     notes: ["Yellow precipitate is CHI3.", "Doesn't work for Methanol or 3-pentanone."]
   },
   { 
     reagent: "Na (Metal)", 
     name: "Sodium Metal Test",
-    function: "Active H (Alcohols/Acids) → H2 Gas (Effervescence)", 
+    category: "Tests",
+    tags: ["Active Hydrogen", "Alcohol", "Acid"],
+    function: "Active H → H2 Gas", 
+    example: "$\\ce{2R-OH + 2Na -> 2R-ONa + H2 ^}$",
     warning: "⚠️ Dangerous! Reacts violently with moisture. Don't use for wet samples.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=702&t=l",
+    caption: "Example Reactant: Propanol",
     notes: ["Tests for any acidic hydrogen.", "Bubbles of Hydrogen gas confirm the presence of active H."]
   },
   { 
     reagent: "Dilute NaOH", 
     name: "Aldol Condensation",
+    category: "Aldehydes",
+    tags: ["Alpha-Hydrogen", "Enolate", "Beta-hydroxy"],
     function: "Aldehyde/Ketone → Beta-Hydroxy Carbonyl", 
+    example: "$\\ce{2CH3CHO ->[dil. NaOH] CH3-CH(OH)-CH2-CHO}$",
     warning: "⚠️ Requires at least one Alpha-Hydrogen!",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=8105&t=l",
+    caption: "Product: 3-Hydroxybutanal (Aldol)",
     notes: ["Intermediate is an Enolate ion.", "On heating, it loses water to give an unsaturated product."]
   },
   { 
     reagent: "Conc. NaOH (50%)", 
     name: "Cannizzaro Reaction",
+    category: "Aldehydes",
+    tags: ["No Alpha-Hydrogen", "Redox", "Disproportionation"],
     function: "Aldehyde → Alcohol + Carboxylic Acid Salt", 
+    example: "$\\ce{2HCHO ->[conc. NaOH] CH3OH + HCOONa}$",
     warning: "⚠️ Only for Aldehydes with NO Alpha-Hydrogen.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=439&t=l",
+    caption: "Product: Methanol (Red. Product)",
     notes: ["Disproportionation reaction.", "One molecule is oxidized, one is reduced."]
   },
   { 
-    reagent: "Lindlar's Catalyst (Pd/CaCO3 + Quinoline)", 
+    reagent: "Lindlar's Catalyst", 
     name: "Partial Hydrogenation",
+    category: "Alkenes",
+    tags: ["Alkyne", "Cis", "Controlled Reduction"],
     function: "Alkyne → Cis-Alkene", 
+    example: "$\\ce{R-C#C-R ->[H2, Pd/CaCO3][Quinoline] R-CH=CH-R}$ (Cis)",
     warning: "⚠️ Only gives the CIS isomer.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6331&t=l",
+    caption: "Product: Cis-2-butene",
     notes: ["Controlled reduction.", "Quinoline acts as a poison to stop the reaction."]
   },
   { 
     reagent: "Hot Acidic KMnO4", 
-    name: "Oxidative Ozonolysis Equivalent",
+    name: "Oxidative Cleavage",
+    category: "Oxidation",
+    tags: ["Alkene", "Cleavage", "Carboxylic Acid"],
     function: "Alkene → Carboxylic Acid / Ketone", 
+    example: "$\\ce{R-CH=CH-R' ->[KMnO4][H+, \Delta] RCOOH + R'COOH}$",
     warning: "⚠️ Very strong oxidative cleavage!",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=243&t=l",
+    caption: "Product: Benzoic Acid (Example)",
     notes: ["Terminal =CH2 becomes CO2.", "Internal -CH= becomes -COOH."]
   },
   { 
     reagent: "NaNH2 (2 equivalents)", 
     name: "Dehydrohalogenation",
+    category: "Alkynes",
+    tags: ["Elimination", "Alkyne", "Vicinal Dihalide"],
     function: "Vicinal Dihalide → Alkyne", 
+    example: "$\\ce{R-CH(X)-CH2(X) ->[2 NaNH2] R-C#CH}$",
     warning: "⚠️ Stronger base than alc. KOH.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6326&t=l",
+    caption: "Product: Propyne",
     notes: ["Used to 'Step-up' to an alkyne.", "Commonly used in conversion sequences."]
   },
   { 
     reagent: "Acidic Strength Orders", 
     name: "GOC Concept",
+    category: "Theory",
+    tags: ["Acidity", "Stability", "Resonance"],
     function: "Comparing Stability of Conjugate Bases", 
     warning: "⚠️ Remember: -I and -M groups increase acidity.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=14909&t=l",
+    caption: "Example: Picric Acid (Highly acidic)",
     notes: [
       "Picric Acid > Formic Acid > Benzoic Acid > Acetic Acid",
       "Phenol is more acidic than Alcohols due to resonance.",
@@ -139,8 +232,12 @@ const reactionDatabase = [
   { 
     reagent: "Huckel's Rule (4n + 2)", 
     name: "Aromaticity Test",
+    category: "Theory",
+    tags: ["Aromatic", "Pi-electrons", "Conjugation"],
     function: "Is it Aromatic, Anti-aromatic, or Non-aromatic?", 
     warning: "⚠️ Must be Planar, Cyclic, and fully Conjugated first!",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=241&t=l",
+    caption: "Example: Benzene (Aromatic)",
     notes: [
       "Aromatic: 4n + 2 pi electrons (2, 6, 10, 14...).",
       "Anti-aromatic: 4n pi electrons (4, 8, 12...).",
@@ -203,6 +300,7 @@ const reactionDatabase = [
     notes: ["Benzyne intermediate is NOT formed here", "Drastic conditions required"]
   }
 ];
+
 
 
 
