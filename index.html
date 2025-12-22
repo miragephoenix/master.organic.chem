@@ -80,7 +80,7 @@
 </div>
 
 <script>
-    // FIREBASE CONFIG (SAME AS BEFORE)
+    // FIREBASE CONFIG
     const firebaseConfig = {
         apiKey: "AIzaSyDIW-SJkO5j4PwN1SDjMxGD_aQdoDHD6CU",
         authDomain: "organic-chem-b2ff8.firebaseapp.com",
@@ -107,97 +107,99 @@
     });
 
     function render(data) {
-    const feed = document.getElementById('feed');
-    const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
-    
-    feed.innerHTML = data.map((r, index) => {
-        const rKey = r.reagent.replace(/[.#$/[\]]/g, "_");
+        const feed = document.getElementById('feed');
+        const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
         
-        // Logic for Image + Caption (Only shows if link exists)
-        const diagramHtml = r.diagram ? `
-            <div class="diagram-container">
-                <img src="${r.diagram}" class="reaction-img" alt="structure">
-                <div style="font-size: 0.85em; color: #666; font-style: italic; margin-top: 5px;">
-                    ${r.caption || 'Product Structure'}
-                </div>
-            </div>` : '';
+        feed.innerHTML = data.map((r, index) => {
+            const rKey = r.reagent.replace(/[.#$/[\]]/g, "_");
+            
+            const diagramHtml = r.diagram ? `
+                <div class="diagram-container">
+                    <img src="${r.diagram}" class="reaction-img" alt="structure">
+                    <div style="font-size: 0.85em; color: #666; font-style: italic; margin-top: 5px;">
+                        ${r.caption || 'Product Structure'}
+                    </div>
+                </div>` : '';
 
-        return `
-        <div class="card" onclick="toggleCard('${index}', '${rKey}')">
-            <span class="category-tag">${r.category || 'General'}</span>
-            ${(r.isCustom && isAdmin) ? `<button class="delete-btn" style="display:block" onclick="deleteReaction('${r.firebaseId}', event)">Delete Card</button>` : ''}
-            
-            <h3 style="margin: 0; color: #2c3e50;">${r.reagent}</h3>
-            <p style="margin: 5px 0; font-weight: bold; color: #27ae60;">${r.name || ''}</p>
-            <small style="color: #7f8c8d;">${r.function}</small>
-            
-            <div class="details" id="details-${index}" onclick="event.stopPropagation()">
-                <hr style="border: 0.5px solid #eee; margin: 15px 0;">
+            return `
+            <div class="card" onclick="toggleCard('${index}', '${rKey}')">
+                <span class="category-tag">${r.category || 'General'}</span>
+                ${(r.isCustom && isAdmin) ? `<button class="delete-btn" style="display:block" onclick="deleteReaction('${r.firebaseId}', event)">Delete Card</button>` : ''}
                 
-                <strong>Reaction Equation:</strong>
-                <p style="background:#f9f9f9; padding:12px; border-radius:8px; border: 1px solid #eee;">
-                    ${r.example || 'Equation loading...'}
-                </p>
+                <h3 style="margin: 0; color: #2c3e50;">${r.reagent}</h3>
+                <p style="margin: 5px 0; font-weight: bold; color: #27ae60;">${r.name || ''}</p>
+                <small style="color: #7f8c8d;">${r.function}</small>
                 
-                ${diagramHtml}
-${r.warning ? `
-    <div style="background: #fff5f5; border-left: 4px solid #ff4d4d; padding: 10px; margin: 10px 0; border-radius: 4px; color: #c53030; font-weight: 500;">
-        ${r.warning}
-    </div>` : ''}
-                <div style="margin-top:15px;">
-                    <strong>Key Hacks:</strong>
-                    <ul style="padding-left: 20px;">
-                        ${(Array.isArray(r.notes) ? r.notes : r.notes.split(',')).map(n => `<li>${n}</li>`).join('')}
-                    </ul>
+                <div class="details" id="details-${index}" onclick="event.stopPropagation()">
+                    <hr style="border: 0.5px solid #eee; margin: 15px 0;">
+                    
+                    <strong>Reaction Equation:</strong>
+                    <div style="background:#f9f9f9; padding:15px; border-radius:8px; border: 1px solid #eee; margin-top:5px; overflow-x:auto;">
+                        ${r.example || 'No equation provided'}
+                    </div>
+                    
+                    ${r.warning ? `
+                    <div style="background: #fff5f5; border-left: 4px solid #ff4d4d; padding: 10px; margin: 10px 0; border-radius: 4px; color: #c53030; font-weight: 500;">
+                        ${r.warning}
+                    </div>` : ''}
+
+                    ${diagramHtml}
+
+                    <div style="margin-top:15px;">
+                        <strong>Key Hacks:</strong>
+                        <ul style="padding-left: 20px;">
+                            ${(Array.isArray(r.notes) ? r.notes : [r.notes]).map(n => `<li style="margin-bottom:5px;">${n}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div id="comments-${rKey}"></div>
+                    <div class="input-area">
+                        <input type="text" id="input-${rKey}" placeholder="Add a memory trick...">
+                        <button onclick="saveTip('${rKey}')">Post</button>
+                    </div>
                 </div>
-                
-                <div id="comments-${rKey}"></div>
-                <div class="input-area">
-                    <input type="text" id="input-${rKey}" placeholder="Add a memory trick...">
-                    <button onclick="saveTip('${rKey}')">Post</button>
-                </div>
-            </div>
-        </div>`;
-    }).join('');
-    
-    if (window.MathJax && window.MathJax.typeset) {
-        window.MathJax.typeset();
+            </div>`;
+        }).join('');
+        
+        // Initial MathJax trigger
+        if (window.MathJax && window.MathJax.typeset) window.MathJax.typeset();
     }
-}
-
-    // (Remaining functions: deleteTip, loadTips, deleteReaction, checkAdmin, filterByCat, runSearch, toggleCard, saveTip are the same as before)
-    // Adding runSearch and toggleCard here for completeness
-    
-   function runSearch() {
-    const query = document.getElementById('mainSearch').value.toLowerCase();
-    let filtered = allReactions.filter(r => {
-        // Check if query matches Name, Reagent, or any Tag in the array
-        const matchesName = r.name && r.name.toLowerCase().includes(query);
-        const matchesReagent = r.reagent && r.reagent.toLowerCase().includes(query);
-        const matchesTags = r.tags && r.tags.some(tag => tag.toLowerCase().includes(query));
-
-        return (currentFilter === 'All' || r.category === currentFilter) &&
-               (matchesName || matchesReagent || matchesTags);
-    });
-    render(filtered);
-}
 
     function toggleCard(id, key) {
         const det = document.getElementById(`details-${id}`);
         const isOpen = det.style.display === 'block';
+        
+        // Close all other cards
         document.querySelectorAll('.details').forEach(d => d.style.display = 'none');
+        
         if(!isOpen) {
             det.style.display = 'block';
             loadTips(key);
-            if (window.MathJax) window.MathJax.typeset();
+            // CRUCIAL: Re-run MathJax after the element becomes visible
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([det]);
+            }
         }
+    }
+
+    function runSearch() {
+        const query = document.getElementById('mainSearch').value.toLowerCase();
+        let filtered = allReactions.filter(r => {
+            const matchesName = r.name && r.name.toLowerCase().includes(query);
+            const matchesReagent = r.reagent && r.reagent.toLowerCase().includes(query);
+            const matchesTags = r.tags && r.tags.some(tag => tag.toLowerCase().includes(query));
+
+            return (currentFilter === 'All' || r.category === currentFilter) &&
+                   (matchesName || matchesReagent || matchesTags);
+        });
+        render(filtered);
     }
 
     function loadTips(rKey) {
         const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
         db.ref('tips/' + rKey).on('value', snap => {
             const data = snap.val();
-            let html = "<strong>Community Hacks:</strong>";
+            let html = "<hr style='border:0.5px solid #eee; margin:15px 0;'><strong>Community Hacks:</strong>";
             for(let id in data) {
                 html += `
                 <div class="comment-box">
@@ -210,16 +212,16 @@ ${r.warning ? `
         });
     }
 
-    function deleteTip(rKey, tipId) {
-        if(confirm("Delete this tip?")) db.ref('tips/' + rKey + '/' + tipId).remove();
-    }
-    
     function saveTip(key) {
         const val = document.getElementById(`input-${key}`).value;
         if(val) {
             db.ref('tips/' + key).push({text: val});
             document.getElementById(`input-${key}`).value = "";
         }
+    }
+
+    function deleteTip(rKey, tipId) {
+        if(confirm("Delete this tip?")) db.ref('tips/' + rKey + '/' + tipId).remove();
     }
 
     function checkAdmin() { runSearch(); }
@@ -235,6 +237,7 @@ ${r.warning ? `
 </script>
 </body>
 </html>
+
 
 
 
