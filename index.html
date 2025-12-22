@@ -140,7 +140,10 @@
                 </p>
                 
                 ${diagramHtml}
-
+${r.warning ? `
+    <div style="background: #fff5f5; border-left: 4px solid #ff4d4d; padding: 10px; margin: 10px 0; border-radius: 4px; color: #c53030; font-weight: 500;">
+        ${r.warning}
+    </div>` : ''}
                 <div style="margin-top:15px;">
                     <strong>Key Hacks:</strong>
                     <ul style="padding-left: 20px;">
@@ -232,5 +235,6 @@
 </script>
 </body>
 </html>
+
 
 
