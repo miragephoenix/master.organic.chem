@@ -147,15 +147,16 @@ const reactionDatabase = [
       "Non-aromatic: If planarity/conjugation fails."
     ]
   },
-  { 
-  reagent: "\\(\\ce{NaOH + CO2}\\)", 
-  name: "Kolbe's Reaction",
-  category: "Naming",
-  function: "Phenol \\(\\rightarrow\\) Salicylic Acid", 
-  example: "\\(\\ce{C6H5OH ->[NaOH] C6H5ONa ->[CO2][H+] C6H4(OH)COOH}\\)",
+ { 
+  reagent: "NaOH + CO2", // Normal Bold
+  name: "Kolbe's Reaction", // Normal Bold
+  function: "Phenol to Salicylic Acid",
+  example: "\\(\\ce{C6H5OH ->[NaOH][CO2] C6H4(OH)COOH}\\)", // LaTeX
   diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=338&t=l",
-  notes: ["Occurs at 125°C and 4-7 atm.", "Intermediate is Sodium Phenoxide."]
+  caption: "Product: Salicylic Acid (Major)", // The new caption!
+  notes: ["Occurs at high pressure", "Major product is Ortho"]
 }
 ];
+
 
 
