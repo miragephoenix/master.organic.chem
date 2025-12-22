@@ -165,14 +165,19 @@
     // (Remaining functions: deleteTip, loadTips, deleteReaction, checkAdmin, filterByCat, runSearch, toggleCard, saveTip are the same as before)
     // Adding runSearch and toggleCard here for completeness
     
-    function runSearch() {
-        const query = document.getElementById('mainSearch').value.toLowerCase();
-        let filtered = allReactions.filter(r => 
-            (currentFilter === 'All' || r.category === currentFilter || (currentFilter === 'Naming' && r.name)) &&
-            (r.reagent.toLowerCase().includes(query) || r.function.toLowerCase().includes(query))
-        );
-        render(filtered);
-    }
+   function runSearch() {
+    const query = document.getElementById('mainSearch').value.toLowerCase();
+    let filtered = allReactions.filter(r => {
+        // Check if query matches Name, Reagent, or any Tag in the array
+        const matchesName = r.name && r.name.toLowerCase().includes(query);
+        const matchesReagent = r.reagent && r.reagent.toLowerCase().includes(query);
+        const matchesTags = r.tags && r.tags.some(tag => tag.toLowerCase().includes(query));
+
+        return (currentFilter === 'All' || r.category === currentFilter) &&
+               (matchesName || matchesReagent || matchesTags);
+    });
+    render(filtered);
+}
 
     function toggleCard(id, key) {
         const det = document.getElementById(`details-${id}`);
@@ -227,4 +232,5 @@
 </script>
 </body>
 </html>
+
 
