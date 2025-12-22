@@ -18,22 +18,10 @@
     <script src="reactions.js"></script> 
     
     <style>
-        .delete-btn { 
-    position: absolute; 
-    top: 10px; 
-    right: 10px; 
-    background: #ff4d4d; 
-    color: white; 
-    border: none; 
-    padding: 5px 10px; 
-    border-radius: 5px; 
-    cursor: pointer; 
-    font-size: 11px;
-}
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; color: #333; }
-        .container { max-width: 800px; margin: auto; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; color: #333; margin: 0; }
+        .container { max-width: 800px; margin: auto; padding-bottom: 100px; }
         
-        /* New: Visual Box for Diagrams */
+        /* Diagrams & Visuals */
         .diagram-container { 
             background: white; 
             padding: 10px; 
@@ -42,93 +30,91 @@
             border-radius: 8px; 
             text-align: center;
         }
-        .reaction-img { max-width: 100%; height: auto; max-height: 150px; }
+        .reaction-img { max-width: 100%; height: auto; max-height: 200px; border-radius: 4px; }
         
-        .admin-box { background: #fff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #ddd; }
-        .admin-box input, .admin-box select { width: 95%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; }
+        /* Forms & Inputs */
+        .admin-box { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #ddd; }
+        .admin-box input, .admin-box select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
         
-        .filter-row { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
-        .filter-btn { background: #fff; border: 1px solid #2ecc71; color: #2ecc71; padding: 5px 15px; border-radius: 20px; cursor: pointer; white-space: nowrap; }
+        /* Filters */
+        .filter-row { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 10px; }
+        .filter-btn { background: #fff; border: 1px solid #2ecc71; color: #2ecc71; padding: 8px 18px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-weight: 500; transition: 0.3s; }
         .filter-btn.active { background: #2ecc71; color: white; }
 
-        .search-bar { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 17px; margin-bottom: 10px; box-sizing: border-box; }
+        .search-bar { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 12px; font-size: 17px; margin-bottom: 15px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        .search-bar:focus { border-color: #2ecc71; }
         
-        .card { background: white; padding: 20px; margin-bottom: 15px; border-radius: 10px; border-left: 6px solid #2ecc71; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; position: relative; }
-        .category-tag { font-size: 0.7em; background: #eee; padding: 2px 8px; border-radius: 10px; float: right; }
+        /* Cards */
+        .card { background: white; padding: 20px; margin-bottom: 15px; border-radius: 12px; border-left: 6px solid #2ecc71; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer; position: relative; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); }
+        .category-tag { font-size: 0.75em; background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 12px; float: right; font-weight: bold; }
         
-        .delete-btn { display: none; position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 12px; }
+        .delete-btn { position: absolute; top: 10px; right: 10px; background: #ff4d4d; color: white; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 11px; font-weight: bold; }
         
-        .details { display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
-        .active .details { display: block; }
+        .details { display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
         
-        .comment-box { background: #e8f4fd; padding: 10px; margin: 5px 0; border-radius: 5px; font-size: 0.9em; border-left: 3px solid #3498db; position: relative; }
-        .tip-del-btn { color: #e74c3c; font-weight: bold; cursor: pointer; position: absolute; right: 8px; top: 8px; font-size: 14px; }
-        
+        /* Community Hacks */
+        .comment-box { background: #e8f4fd; padding: 12px; margin: 8px 0; border-radius: 8px; font-size: 0.9em; border-left: 4px solid #3498db; position: relative; }
         .input-area { display: flex; gap: 10px; margin-top: 15px; }
-        button { background: #2ecc71; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .add-btn { background: #3498db; width: 100%; margin-top: 10px; }
+        .input-area input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
+        
+        button { background: #2ecc71; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        
+        /* FAB UI */
+        #fab { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; border-radius: 50%; background: #2ecc71; color: white; border: none; box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4); font-size: 35px; cursor: pointer; z-index: 1000; transition: 0.3s; }
+        #fab:hover { transform: scale(1.1); background: #27ae60; }
+        #formOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1001; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📚 JEE Organic Hub (Visual)</h1>
+    <h1 style="text-align: center; color: #2c3e50;">🧪 JEE Organic Hub</h1>
 
     <div class="filter-row" id="filterRow">
         <button class="filter-btn active" onclick="filterByCat('All', event)">All</button>
+        <button class="filter-btn" onclick="filterByCat('Naming', event)">Naming</button>
         <button class="filter-btn" onclick="filterByCat('Reduction', event)">Reduction</button>
         <button class="filter-btn" onclick="filterByCat('Oxidation', event)">Oxidation</button>
-        <button class="filter-btn" onclick="filterByCat('Naming', event)">Naming</button>
-        <button class="filter-btn" onclick="filterByCat('Test', event)">Tests</button>
+        <button class="filter-btn" onclick="filterByCat('Tests', event)">Tests</button>
     </div>
     
-    <input type="text" id="mainSearch" class="search-bar" placeholder="Search (supports LaTeX)...">
-    <div id="adminPanel" style="display:none;" class="admin-box">
-    <h3>🛠️ Add New JEE Reaction</h3>
-    <input type="text" id="newName" placeholder="Reaction Name (e.g. Wurtz)">
-    <input type="text" id="newReagent" placeholder="Reagent (e.g. Na/Dry Ether)">
-    <input type="text" id="newFunction" placeholder="Function (e.g. Alkyl Halide -> Alkane)">
-    <input type="text" id="newExample" placeholder="LaTeX Equation (e.g. $\ce{R-X -> R-R}$)">
-    <input type="text" id="newWarning" placeholder="Warning (e.g. Fails for 3° halides)">
-    <input type="text" id="newDiagram" placeholder="Diagram URL (PubChem Link)">
-    <input type="text" id="newNotes" placeholder="Hacks (comma separated)">
-    <select id="newCat">
-        <option value="General">General</option>
-        <option value="Reduction">Reduction</option>
-        <option value="Oxidation">Oxidation</option>
-        <option value="Naming">Naming</option>
-        <option value="Tests">Tests</option>
-    </select>
-    <button class="add-btn" onclick="addReaction()">Upload to Firebase</button>
-</div>
-    <div id="contributionPanel" class="admin-box" style="border-left: 6px solid #3498db;">
-    <h3 style="color: #3498db; margin-top: 0;">🚀 Contribute a Reaction</h3>
-    <p style="font-size: 0.8em; color: #666;">Help the community! Add a reaction from your notes or NCERT.</p>
-    <input type="text" id="newName" placeholder="Reaction Name (e.g., Rosenmund Reduction)">
-    <input type="text" id="newReagent" placeholder="Reagent (e.g., H2 / Pd-BaSO4)">
-    <input type="text" id="newFunction" placeholder="Function (e.g., Acid Chloride -> Aldehyde)">
-    <input type="text" id="newExample" placeholder="LaTeX Equation (e.g., $\ce{RCOCl -> RCHO}$)">
-    <input type="text" id="newWarning" placeholder="Warning/Exception (e.g., Does not work for Formyl Chloride)">
-    <input type="text" id="newDiagram" placeholder="Diagram URL (Optional)">
-    <input type="text" id="newNotes" placeholder="Memory Hacks (comma separated)">
-    <select id="newCat">
-        <option value="General">General</option>
-        <option value="Naming">Naming</option>
-        <option value="Reduction">Reduction</option>
-        <option value="Oxidation">Oxidation</option>
-        <option value="Tests">Tests</option>
-    </select>
-    <button class="add-btn" style="background:#3498db;" onclick="addReaction()">Post to Hub</button>
-</div>
+    <input type="text" id="mainSearch" class="search-bar" placeholder="Search by reagent or reaction name...">
+    
     <div id="feed"></div>
 
-    <div style="text-align: center; padding: 40px 20px;">
-        <input type="password" id="adminKey" placeholder="Admin Key" oninput="checkAdmin()" style="border:none; background:none; text-align:center; color:#ddd; font-size:12px; outline:none;">
+    <div style="text-align: center; margin-top: 50px;">
+        <input type="password" id="adminKey" placeholder="Admin Access" oninput="checkAdmin()" style="border:none; background:none; text-align:center; color:#ccc; font-size:11px; outline:none; width: 100px;">
+    </div>
+</div>
+
+<button id="fab" onclick="toggleForm()">+</button>
+
+<div id="formOverlay">
+    <div class="admin-box" style="width: 90%; max-width: 500px; position: relative;">
+        <span onclick="toggleForm()" style="position:absolute; top:15px; right:20px; cursor:pointer; font-size:24px; color:#999;">&times;</span>
+        <h2 style="margin-top: 0; color: #2ecc71;">Share Reaction</h2>
+        
+        <input type="text" id="newName" placeholder="Reaction Name (e.g., Stephen Reduction)">
+        <input type="text" id="newReagent" placeholder="Reagent (e.g., SnCl2 / HCl)">
+        <input type="text" id="newFunction" placeholder="Main function (e.g., Nitrile -> Aldehyde)">
+        <input type="text" id="newWarning" placeholder="Warnings/Exceptions">
+        <input type="text" id="newDiagram" placeholder="Diagram/Image URL (optional)">
+        <input type="text" id="newNotes" placeholder="Memory hacks (comma separated)">
+        
+        <select id="newCat">
+            <option value="General">General</option>
+            <option value="Naming">Naming</option>
+            <option value="Reduction">Reduction</option>
+            <option value="Oxidation">Oxidation</option>
+            <option value="Tests">Tests</option>
+        </select>
+        <button style="width: 100%; margin-top: 10px; padding: 15px;" onclick="addReaction()">Post to Community</button>
     </div>
 </div>
 
 <script>
-    // 1. FIREBASE CONFIG FIRST
+    // 1. FIREBASE INITIALIZATION
     const firebaseConfig = {
         apiKey: "AIzaSyDIW-SJkO5j4PwN1SDjMxGD_aQdoDHD6CU",
         authDomain: "organic-chem-b2ff8.firebaseapp.com",
@@ -142,18 +128,16 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 2. STATE VARIABLES
     let allReactions = [];
     let currentFilter = 'All';
     const MY_SECRET = "JEE2025"; 
 
-    // 3. CORE LOGIC
+    // 2. DATA SYNC
     db.ref('custom_reactions').on('value', (snapshot) => {
         const data = snapshot.val();
         const customOnes = [];
         for(let id in data) customOnes.push({...data[id], firebaseId: id, isCustom: true});
         
-        // Combine your reactions.js array with Firebase data
         if (typeof reactionDatabase !== 'undefined') {
             allReactions = [...reactionDatabase.map(r => ({...r, isCustom: false})), ...customOnes];
         } else {
@@ -162,62 +146,51 @@
         runSearch();
     });
 
+    // 3. UI RENDERING
     function render(data) {
         const feed = document.getElementById('feed');
-        const adminInput = document.getElementById('adminKey').value;
-        const isAdmin = adminInput === MY_SECRET;
+        const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
         
         if (data.length === 0) {
-            feed.innerHTML = "<p style='text-align:center; color:#888;'>No reactions found. Try a different search.</p>";
+            feed.innerHTML = "<p style='text-align:center; color:#888;'>No reactions found.</p>";
             return;
         }
 
         feed.innerHTML = data.map((r, index) => {
-            const rKey = (r.reagent || "unknown").replace(/[.#$/[\]]/g, "_");
+            const rKey = (r.reagent || "key").replace(/[.#$/[\]]/g, "_");
             
-            const diagramHtml = r.diagram ? `
-                <div class="diagram-container">
-                    <img src="${r.diagram}" class="reaction-img" alt="structure">
-                    <div style="font-size: 0.85em; color: #666; font-style: italic; margin-top: 5px;">
-                        ${r.caption || 'Product Structure'}
-                    </div>
-                </div>` : '';
-
-          return `
-<div class="card" onclick="toggleCard('${index}', '${rKey}')">
-    <span class="category-tag">${r.category || 'General'}</span>
-    
-    ${isAdmin ? `<button class="delete-btn" style="display:block; z-index:10;" onclick="deleteReaction('${r.firebaseId || index}', event)">Delete Card</button>` : ''}
+            return `
+            <div class="card" onclick="toggleCard('${index}', '${rKey}')">
+                <span class="category-tag">${r.category || 'General'}</span>
+                
+                ${isAdmin ? `<button class="delete-btn" onclick="deleteReaction('${r.firebaseId || index}', event)">Delete</button>` : ''}
                 
                 <h3 style="margin: 0; color: #2c3e50;">${r.reagent}</h3>
                 <p style="margin: 5px 0; font-weight: bold; color: #27ae60;">${r.name || ''}</p>
                 <small style="color: #7f8c8d;">${r.function}</small>
                 
                 <div class="details" id="details-${index}" onclick="event.stopPropagation()">
-                    <hr style="border: 0.5px solid #eee; margin: 15px 0;">
+                    <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
                     
-                    <strong>Reaction Equation:</strong>
-                    <div style="background:#f9f9f9; padding:15px; border-radius:8px; border: 1px solid #eee; margin-top:5px; overflow-x:auto;">
-                        ${r.example || 'No equation provided'}
+                    <strong>Equation:</strong>
+                    <div style="background:#f9f9f9; padding:15px; border-radius:8px; margin: 8px 0; overflow-x:auto;">
+                        ${r.example || '$\ce{Reagent -> Product}$'}
                     </div>
                     
-                    ${r.warning ? `
-                    <div style="background: #fff5f5; border-left: 4px solid #ff4d4d; padding: 10px; margin: 10px 0; border-radius: 4px; color: #c53030; font-weight: 500;">
-                        ${r.warning}
-                    </div>` : ''}
+                    ${r.warning ? `<div style="background:#fff5f5; border-left:4px solid #ff4d4d; padding:10px; color:#c53030; border-radius:4px; margin:10px 0;">${r.warning}</div>` : ''}
 
-                    ${diagramHtml}
+                    ${r.diagram ? `<div class="diagram-container"><img src="${r.diagram}" class="reaction-img"></div>` : ''}
 
                     <div style="margin-top:15px;">
                         <strong>Key Hacks:</strong>
-                        <ul style="padding-left: 20px;">
-                            ${(Array.isArray(r.notes) ? r.notes : [r.notes]).map(n => `<li style="margin-bottom:5px;">${n}</li>`).join('')}
+                        <ul style="padding-left: 20px; margin-top: 5px;">
+                            ${(Array.isArray(r.notes) ? r.notes : [r.notes]).map(n => `<li>${n}</li>`).join('')}
                         </ul>
                     </div>
                     
                     <div id="comments-${rKey}"></div>
                     <div class="input-area">
-                        <input type="text" id="input-${rKey}" placeholder="Add a memory trick...">
+                        <input type="text" id="input-${rKey}" placeholder="Memory trick...">
                         <button onclick="saveTip('${rKey}')">Post</button>
                     </div>
                 </div>
@@ -227,6 +200,12 @@
         if (window.MathJax && window.MathJax.typeset) window.MathJax.typeset();
     }
 
+    // 4. LOGIC FUNCTIONS
+    function toggleForm() {
+        const overlay = document.getElementById('formOverlay');
+        overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+    }
+
     function toggleCard(id, key) {
         const det = document.getElementById(`details-${id}`);
         const isOpen = det.style.display === 'block';
@@ -234,35 +213,19 @@
         if(!isOpen) {
             det.style.display = 'block';
             loadTips(key);
-            if (window.MathJax && window.MathJax.typesetPromise) {
-                window.MathJax.typesetPromise([det]);
-            }
+            if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([det]);
         }
     }
 
-    function runSearch() {
-        const query = document.getElementById('mainSearch').value.toLowerCase();
-        let filtered = allReactions.filter(r => {
-            const matchesName = r.name && r.name.toLowerCase().includes(query);
-            const matchesReagent = r.reagent && r.reagent.toLowerCase().includes(query);
-            return (currentFilter === 'All' || r.category === currentFilter) &&
-                   (matchesName || matchesReagent);
-        });
-        render(filtered);
-    }
-
-    // 4. ADMIN & TIPS FUNCTIONS (At the bottom)
-    function checkAdmin() {
-    // This now just triggers a re-render to show/hide "Delete" buttons
-    runSearch(); 
-}
-
     function addReaction() {
+        const reagentVal = document.getElementById('newReagent').value;
+        if(!reagentVal) return alert("Reagent is required!");
+
         const reaction = {
             name: document.getElementById('newName').value,
-            reagent: document.getElementById('newReagent').value,
+            reagent: reagentVal,
             function: document.getElementById('newFunction').value,
-            example: document.getElementById('newExample').value,
+            example: `$\\ce{ ${reagentVal} }$`, 
             warning: document.getElementById('newWarning').value,
             diagram: document.getElementById('newDiagram').value,
             notes: document.getElementById('newNotes').value.split(','),
@@ -271,22 +234,37 @@
         };
 
         db.ref('custom_reactions').push(reaction).then(() => {
-            alert("Reaction added successfully!");
-            ["newName", "newReagent", "newFunction", "newExample", "newWarning", "newDiagram", "newNotes"].forEach(id => {
-                document.getElementById(id).value = "";
-            });
+            alert("Added!");
+            toggleForm();
+            ["newName", "newReagent", "newFunction", "newWarning", "newDiagram", "newNotes"].forEach(id => document.getElementById(id).value = "");
         });
+    }
+
+    function runSearch() {
+        const query = document.getElementById('mainSearch').value.toLowerCase();
+        let filtered = allReactions.filter(r => {
+            const matchesName = r.name && r.name.toLowerCase().includes(query);
+            const matchesReagent = r.reagent && r.reagent.toLowerCase().includes(query);
+            return (currentFilter === 'All' || r.category === currentFilter) && (matchesName || matchesReagent);
+        });
+        render(filtered);
+    }
+
+    function checkAdmin() { runSearch(); }
+
+    function filterByCat(cat, e) {
+        currentFilter = cat;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        runSearch();
     }
 
     function loadTips(rKey) {
         db.ref('tips/' + rKey).on('value', snap => {
             const data = snap.val();
-            let html = "<hr style='border:0.5px solid #eee; margin:15px 0;'><strong>Community Hacks:</strong>";
-            for(let id in data) {
-                html += `<div class="comment-box">${data[id].text}</div>`;
-            }
-            const el = document.getElementById(`comments-${rKey}`);
-            if(el) el.innerHTML = html;
+            let html = "<hr style='border:0; border-top:1px solid #eee; margin:15px 0;'><strong>Community Hacks:</strong>";
+            for(let id in data) html += `<div class="comment-box">${data[id].text}</div>`;
+            document.getElementById(`comments-${rKey}`).innerHTML = html;
         });
     }
 
@@ -298,31 +276,15 @@
         }
     }
 
-    function filterByCat(cat, e) {
-        currentFilter = cat;
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        runSearch();
+    function deleteReaction(id, event) {
+        event.stopPropagation();
+        if(confirm("Delete this reaction?")) {
+            db.ref('custom_reactions/' + id).remove().then(() => alert("Deleted."));
+        }
     }
 
     document.getElementById('mainSearch').addEventListener('input', runSearch);
-    
-    function deleteReaction(id, event) {
-    event.stopPropagation(); // Prevents the card from opening when clicking delete
-    if(confirm("Are you sure you want to remove this reaction from the database?")) {
-        // If it's a firebase reaction, delete it from the DB
-        db.ref('custom_reactions/' + id).remove()
-            .then(() => alert("Deleted successfully!"))
-            .catch(err => alert("Error deleting: " + err));
-    }
-}
 </script>
+
 </body>
 </html>
-
-
-
-
-
-
-
