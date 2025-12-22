@@ -18,6 +18,18 @@
     <script src="reactions.js"></script> 
     
     <style>
+        .delete-btn { 
+    position: absolute; 
+    top: 10px; 
+    right: 10px; 
+    background: #ff4d4d; 
+    color: white; 
+    border: none; 
+    padding: 5px 10px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-size: 11px;
+}
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; color: #333; }
         .container { max-width: 800px; margin: auto; }
         
@@ -89,6 +101,25 @@
     </select>
     <button class="add-btn" onclick="addReaction()">Upload to Firebase</button>
 </div>
+    <div id="contributionPanel" class="admin-box" style="border-left: 6px solid #3498db;">
+    <h3 style="color: #3498db; margin-top: 0;">🚀 Contribute a Reaction</h3>
+    <p style="font-size: 0.8em; color: #666;">Help the community! Add a reaction from your notes or NCERT.</p>
+    <input type="text" id="newName" placeholder="Reaction Name (e.g., Rosenmund Reduction)">
+    <input type="text" id="newReagent" placeholder="Reagent (e.g., H2 / Pd-BaSO4)">
+    <input type="text" id="newFunction" placeholder="Function (e.g., Acid Chloride -> Aldehyde)">
+    <input type="text" id="newExample" placeholder="LaTeX Equation (e.g., $\ce{RCOCl -> RCHO}$)">
+    <input type="text" id="newWarning" placeholder="Warning/Exception (e.g., Does not work for Formyl Chloride)">
+    <input type="text" id="newDiagram" placeholder="Diagram URL (Optional)">
+    <input type="text" id="newNotes" placeholder="Memory Hacks (comma separated)">
+    <select id="newCat">
+        <option value="General">General</option>
+        <option value="Naming">Naming</option>
+        <option value="Reduction">Reduction</option>
+        <option value="Oxidation">Oxidation</option>
+        <option value="Tests">Tests</option>
+    </select>
+    <button class="add-btn" style="background:#3498db;" onclick="addReaction()">Post to Hub</button>
+</div>
     <div id="feed"></div>
 
     <div style="text-align: center; padding: 40px 20px;">
@@ -152,9 +183,11 @@
                     </div>
                 </div>` : '';
 
-            return `
-            <div class="card" onclick="toggleCard('${index}', '${rKey}')">
-                <span class="category-tag">${r.category || 'General'}</span>
+          return `
+<div class="card" onclick="toggleCard('${index}', '${rKey}')">
+    <span class="category-tag">${r.category || 'General'}</span>
+    
+    ${isAdmin ? `<button class="delete-btn" style="display:block; z-index:10;" onclick="deleteReaction('${r.firebaseId || index}', event)">Delete Card</button>` : ''}
                 
                 <h3 style="margin: 0; color: #2c3e50;">${r.reagent}</h3>
                 <p style="margin: 5px 0; font-weight: bold; color: #27ae60;">${r.name || ''}</p>
@@ -220,14 +253,9 @@
 
     // 4. ADMIN & TIPS FUNCTIONS (At the bottom)
     function checkAdmin() {
-        const panel = document.getElementById('adminPanel');
-        if (document.getElementById('adminKey').value === MY_SECRET) {
-            panel.style.display = 'block';
-        } else {
-            panel.style.display = 'none';
-        }
-        runSearch();
-    }
+    // This now just triggers a re-render to show/hide "Delete" buttons
+    runSearch(); 
+}
 
     function addReaction() {
         const reaction = {
@@ -278,9 +306,20 @@
     }
 
     document.getElementById('mainSearch').addEventListener('input', runSearch);
+    
+    function deleteReaction(id, event) {
+    event.stopPropagation(); // Prevents the card from opening when clicking delete
+    if(confirm("Are you sure you want to remove this reaction from the database?")) {
+        // If it's a firebase reaction, delete it from the DB
+        db.ref('custom_reactions/' + id).remove()
+            .then(() => alert("Deleted successfully!"))
+            .catch(err => alert("Error deleting: " + err));
+    }
+}
 </script>
 </body>
 </html>
+
 
 
 
