@@ -147,16 +147,63 @@ const reactionDatabase = [
       "Non-aromatic: If planarity/conjugation fails."
     ]
   },
- { 
-  reagent: "NaOH + CO2", // Normal Bold
-  name: "Kolbe's Reaction", // Normal Bold
-  function: "Phenol to Salicylic Acid",
-  example: "\\(\\ce{C6H5OH ->[NaOH][CO2] C6H4(OH)COOH}\\)", // LaTeX
-  diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=338&t=l",
-  caption: "Product: Salicylic Acid (Major)", // The new caption!
-  notes: ["Occurs at high pressure", "Major product is Ortho"]
-}
+  {
+    name: "Kolbe's Reaction",
+    reagent: "NaOH + CO2",
+    category: "Phenols",
+    tags: ["Phenol", "Carboxylic Acid", "Substitution"],
+    function: "Phenol to Salicylic Acid",
+    example: "\\(\\ce{C6H5OH ->[NaOH][CO2, 400K][H+] C6H4(OH)COOH}\\)",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=338&t=l",
+    caption: "Product: Salicylic Acid (Major)",
+    notes: ["Ortho isomer is major due to H-bonding", "Requires high pressure"]
+  },
+  {
+    name: "Reimer-Tiemann Reaction",
+    reagent: "CHCl3 + aq. NaOH",
+    category: "Phenols",
+    tags: ["Phenol", "Aldehyde", "Naming"],
+    function: "Phenol to Salicylaldehyde",
+    example: "\\(\\ce{C6H5OH ->[CHCl3][NaOH] C6H4(OH)CHO}\\)",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6527&t=l",
+    caption: "Product: Salicylaldehyde",
+    notes: ["Intermediate is Dichlorocarbene (:CCl2)", "Ortho is major"]
+  },
+  {
+    name: "Williamson Ether Synthesis",
+    reagent: "RX + R'ONa",
+    category: "Ethers",
+    tags: ["Ether", "Substitution", "SN2"],
+    function: "Alkyl Halide to Ether",
+    example: "\\(\\ce{R-X + R'-ONa -> R-O-R' + NaX}\\)",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=3283&t=l",
+    caption: "Product Example: Diethyl Ether",
+    notes: ["Follows SN2 mechanism", "Best with primary (1°) alkyl halides"]
+  },
+  {
+    name: "Hydroboration-Oxidation",
+    reagent: "B2H6 / H2O2, OH-",
+    category: "Alcohols",
+    tags: ["Alcohol", "Alkene", "Addition"],
+    function: "Alkene to Alcohol (Anti-Mark)",
+    example: "\\(\\ce{R-CH=CH2 ->[B2H6][H2O2/OH-] R-CH2CH2OH}\\)",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=702&t=l",
+    caption: "Product: Propan-1-ol (from Propene)",
+    notes: ["Anti-Markovnikov addition of water", "Syn-addition mechanism"]
+  },
+  {
+    name: "Dow's Process",
+    reagent: "NaOH (623K, 300 atm)",
+    category: "Phenols",
+    tags: ["Phenol", "Aromatic", "Industrial"],
+    function: "Chlorobenzene to Phenol",
+    example: "\\(\\ce{C6H5Cl ->[NaOH, 623K][300 atm] C6H5ONa ->[H+] C6H5OH}\\)",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=996&t=l",
+    caption: "Product: Phenol",
+    notes: ["Benzyne intermediate is NOT formed here", "Drastic conditions required"]
+  }
 ];
+
 
 
 
