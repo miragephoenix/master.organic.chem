@@ -23,8 +23,12 @@
     <h1 style="text-align: center; color: #2ECC71;">🧪 Master Organic - Aarav</h1>
     
     <div style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 20px;">
-        <button class="theme-s
-            " onclick="filterByCat('All', event)">All</button>
+        <button class="theme-switch-inline" onclick="startStudyMode()">📖 Study Mode</button>
+        <button class="theme-switch-inline" onclick="toggleTheme()" id="themeBtn">🌙 Dark Mode</button>
+    </div>
+
+    <div class="filter-row" id="filterRow">
+        <button class="filter-btn active" onclick="filterByCat('All', event)">All</button>
         <button class="filter-btn" onclick="filterByCat('Naming', event)">Naming</button>
         <button class="filter-btn" onclick="filterByCat('Reduction', event)">Reduction</button>
         <button class="filter-btn" onclick="filterByCat('Oxidation', event)">Oxidation</button>
@@ -70,7 +74,7 @@
 </div>
 
 <script>
-    // 1. DATA & THEME INIT
+    // 1. DATA & THEME INITIALIZATION
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
 
@@ -100,86 +104,11 @@
     let currentFilter = 'All';
     const MY_SECRET = "JEE2025"; 
 
-    // Study Mode Variables
     let studyIndex = 0;
     let touchStartY = 0;
     let studyData = [];
-/* --- PASTE THIS BELOW YOUR GLOBAL VARIABLES --- */
 
-function startStudyMode() {
-    // Check if data exists in allReactions
-    if (!allReactions || allReactions.length === 0) {
-        alert("No reactions found! Add some first.");
-        return;
-    }
-
-    // Shuffle and reset index
-    studyData = [...allReactions].sort(() => Math.random() - 0.5);
-    studyIndex = 0;
-    
-    document.getElementById('studyOverlay').style.display = 'flex';
-    renderFlashcard();
-}
-
-function exitStudyMode() {
-    document.getElementById('studyOverlay').style.display = 'none';
-}
-
-function renderFlashcard() {
-    const r = studyData[studyIndex];
-    const container = document.getElementById('flashcard-container');
-    
-    // Using .classList.toggle('flipped') allows the card to flip back and forth
-    container.innerHTML = `
-        <div class="flashcard" id="currentFlashcard" onclick="this.classList.toggle('flipped')">
-            <div class="flashcard-inner">
-                <div class="card-front">
-                    <span style="font-size: 0.8em; opacity: 0.7;">REAGENT</span>
-                    <h1 style="text-align: center; font-size: 2.2em;">${r.reagent}</h1>
-                    <p style="font-size: 0.9em; margin-top: 10px;">${r.name || ''}</p>
-                </div>
-                
-                <div class="card-back" onclick="event.stopPropagation()">
-                    <h3 style="color: var(--accent); margin: 0;">${r.function}</h3>
-                    <div style="background: var(--bg-color); padding: 12px; border-radius: 8px; margin: 15px 0; width: 100%; font-family: monospace;">
-                        ${r.example || '$\ce{Reagent -> Product}$'}
-                    </div>
-                    <div style="text-align: left; width: 100%; font-size: 0.9em;">
-                        <strong>Hacks:</strong>
-                        <ul style="padding-left: 15px; margin-top: 5px; color: var(--text-sub);">
-                            ${(Array.isArray(r.notes) ? r.notes : [r.notes]).map(n => `<li>${n}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <button onclick="nextCard()" style="margin-top: auto; width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 25px; font-weight: bold;">Next Reaction →</button>
-                </div>
-            </div>
-        </div>
-    `;
-
-    // Swipe Up Logic
-    const card = document.getElementById('currentFlashcard');
-    card.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
-    card.addEventListener('touchend', e => {
-        const swipeDistance = touchStartY - e.changedTouches[0].clientY;
-        if (swipeDistance > 70) nextCard(); 
-    });
-
-    // Re-render LaTeX
-    if (window.MathJax && window.MathJax.typeset) window.MathJax.typeset();
-}
-
-function nextCard() {
-    studyIndex = (studyIndex + 1) % studyData.length;
-    
-    // Add a quick fade out/in transition
-    const container = document.getElementById('flashcard-container');
-    container.style.opacity = 0;
-    setTimeout(() => {
-        renderFlashcard();
-        container.style.opacity = 1;
-    }, 200);
-}
-    // 2. DATA SYNC
+    // 2. FIREBASE DATA SYNC
     db.ref('custom_reactions').on('value', (snapshot) => {
         const data = snapshot.val();
         const customOnes = [];
@@ -193,7 +122,7 @@ function nextCard() {
         runSearch();
     });
 
-    // 3. MAIN UI RENDER
+    // 3. MAIN UI RENDERER
     function render(data) {
         const feed = document.getElementById('feed');
         const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
@@ -230,9 +159,9 @@ function nextCard() {
         if (window.MathJax && window.MathJax.typeset) window.MathJax.typeset();
     }
 
-    // 4. STUDY MODE FUNCTIONS
+    // 4. STUDY MODE LOGIC
     function startStudyMode() {
-        if (allReactions.length === 0) return alert("No data yet!");
+        if (!allReactions || allReactions.length === 0) return alert("No reactions found!");
         studyData = [...allReactions].sort(() => Math.random() - 0.5);
         studyIndex = 0;
         document.getElementById('studyOverlay').style.display = 'flex';
@@ -246,18 +175,27 @@ function nextCard() {
     function renderFlashcard() {
         const r = studyData[studyIndex];
         const container = document.getElementById('flashcard-container');
+        
         container.innerHTML = `
             <div class="flashcard" id="currentFlashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
                     <div class="card-front">
-                        <span style="font-size: 0.7em;">REAGENT</span>
-                        <h1 style="font-size: 2em;">${r.reagent}</h1>
+                        <span style="font-size: 0.8em; opacity: 0.7;">REAGENT</span>
+                        <h1 style="text-align: center; font-size: 2.2em;">${r.reagent}</h1>
+                        <p style="font-size: 0.9em; margin-top: 10px;">${r.name || ''}</p>
                     </div>
                     <div class="card-back" onclick="event.stopPropagation()">
-                        <h3>${r.function}</h3>
-                        <div style="background: #f0f0f0; padding: 10px; border-radius: 8px; color: #333;">${r.example || ''}</div>
-                        <p style="font-size: 0.9em; margin-top: 10px;">${r.notes}</p>
-                        <button onclick="nextCard()" style="margin-top: 20px; padding: 10px 20px; background: #2ecc71; color: white; border: none; border-radius: 20px;">Next →</button>
+                        <h3 style="color: var(--accent); margin: 0;">${r.function}</h3>
+                        <div style="background: var(--bg-color); padding: 12px; border-radius: 8px; margin: 15px 0; width: 100%; font-family: monospace;">
+                            ${r.example || '$\ce{Reagent -> Product}$'}
+                        </div>
+                        <div style="text-align: left; width: 100%; font-size: 0.85em;">
+                            <strong>Hacks:</strong>
+                            <ul style="padding-left: 15px; color: var(--text-sub);">
+                                ${(Array.isArray(r.notes) ? r.notes : [r.notes]).map(n => `<li>${n}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <button onclick="nextCard()" style="margin-top: auto; width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 25px; font-weight: bold; cursor: pointer;">Next Reaction →</button>
                     </div>
                 </div>
             </div>`;
@@ -273,10 +211,15 @@ function nextCard() {
 
     function nextCard() {
         studyIndex = (studyIndex + 1) % studyData.length;
-        renderFlashcard();
+        const container = document.getElementById('flashcard-container');
+        container.style.opacity = 0;
+        setTimeout(() => {
+            renderFlashcard();
+            container.style.opacity = 1;
+        }, 200);
     }
 
-    // 5. HELPER FUNCTIONS
+    // 5. APP FUNCTIONALITY
     function toggleForm() {
         const overlay = document.getElementById('formOverlay');
         overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
@@ -285,9 +228,6 @@ function nextCard() {
     function toggleCard(id, key) {
         const det = document.getElementById(`details-${id}`);
         det.style.display = (det.style.display === 'block') ? 'none' : 'block';
-        if(det.style.display === 'block') {
-            if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([det]);
-        }
     }
 
     function addReaction() {
@@ -306,6 +246,7 @@ function nextCard() {
         };
         db.ref('custom_reactions').push(reaction).then(() => {
             toggleForm();
+            ["newName", "newReagent", "newFunction", "newWarning", "newDiagram", "newNotes"].forEach(id => document.getElementById(id).value = "");
         });
     }
 
@@ -332,4 +273,3 @@ function nextCard() {
 
 </body>
 </html>
-
