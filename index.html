@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="style.css?v=2.2">
+    <link rel="stylesheet" href="style.css?v=2.3">
     <title>JEE Organic Live Hub</title>
     <script>
       window.MathJax = {
@@ -83,7 +83,6 @@
     let studyIndex = 0;
     let currentFilter = 'All';
 
-    // 1. DATA SYNC
     db.ref('custom_reactions').on('value', (snapshot) => {
         const data = snapshot.val();
         const custom = [];
@@ -92,7 +91,6 @@
         runSearch();
     });
 
-    // 2. SEARCH & FEED
     function runSearch() {
         const query = document.getElementById('mainSearch').value.toLowerCase();
         const filtered = allReactions.filter(r => {
@@ -105,7 +103,9 @@
 
     function render(data) {
         const feed = document.getElementById('feed');
-        feed.innerHTML = data.map((r, index) => `
+        feed.innerHTML = data.map((r, index) => {
+            const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
+            return `
             <div class="card" onclick="toggleExpand(${index})" style="cursor:pointer; margin-bottom:15px; padding:15px; border-radius:12px; border:1px solid #ddd;">
                 <h3 style="color: var(--accent); margin:0;">${r.reagent}</h3>
                 <p style="font-weight:bold; margin:5px 0;">${r.name || ''}</p>
@@ -115,40 +115,63 @@
                     <div style="background:#f9f9f9; padding:10px; border-radius:8px; color:#333;">${r.example || ''}</div>
                     ${r.warning ? `<p style="color:red; font-size:0.85em;">⚠️ ${r.warning}</p>` : ''}
                     <p style="font-size:0.9em;"><strong>Hacks:</strong> ${r.notes || 'None'}</p>
-                    <button class="theme-switch-inline" style="width:100%; margin-top:10px; font-size:12px;" onclick="event.stopPropagation(); alert('Notes feature coming soon!')">💬 Community Notes</button>
+                    
+                    <div class="community-section" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                        <div id="notes-list-${index}" style="font-size: 0.85em; margin-bottom: 10px;">
+                            <small style="color: #999;">Loading hacks...</small>
+                        </div>
+                        <div style="display: flex; gap: 5px;">
+                            <input type="text" id="note-input-${index}" placeholder="Add a memory hack..." style="flex:1; padding: 5px; border-radius: 5px; border: 1px solid #ddd; font-size: 12px;" onclick="event.stopPropagation()">
+                            <button onclick="event.stopPropagation(); postNote('${cleanKey}', ${index})" style="background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer;">Post</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
         if (window.MathJax) window.MathJax.typeset();
     }
 
     function toggleExpand(index) {
         const d = document.getElementById(`details-${index}`);
-        d.style.display = (d.style.display === 'none') ? 'block' : 'none';
+        const isOpening = d.style.display === 'none';
+        d.style.display = isOpening ? 'block' : 'none';
+        
+        if(isOpening) {
+            const r = allReactions[index];
+            const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
+            loadNotes(cleanKey, index);
+        }
     }
 
-    // 3. STUDY MODE
-    function renderFlashcard() {
-        const r = studyData[studyIndex];
-        const container = document.getElementById('flashcard-container');
-        container.innerHTML = `
-            <div class="flashcard" id="currentFlashcard" onclick="this.classList.toggle('flipped')">
-                <div class="flashcard-inner">
-                    <div class="card-front">
-                        <small>REAGENT</small>
-                        <h1 style="font-size:2.2em;">${r.reagent}</h1>
-                        <p>${r.name || ''}</p>
-                    </div>
-                    <div class="card-back" onclick="event.stopPropagation(); this.parentElement.parentElement.classList.toggle('flipped')">
-                        ${r.diagram ? `<img src="${r.diagram}" class="reaction-diagram" style="max-height:100px;">` : ''}
-                        <h2 style="color:#2ecc71; margin:0;">${r.function}</h2>
-                        <div style="background:#f0f0f0; padding:10px; border-radius:8px; width:100%; color:#333; font-size:0.8em;">${r.example || ''}</div>
-                        <button onclick="event.stopPropagation(); nextCard()" style="background:#2ecc71; color:white; border:none; padding:12px 25px; border-radius:25px; margin-top:auto; font-weight:bold;">Next →</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        if (window.MathJax) window.MathJax.typeset();
+    // COMMUNITY NOTE FUNCTIONS
+    function postNote(reagentKey, index) {
+        const input = document.getElementById(`note-input-${index}`);
+        const noteText = input.value;
+        if(!noteText) return;
+
+        db.ref('community_notes/' + reagentKey).push({
+            text: noteText,
+            timestamp: Date.now()
+        }).then(() => {
+            input.value = "";
+            loadNotes(reagentKey, index);
+        });
+    }
+
+    function loadNotes(reagentKey, index) {
+        db.ref('community_notes/' + reagentKey).limitToLast(5).once('value', (snap) => {
+            const container = document.getElementById(`notes-list-${index}`);
+            const data = snap.val();
+            if(!data) {
+                container.innerHTML = "<small style='color:#999;'>No community hacks yet.</small>";
+                return;
+            }
+            let html = "<strong>Community Hacks:</strong>";
+            for(let id in data) {
+                html += `<div style="background:rgba(46, 204, 113, 0.1); padding:5px; border-radius:4px; margin-top:4px; font-size:0.9em;">💡 ${data[id].text}</div>`;
+            }
+            container.innerHTML = html;
+        });
     }
 
     function startStudyMode() {
@@ -160,7 +183,6 @@
     function exitStudyMode() { document.getElementById('studyOverlay').style.display = 'none'; }
     function nextCard() { studyIndex = (studyIndex + 1) % studyData.length; renderFlashcard(); }
 
-    // 4. UTILS
     function toggleForm() {
         const f = document.getElementById('formOverlay');
         f.style.display = (f.style.display === 'flex') ? 'none' : 'flex';
@@ -169,7 +191,7 @@
     function addReaction() {
         const reagent = document.getElementById('newReagent').value;
         if(!reagent) return alert("Reagent is required!");
-        const data = {
+        db.ref('custom_reactions').push({
             reagent,
             name: document.getElementById('newName').value,
             function: document.getElementById('newFunction').value,
@@ -177,11 +199,7 @@
             diagram: document.getElementById('newDiagram').value,
             notes: document.getElementById('newNotes').value,
             category: 'General'
-        };
-        db.ref('custom_reactions').push(data).then(() => {
-            toggleForm();
-            alert("Reaction Shared!");
-        });
+        }).then(() => { toggleForm(); });
     }
 
     function toggleTheme() {
@@ -201,6 +219,5 @@
 
     document.getElementById('mainSearch').addEventListener('input', runSearch);
 </script>
-
 </body>
 </html>
