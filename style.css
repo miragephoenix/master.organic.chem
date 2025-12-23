@@ -334,3 +334,36 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
     color: #333;
     transform: rotateY(180deg);
 }
+/* Forces the pill shape for your top buttons */
+.theme-switch-inline {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 50px; 
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+/* The Warning text style */
+.warning-box {
+    margin-top: 10px;
+    padding: 8px;
+    background: #fff5f5;
+    border-left: 4px solid #ff4757;
+    color: #ff4757;
+    font-size: 0.85em;
+    text-align: left;
+    width: 100%;
+    border-radius: 4px;
+}
+
+/* Fixes the "sliver" card look */
+.flashcard {
+    width: 320px;
+    height: 480px;
+    perspective: 1000px;
+}
