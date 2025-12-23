@@ -129,7 +129,7 @@ let studyIndex = 0;
 let touchStartY = 0;
 let studyData = []; // This holds the shuffled version for your session
 
-function startStudyMode() {
+function allReactions() {
     // SMALL FIX: Ensure we use your actual data array
     // If your array is named differently (e.g., 'allReactions'), change 'reactionsData' below.
     if (typeof reactionsData === 'undefined' || reactionsData.length === 0) {
@@ -279,6 +279,8 @@ function nextCard() {
     }
 
     function addReaction() {
+        console.log("Checking allReactions array:", allReactions);
+    console.log("Number of items found:", allReactions ? allReactions.length : "undefined");
         const reagentVal = document.getElementById('newReagent').value;
         if(!reagentVal) return alert("Reagent is required!");
 
@@ -347,7 +349,7 @@ function nextCard() {
     document.getElementById('mainSearch').addEventListener('input', runSearch);
     
 </script>
-<button class="theme-switch" onclick="startStudyMode()" style="right: 140px;">📖 Study Mode</button>
+<button class="theme-switch" onclick="allReactions()" style="right: 140px; top: 20px;">📖 Study Mode</button>
     <div id="studyOverlay">
     <button class="close-study" onclick="exitStudyMode()">✕ Exit</button>
     <div id="flashcard-container">
@@ -356,6 +358,7 @@ function nextCard() {
 </div>
 </body>
 </html>
+
 
 
 
