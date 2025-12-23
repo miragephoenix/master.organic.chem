@@ -367,3 +367,18 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
     height: 480px;
     perspective: 1000px;
 }
+.flashcard {
+    width: 320px; /* This MUST be here */
+    height: 480px;
+    perspective: 1000px;
+}
+
+.theme-switch-inline {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 50px; /* Makes it a pill */
+    font-weight: bold;
+    cursor: pointer;
+}
