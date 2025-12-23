@@ -5,10 +5,7 @@
     <title>JEE Organic Live Hub</title>
     <script>
       window.MathJax = {
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']],
-          packages: {'[+]': ['mhchem']}
-        },
+        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], packages: {'[+]': ['mhchem']} },
         loader: { load: ['[tex]/mhchem'] }
       };
     </script>
@@ -27,7 +24,7 @@
         <button class="theme-switch-inline" onclick="toggleTheme()" id="themeBtn">🌙 Dark Mode</button>
     </div>
 
-    <div class="filter-row" id="filterRow">
+    <div class="filter-row">
         <button class="filter-btn active" onclick="filterByCat('All', event)">All</button>
         <button class="filter-btn" onclick="filterByCat('Naming', event)">Naming</button>
         <button class="filter-btn" onclick="filterByCat('Reduction', event)">Reduction</button>
@@ -35,57 +32,19 @@
         <button class="filter-btn" onclick="filterByCat('Tests', event)">Tests</button>
     </div>
     
-    <input type="text" id="mainSearch" class="search-bar" placeholder="Search by reagent or reaction name...">
-    
+    <input type="text" id="mainSearch" class="search-bar" placeholder="Search reagents...">
     <div id="feed"></div>
-
-    <div style="text-align: center; margin-top: 50px;">
-        <input type="password" id="adminKey" placeholder="Admin Access" oninput="checkAdmin()" style="border:none; background:none; text-align:center; color:#ccc; font-size:11px; outline:none; width: 100px;">
-    </div>
 </div>
 
-<button id="fab" onclick="toggleForm()">+</button>
-
-<div id="formOverlay">
-    <div class="admin-box" style="width: 90%; max-width: 500px; position: relative;">
-        <span onclick="toggleForm()" style="position:absolute; top:15px; right:20px; cursor:pointer; font-size:24px; color:#999;">&times;</span>
-        <h2 style="margin-top: 0; color: #2ecc71;">Share Reaction</h2>
-        <input type="text" id="newName" placeholder="Reaction Name">
-        <input type="text" id="newReagent" placeholder="Reagent">
-        <input type="text" id="newFunction" placeholder="Main function">
-        <input type="text" id="newWarning" placeholder="Warnings/Exceptions">
-        <input type="text" id="newDiagram" placeholder="Diagram URL (optional)">
-        <input type="text" id="newNotes" placeholder="Memory hacks (comma separated)">
-        <select id="newCat">
-            <option value="General">General</option>
-            <option value="Naming">Naming</option>
-            <option value="Reduction">Reduction</option>
-            <option value="Oxidation">Oxidation</option>
-            <option value="Tests">Tests</option>
-        </select>
-        <button style="width: 100%; margin-top: 10px; padding: 15px;" onclick="addReaction()">Post to Community</button>
-    </div>
-</div>
-
-<div id="studyOverlay" style="display:none;">
-    <button class="close-study" onclick="exitStudyMode()" style="position: fixed; top: 20px; left: 20px; z-index: 6000; background: #fff; border-radius: 50%; width: 40px; height: 40px; border: none; font-weight: bold; cursor: pointer;">✕</button>
+<div id="studyOverlay" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); flex-direction: column; align-items: center; justify-content: center; z-index: 5000;">
+    <button onclick="exitStudyMode()" style="position:absolute; top:20px; right:20px; background:white; border:none; border-radius:50%; width:40px; height:40px; font-weight:bold; cursor:pointer; z-index: 6000;">✕</button>
     <div id="flashcard-container"></div>
-    <p style="margin-top: 20px; color: #fff; position: absolute; bottom: 30px;">Tap to flip • Swipe up for next</p>
+    <p style="color:white; margin-top:20px;">Tap to Flip Back & Forth • Swipe up for Next</p>
 </div>
 
 <script>
-    // 1. DATA & THEME INITIALIZATION
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
-
-    function toggleTheme() {
-        const html = document.documentElement;
-        const current = html.getAttribute('data-theme');
-        const target = current === 'light' ? 'dark' : 'light';
-        html.setAttribute('data-theme', target);
-        localStorage.setItem('theme', target);
-        document.getElementById('themeBtn').innerText = target === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
-    }
 
     const firebaseConfig = {
         apiKey: "AIzaSyDIW-SJkO5j4PwN1SDjMxGD_aQdoDHD6CU",
@@ -96,81 +55,31 @@
         messagingSenderId: "799844686854",
         appId: "1:799844686854:web:b9014316afd5ba5233f787"
     };
-    
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     let allReactions = [];
-    let currentFilter = 'All';
-    const MY_SECRET = "JEE2025"; 
-
+    let studyData = [];
     let studyIndex = 0;
     let touchStartY = 0;
-    let studyData = [];
 
-    // 2. FIREBASE DATA SYNC
-    db.ref('custom_reactions').on('value', (snapshot) => {
-        const data = snapshot.val();
-        const customOnes = [];
-        for(let id in data) customOnes.push({...data[id], firebaseId: id, isCustom: true});
-        
-        if (typeof reactionDatabase !== 'undefined') {
-            allReactions = [...reactionDatabase.map(r => ({...r, isCustom: false})), ...customOnes];
-        } else {
-            allReactions = customOnes;
-        }
-        runSearch();
+    db.ref('custom_reactions').on('value', (snap) => {
+        const data = snap.val();
+        const custom = [];
+        for(let id in data) custom.push({...data[id], firebaseId: id});
+        allReactions = (typeof reactionDatabase !== 'undefined') ? [...reactionDatabase, ...custom] : custom;
+        render(allReactions);
     });
 
-    // 3. MAIN UI RENDERER
-    function render(data) {
-        const feed = document.getElementById('feed');
-        const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
-        
-        if (data.length === 0) {
-            feed.innerHTML = `<p style='text-align:center; color:var(--text-sub); padding: 20px;'>No reactions found.</p>`;
-            return;
-        }
-
-        feed.innerHTML = data.map((r, index) => {
-            const rKey = (r.reagent || "unknown").replace(/[.#$/[\]]/g, "_");
-            return `
-            <div class="card" onclick="toggleCard('${index}', '${rKey}')">
-                <span class="category-tag">${r.category || 'General'}</span>
-                ${isAdmin ? `<button class="delete-btn" onclick="deleteReaction('${r.firebaseId || index}', event)">Delete</button>` : ''}
-                <h3 style="margin: 0; color: var(--accent);">${r.reagent}</h3>
-                <p style="margin: 5px 0; font-weight: bold;">${r.name || ''}</p>
-                <small>${r.function}</small>
-                <div class="details" id="details-${index}" style="display:none;">
-                    <div style="background: var(--bg-color); padding:15px; border-radius:8px; margin-top:8px;">
-                        ${r.example || '$\ce{Reagent -> Product}$'}
-                    </div>
-                    <div style="margin-top:15px;">
-                        <strong>Key Hacks:</strong>
-                        <ul style="padding-left: 20px;">
-                            ${(Array.isArray(r.notes) ? r.notes : [r.notes]).map(n => `<li>${n}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <div id="comments-${rKey}"></div>
-                </div>
-            </div>`;
-        }).join('');
-        
-        if (window.MathJax && window.MathJax.typeset) window.MathJax.typeset();
-    }
-
-    // 4. STUDY MODE LOGIC
     function startStudyMode() {
-        if (!allReactions || allReactions.length === 0) return alert("No reactions found!");
+        if (allReactions.length === 0) return alert("No reactions found!");
         studyData = [...allReactions].sort(() => Math.random() - 0.5);
         studyIndex = 0;
         document.getElementById('studyOverlay').style.display = 'flex';
         renderFlashcard();
     }
 
-    function exitStudyMode() {
-        document.getElementById('studyOverlay').style.display = 'none';
-    }
+    function exitStudyMode() { document.getElementById('studyOverlay').style.display = 'none'; }
 
     function renderFlashcard() {
         const r = studyData[studyIndex];
@@ -180,96 +89,54 @@
             <div class="flashcard" id="currentFlashcard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
                     <div class="card-front">
-                        <span style="font-size: 0.8em; opacity: 0.7;">REAGENT</span>
-                        <h1 style="text-align: center; font-size: 2.2em;">${r.reagent}</h1>
-                        <p style="font-size: 0.9em; margin-top: 10px;">${r.name || ''}</p>
+                        <small>REAGENT</small>
+                        <h1 style="font-size:2em; margin: 10px 0;">${r.reagent}</h1>
+                        <p style="font-style: italic; opacity: 0.9;">${r.name || ''}</p>
                     </div>
-                    <div class="card-back" onclick="event.stopPropagation()">
-                        <h3 style="color: var(--accent); margin: 0;">${r.function}</h3>
-                        <div style="background: var(--bg-color); padding: 12px; border-radius: 8px; margin: 15px 0; width: 100%; font-family: monospace;">
-                            ${r.example || '$\ce{Reagent -> Product}$'}
+                    <div class="card-back" onclick="event.stopPropagation(); this.parentElement.parentElement.classList.toggle('flipped')">
+                        <h2 style="color:#2ecc71; margin-bottom: 5px;">${r.function}</h2>
+                        
+                        <div style="background:#f0f0f0; padding:10px; border-radius:8px; margin:5px 0; width: 100%; font-family: monospace;">
+                            ${r.example || ''}
                         </div>
-                        <div style="text-align: left; width: 100%; font-size: 0.85em;">
-                            <strong>Hacks:</strong>
-                            <ul style="padding-left: 15px; color: var(--text-sub);">
-                                ${(Array.isArray(r.notes) ? r.notes : [r.notes]).map(n => `<li>${n}</li>`).join('')}
-                            </ul>
+
+                        ${r.warning ? `<div class="warning-box"><strong>⚠️ Warning:</strong> ${r.warning}</div>` : ''}
+
+                        <div style="text-align: left; width: 100%; margin-top: 10px; font-size: 0.85em;">
+                            <strong>Hacks:</strong> ${r.notes || 'None'}
                         </div>
-                        <button onclick="nextCard()" style="margin-top: auto; width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 25px; font-weight: bold; cursor: pointer;">Next Reaction →</button>
+
+                        <button onclick="event.stopPropagation(); nextCard()" style="background:#2ecc71; color:white; border:none; padding:12px 25px; border-radius:25px; margin-top: auto; cursor:pointer; font-weight: bold;">Next Reaction →</button>
                     </div>
                 </div>
-            </div>`;
+            </div>
+        `;
 
         const card = document.getElementById('currentFlashcard');
         card.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
         card.addEventListener('touchend', e => {
             if (touchStartY - e.changedTouches[0].clientY > 70) nextCard();
         });
-
-        if (window.MathJax && window.MathJax.typeset) window.MathJax.typeset();
+        if (window.MathJax) window.MathJax.typeset();
     }
 
     function nextCard() {
         studyIndex = (studyIndex + 1) % studyData.length;
-        const container = document.getElementById('flashcard-container');
-        container.style.opacity = 0;
-        setTimeout(() => {
-            renderFlashcard();
-            container.style.opacity = 1;
-        }, 200);
+        renderFlashcard();
     }
 
-    // 5. APP FUNCTIONALITY
-    function toggleForm() {
-        const overlay = document.getElementById('formOverlay');
-        overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+    function toggleTheme() {
+        const html = document.documentElement;
+        const target = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', target);
+        localStorage.setItem('theme', target);
+        document.getElementById('themeBtn').innerText = target === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
     }
 
-    function toggleCard(id, key) {
-        const det = document.getElementById(`details-${id}`);
-        det.style.display = (det.style.display === 'block') ? 'none' : 'block';
+    function render(data) {
+        const feed = document.getElementById('feed');
+        feed.innerHTML = data.map(r => `<div class="card"><h3>${r.reagent}</h3><p>${r.function}</p></div>`).join('');
     }
-
-    function addReaction() {
-        const reagentVal = document.getElementById('newReagent').value;
-        if(!reagentVal) return alert("Reagent required!");
-        const reaction = {
-            name: document.getElementById('newName').value,
-            reagent: reagentVal,
-            function: document.getElementById('newFunction').value,
-            example: `$\\ce{ ${reagentVal} }$`,
-            warning: document.getElementById('newWarning').value,
-            diagram: document.getElementById('newDiagram').value,
-            notes: document.getElementById('newNotes').value.split(','),
-            category: document.getElementById('newCat').value,
-            timestamp: Date.now()
-        };
-        db.ref('custom_reactions').push(reaction).then(() => {
-            toggleForm();
-            ["newName", "newReagent", "newFunction", "newWarning", "newDiagram", "newNotes"].forEach(id => document.getElementById(id).value = "");
-        });
-    }
-
-    function runSearch() {
-        const query = document.getElementById('mainSearch').value.toLowerCase();
-        let filtered = allReactions.filter(r => {
-            const matchesName = r.name && r.name.toLowerCase().includes(query);
-            const matchesReagent = r.reagent && r.reagent.toLowerCase().includes(query);
-            return (currentFilter === 'All' || r.category === currentFilter) && (matchesName || matchesReagent);
-        });
-        render(filtered);
-    }
-
-    function checkAdmin() { runSearch(); }
-    function filterByCat(cat, e) {
-        currentFilter = cat;
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        runSearch();
-    }
-
-    document.getElementById('mainSearch').addEventListener('input', runSearch);
 </script>
-
 </body>
 </html>
