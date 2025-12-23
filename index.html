@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="style.css?v=2.3">
+    <link rel="stylesheet" href="style.css?v=2.4">
     <title>JEE Organic Live Hub</title>
     <script>
       window.MathJax = {
@@ -32,7 +32,6 @@
     </div>
     
     <input type="text" id="mainSearch" class="search-bar" placeholder="Search by reagent or reaction name...">
-    
     <div id="feed"></div>
 
     <div style="text-align: center; margin-top: 50px;">
@@ -57,9 +56,9 @@
 </div>
 
 <div id="studyOverlay" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); flex-direction: column; align-items: center; justify-content: center; z-index: 5000;">
-    <button onclick="exitStudyMode()" style="position:absolute; top:20px; right:20px; background:white; border:none; border-radius:50%; width:40px; height:40px; font-weight:bold; cursor:pointer;">✕</button>
+    <button onclick="exitStudyMode()" style="position:absolute; top:20px; right:20px; background:white; border:none; border-radius:50%; width:40px; height:40px; font-weight:bold; cursor:pointer; z-index: 6000;">✕</button>
     <div id="flashcard-container"></div>
-    <p style="color:white; margin-top:20px;">Tap to Flip • Swipe up for Next</p>
+    <p style="color:white; margin-top:20px; font-family: sans-serif;">Tap to Flip • Swipe up for Next</p>
 </div>
 
 <script>
@@ -106,7 +105,7 @@
         feed.innerHTML = data.map((r, index) => {
             const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
             return `
-            <div class="card" onclick="toggleExpand(${index})" style="cursor:pointer; margin-bottom:15px; padding:15px; border-radius:12px; border:1px solid #ddd;">
+            <div class="card" onclick="toggleExpand(${index})" style="cursor:pointer; margin-bottom:15px;">
                 <h3 style="color: var(--accent); margin:0;">${r.reagent}</h3>
                 <p style="font-weight:bold; margin:5px 0;">${r.name || ''}</p>
                 <small>${r.function}</small>
@@ -121,7 +120,7 @@
                             <small style="color: #999;">Loading hacks...</small>
                         </div>
                         <div style="display: flex; gap: 5px;">
-                            <input type="text" id="note-input-${index}" placeholder="Add a memory hack..." style="flex:1; padding: 5px; border-radius: 5px; border: 1px solid #ddd; font-size: 12px;" onclick="event.stopPropagation()">
+                            <input type="text" id="note-input-${index}" placeholder="Add a hack..." style="flex:1; padding: 5px; border-radius: 5px; border: 1px solid #ddd; font-size: 12px;" onclick="event.stopPropagation()">
                             <button onclick="event.stopPropagation(); postNote('${cleanKey}', ${index})" style="background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer;">Post</button>
                         </div>
                     </div>
@@ -135,7 +134,6 @@
         const d = document.getElementById(`details-${index}`);
         const isOpening = d.style.display === 'none';
         d.style.display = isOpening ? 'block' : 'none';
-        
         if(isOpening) {
             const r = allReactions[index];
             const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
@@ -143,16 +141,67 @@
         }
     }
 
-    // COMMUNITY NOTE FUNCTIONS
+    function renderFlashcard() {
+        if (!studyData.length) return;
+        const r = studyData[studyIndex];
+        const container = document.getElementById('flashcard-container');
+        
+        // Ensure strings exist to prevent "undefined" showing up
+        const reagent = r.reagent || "No Reagent";
+        const name = r.name || "";
+        const func = r.function || "No Function Listed";
+        const example = r.example || "";
+        const diagramHtml = r.diagram ? `<img src="${r.diagram}" class="reaction-diagram" style="max-height:100px;">` : '';
+        const warningHtml = r.warning ? `<p style="color:red; font-size:0.8em; margin:5px 0;">⚠️ ${r.warning}</p>` : '';
+
+        container.innerHTML = `
+            <div class="flashcard" id="currentFlashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="card-front">
+                        <small>REAGENT</small>
+                        <h1 style="font-size:2.2em; margin:10px 0;">${reagent}</h1>
+                        <p>${name}</p>
+                    </div>
+                    <div class="card-back" onclick="event.stopPropagation(); this.parentElement.parentElement.classList.toggle('flipped')">
+                        ${diagramHtml}
+                        <h2 style="color:#2ecc71; margin:0; font-size:1.2em;">${func}</h2>
+                        <div style="background:#f0f0f0; padding:10px; border-radius:8px; width:100%; color:#333; font-size:0.8em; margin:10px 0;">
+                            ${example}
+                        </div>
+                        ${warningHtml}
+                        <button onclick="event.stopPropagation(); nextCard()" style="background:#2ecc71; color:white; border:none; padding:12px 25px; border-radius:25px; margin-top:auto; font-weight:bold; cursor:pointer;">Next →</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const card = document.getElementById('currentFlashcard');
+        let touchStartY = 0;
+        card.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
+        card.addEventListener('touchend', e => {
+            if (touchStartY - e.changedTouches[0].clientY > 70) nextCard();
+        });
+
+        if (window.MathJax) window.MathJax.typeset();
+    }
+
+    function startStudyMode() {
+        if (!allReactions.length) return alert("No reactions to study!");
+        studyData = [...allReactions].sort(() => Math.random() - 0.5);
+        studyIndex = 0;
+        document.getElementById('studyOverlay').style.display = 'flex';
+        renderFlashcard();
+    }
+
+    function exitStudyMode() { document.getElementById('studyOverlay').style.display = 'none'; }
+    function nextCard() { studyIndex = (studyIndex + 1) % studyData.length; renderFlashcard(); }
+
+    // Notes and Other Utils
     function postNote(reagentKey, index) {
         const input = document.getElementById(`note-input-${index}`);
         const noteText = input.value;
         if(!noteText) return;
-
-        db.ref('community_notes/' + reagentKey).push({
-            text: noteText,
-            timestamp: Date.now()
-        }).then(() => {
+        db.ref('community_notes/' + reagentKey).push({ text: noteText, timestamp: Date.now() }).then(() => {
             input.value = "";
             loadNotes(reagentKey, index);
         });
@@ -162,26 +211,12 @@
         db.ref('community_notes/' + reagentKey).limitToLast(5).once('value', (snap) => {
             const container = document.getElementById(`notes-list-${index}`);
             const data = snap.val();
-            if(!data) {
-                container.innerHTML = "<small style='color:#999;'>No community hacks yet.</small>";
-                return;
-            }
+            if(!data) { container.innerHTML = "<small style='color:#999;'>No community hacks yet.</small>"; return; }
             let html = "<strong>Community Hacks:</strong>";
-            for(let id in data) {
-                html += `<div style="background:rgba(46, 204, 113, 0.1); padding:5px; border-radius:4px; margin-top:4px; font-size:0.9em;">💡 ${data[id].text}</div>`;
-            }
+            for(let id in data) { html += `<div style="background:rgba(46, 204, 113, 0.1); padding:5px; border-radius:4px; margin-top:4px; font-size:0.9em;">💡 ${data[id].text}</div>`; }
             container.innerHTML = html;
         });
     }
-
-    function startStudyMode() {
-        studyData = [...allReactions].sort(() => Math.random() - 0.5);
-        studyIndex = 0;
-        document.getElementById('studyOverlay').style.display = 'flex';
-        renderFlashcard();
-    }
-    function exitStudyMode() { document.getElementById('studyOverlay').style.display = 'none'; }
-    function nextCard() { studyIndex = (studyIndex + 1) % studyData.length; renderFlashcard(); }
 
     function toggleForm() {
         const f = document.getElementById('formOverlay');
