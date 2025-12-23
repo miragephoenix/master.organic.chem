@@ -123,3 +123,72 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
 
 .diagram-container { background: white; padding: 10px; border-radius: 8px; text-align: center; margin-top: 10px; }
 .reaction-img { max-width: 100%; height: auto; max-height: 200px; }
+
+
+/* Study Mode Overlay */
+#studyOverlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg-color);
+    z-index: 5000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* The Flashcard Container */
+.flashcard {
+    width: 90%;
+    max-width: 400px;
+    height: 500px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.flashcard.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+}
+
+.card-front {
+    background: var(--accent);
+    color: white;
+}
+
+.card-back {
+    background: var(--card-bg);
+    color: var(--text-main);
+    transform: rotateY(180deg);
+    overflow-y: auto;
+}
+
+/* Exit Button */
+.close-study {
+    position: absolute;
+    top: 20px; left: 20px;
+    background: none; border: none;
+    font-size: 24px; color: var(--text-main);
+    cursor: pointer;
+}
