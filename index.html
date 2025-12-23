@@ -124,7 +124,92 @@ function toggleTheme() {
         feed.innerHTML = `<p style='text-align:center; color:var(--text-sub); padding: 20px;'>No reactions found. Try a different search.</p>`;
         return;
     }
+// --- STUDY MODE LOGIC ---
+let studyIndex = 0;
+let touchStartY = 0;
+let studyData = []; // This holds the shuffled version for your session
 
+function startStudyMode() {
+    // SMALL FIX: Ensure we use your actual data array
+    // If your array is named differently (e.g., 'allReactions'), change 'reactionsData' below.
+    if (typeof reactionsData === 'undefined' || reactionsData.length === 0) {
+        alert("No reactions found! Add some data first or wait for the sync.");
+        return;
+    }
+
+    // Create a copy and shuffle it so you don't memorize the order
+    studyData = [...reactionsData].sort(() => Math.random() - 0.5);
+    
+    studyIndex = 0;
+    document.getElementById('studyOverlay').style.display = 'flex';
+    renderFlashcard();
+}
+
+function exitStudyMode() {
+    document.getElementById('studyOverlay').style.display = 'none';
+}
+
+function renderFlashcard() {
+    const r = studyData[studyIndex];
+    const container = document.getElementById('flashcard-container');
+    
+    container.innerHTML = `
+        <div class="flashcard" id="currentFlashcard" onclick="this.classList.toggle('flipped')">
+            <div class="flashcard-inner">
+                <div class="card-front">
+                    <span style="font-size: 0.8em; opacity: 0.8; margin-bottom: 10px;">REAGENT / TEST</span>
+                    <h1 style="font-size: 2.2em; margin: 0;">${r.reagent}</h1>
+                    ${r.name ? `<p style="margin-top: 10px; font-weight: bold;">(${r.name})</p>` : ''}
+                </div>
+                
+                <div class="card-back" onclick="event.stopPropagation()">
+                    <h3 style="color: var(--accent); margin-top: 0;">${r.function}</h3>
+                    
+                    <div style="background: var(--bg-color); padding: 15px; border-radius: 8px; width: 100%; border: 1px solid var(--border-color); font-family: monospace;">
+                        ${r.example || '$\ce{Reagent -> Product}$'}
+                    </div>
+
+                    <div style="text-align: left; width: 100%; margin-top: 15px;">
+                        <strong style="font-size: 0.9em;">Memory Hacks:</strong>
+                        <ul style="padding-left: 20px; font-size: 0.9em; color: var(--text-sub);">
+                            ${(Array.isArray(r.notes) ? r.notes : [r.notes]).map(n => `<li style="margin-bottom:5px;">${n}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <button onclick="nextCard()" style="margin-top: auto; background: var(--accent); color: white; border: none; padding: 12px 25px; border-radius: 30px; cursor: pointer; font-weight: bold; width: 100%;">Got it! Next →</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Swipe Detection Logic for the "TikTok" feel
+    const card = document.getElementById('currentFlashcard');
+    card.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
+    card.addEventListener('touchend', e => {
+        const touchEndY = e.changedTouches[0].clientY;
+        const swipeDistance = touchStartY - touchEndY;
+        if (swipeDistance > 70) nextCard(); // Swipe UP to go next
+    });
+    
+    // Renders LaTeX/MathJax formulas inside the card
+    if (window.MathJax && window.MathJax.typeset) window.MathJax.typeset();
+}
+
+function nextCard() {
+    studyIndex = (studyIndex + 1) % studyData.length;
+    
+    const container = document.getElementById('flashcard-container');
+    // Animation trigger
+    container.style.transition = "0.2s";
+    container.style.opacity = 0;
+    container.style.transform = "translateY(-30px)";
+    
+    setTimeout(() => {
+        renderFlashcard();
+        container.style.opacity = 1;
+        container.style.transform = "translateY(0)";
+    }, 200);
+}
     feed.innerHTML = data.map((r, index) => {
         // Clean key for Firebase comments logic
         const rKey = (r.reagent || "unknown").replace(/[.#$/[\]]/g, "_");
@@ -260,10 +345,18 @@ function toggleTheme() {
     }
 
     document.getElementById('mainSearch').addEventListener('input', runSearch);
+    
 </script>
-
+<button class="theme-switch" onclick="startStudyMode()" style="right: 140px;">📖 Study Mode</button>
+    <div id="studyOverlay">
+    <button class="close-study" onclick="exitStudyMode()">✕ Exit</button>
+    <div id="flashcard-container">
+        </div>
+    <p style="margin-top: 20px; color: var(--text-sub);">Tap to flip • Swipe up for next</p>
+</div>
 </body>
 </html>
+
 
 
 
