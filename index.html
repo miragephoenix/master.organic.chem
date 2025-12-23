@@ -129,4 +129,136 @@
         const isAdmin = document.getElementById('adminKey').value === MY_SECRET;
         
         if (data.length === 0) {
-            feed.innerHTML = `<p style='text-align:center; color:var(--text-sub); padding: 20px;'>No reactions found.</p
+            feed.innerHTML = `<p style='text-align:center; color:var(--text-sub); padding: 20px;'>No reactions found.</p>`;
+            return;
+        }
+
+        feed.innerHTML = data.map((r, index) => {
+            const rKey = (r.reagent || "unknown").replace(/[.#$/[\]]/g, "_");
+            return `
+            <div class="card" onclick="toggleCard('${index}', '${rKey}')">
+                <span class="category-tag">${r.category || 'General'}</span>
+                ${isAdmin ? `<button class="delete-btn" onclick="deleteReaction('${r.firebaseId || index}', event)">Delete</button>` : ''}
+                <h3 style="margin: 0; color: var(--accent);">${r.reagent}</h3>
+                <p style="margin: 5px 0; font-weight: bold;">${r.name || ''}</p>
+                <small>${r.function}</small>
+                <div class="details" id="details-${index}" style="display:none;">
+                    <div style="background: var(--bg-color); padding:15px; border-radius:8px; margin-top:8px;">
+                        ${r.example || '$\ce{Reagent -> Product}$'}
+                    </div>
+                    <div style="margin-top:15px;">
+                        <strong>Key Hacks:</strong>
+                        <ul style="padding-left: 20px;">
+                            ${(Array.isArray(r.notes) ? r.notes : [r.notes]).map(n => `<li>${n}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div id="comments-${rKey}"></div>
+                </div>
+            </div>`;
+        }).join('');
+        
+        if (window.MathJax && window.MathJax.typeset) window.MathJax.typeset();
+    }
+
+    // 4. STUDY MODE FUNCTIONS
+    function startStudyMode() {
+        if (allReactions.length === 0) return alert("No data yet!");
+        studyData = [...allReactions].sort(() => Math.random() - 0.5);
+        studyIndex = 0;
+        document.getElementById('studyOverlay').style.display = 'flex';
+        renderFlashcard();
+    }
+
+    function exitStudyMode() {
+        document.getElementById('studyOverlay').style.display = 'none';
+    }
+
+    function renderFlashcard() {
+        const r = studyData[studyIndex];
+        const container = document.getElementById('flashcard-container');
+        container.innerHTML = `
+            <div class="flashcard" id="currentFlashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="card-front">
+                        <span style="font-size: 0.7em;">REAGENT</span>
+                        <h1 style="font-size: 2em;">${r.reagent}</h1>
+                    </div>
+                    <div class="card-back" onclick="event.stopPropagation()">
+                        <h3>${r.function}</h3>
+                        <div style="background: #f0f0f0; padding: 10px; border-radius: 8px; color: #333;">${r.example || ''}</div>
+                        <p style="font-size: 0.9em; margin-top: 10px;">${r.notes}</p>
+                        <button onclick="nextCard()" style="margin-top: 20px; padding: 10px 20px; background: #2ecc71; color: white; border: none; border-radius: 20px;">Next →</button>
+                    </div>
+                </div>
+            </div>`;
+
+        const card = document.getElementById('currentFlashcard');
+        card.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
+        card.addEventListener('touchend', e => {
+            if (touchStartY - e.changedTouches[0].clientY > 70) nextCard();
+        });
+
+        if (window.MathJax && window.MathJax.typeset) window.MathJax.typeset();
+    }
+
+    function nextCard() {
+        studyIndex = (studyIndex + 1) % studyData.length;
+        renderFlashcard();
+    }
+
+    // 5. HELPER FUNCTIONS
+    function toggleForm() {
+        const overlay = document.getElementById('formOverlay');
+        overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function toggleCard(id, key) {
+        const det = document.getElementById(`details-${id}`);
+        det.style.display = (det.style.display === 'block') ? 'none' : 'block';
+        if(det.style.display === 'block') {
+            if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([det]);
+        }
+    }
+
+    function addReaction() {
+        const reagentVal = document.getElementById('newReagent').value;
+        if(!reagentVal) return alert("Reagent required!");
+        const reaction = {
+            name: document.getElementById('newName').value,
+            reagent: reagentVal,
+            function: document.getElementById('newFunction').value,
+            example: `$\\ce{ ${reagentVal} }$`,
+            warning: document.getElementById('newWarning').value,
+            diagram: document.getElementById('newDiagram').value,
+            notes: document.getElementById('newNotes').value.split(','),
+            category: document.getElementById('newCat').value,
+            timestamp: Date.now()
+        };
+        db.ref('custom_reactions').push(reaction).then(() => {
+            toggleForm();
+        });
+    }
+
+    function runSearch() {
+        const query = document.getElementById('mainSearch').value.toLowerCase();
+        let filtered = allReactions.filter(r => {
+            const matchesName = r.name && r.name.toLowerCase().includes(query);
+            const matchesReagent = r.reagent && r.reagent.toLowerCase().includes(query);
+            return (currentFilter === 'All' || r.category === currentFilter) && (matchesName || matchesReagent);
+        });
+        render(filtered);
+    }
+
+    function checkAdmin() { runSearch(); }
+    function filterByCat(cat, e) {
+        currentFilter = cat;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        runSearch();
+    }
+
+    document.getElementById('mainSearch').addEventListener('input', runSearch);
+</script>
+
+</body>
+</html>
