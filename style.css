@@ -382,3 +382,26 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
     font-weight: bold;
     cursor: pointer;
 }
+
+.theme-switch-inline {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 50px !important;
+    font-weight: bold;
+    cursor: pointer;
+}
+.flashcard {
+    width: 320px; 
+    height: 480px;
+    perspective: 1000px;
+}
+.reaction-diagram {
+    width: auto;
+    max-width: 100%;
+    max-height: 150px;
+    display: block;
+    margin: 10px auto;
+    object-fit: contain;
+}
