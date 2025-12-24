@@ -513,40 +513,38 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
 }
 
 /* 1. Global Reset - Only one scrollbar allowed */
+/* 1. Reset everything to one single scrollbar */
 html, body {
     margin: 0;
     padding: 0;
-    height: auto !important; /* Forces the page to grow naturally */
+    height: auto;
     overflow-x: hidden;
-    overflow-y: auto !important; /* Only the system scrollbar */
+    position: relative; 
 }
 
-/* 2. Search Bar - Regular position (Not Sticky) */
+/* 2. Search Bar - Moves with the page (Non-sticky) */
 .search-bar, .search-container {
-    position: relative !important; /* It will now move with the page */
-    width: 90%;
-    margin: 20px auto;
+    position: relative !important; 
     display: block;
+    margin: 20px auto;
+    width: 90%;
 }
 
-/* 3. The Feed - No internal scrolling */
+/* 3. The Feed - Natural height, no double scrollbar */
 #feed {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
     width: 100%;
-    padding-bottom: 50px;
+    padding: 20px 0;
+    overflow: visible !important; /* This kills the second scrollbar */
 }
 
-/* 4. The Card - Back to original size */
+/* 4. The Card - Full width and centered */
 .card {
-    width: 95%;
-    max-width: 600px;
-    margin: 10px auto;
-}
-
-/* 5. The Background Lock Class */
-.no-scroll {
-    overflow: hidden !important; /* Only used when a card is open */
+    width: 92%;
+    max-width: 500px;
+    margin: 15px auto;
+    /* Keeps the notes from 'leaking' scroll to the background */
+    overscroll-behavior: contain; 
 }
