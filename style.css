@@ -405,19 +405,19 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
     margin: 10px auto;
     object-fit: contain;
 }
-.tag-bar {
+/*.tag-bar {
   display: flex;
   overflow-x: auto;
   gap: 10px;
   padding: 15px 5%;
   background: #ffffff;
-  scrollbar-width: none; /* Hides scrollbar for Firefox */
-  -ms-overflow-style: none; /* Hides scrollbar for IE/Edge */
-}
+  scrollbar-width: none; /* Hides scrollbar for Firefox 
+  -ms-overflow-style: none; /* Hides scrollbar for IE/Edge 
+} 
 
 .tag-bar::-webkit-scrollbar {
-  display: none; /* Hides scrollbar for Chrome/Safari */
-}
+  display: none; /* Hides scrollbar for Chrome/Safari 
+}*/
 
 .tag-btn {
   background: #f1f3f4;
