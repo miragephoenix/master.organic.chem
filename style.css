@@ -560,3 +560,16 @@ body.lock-screen {
     touch-action: auto; 
     z-index: 9999;
 }
+/* This part connects to your JS function */
+body.lock-screen {
+    overflow: hidden !important;
+    /* This is the secret for mobile: it ignores the 'swipe' gesture on the background */
+    touch-action: none; 
+    height: 100vh;
+}
+
+/* We must allow the actual card to be interactive still */
+.card.active {
+    touch-action: auto !important;
+    z-index: 1000;
+}
