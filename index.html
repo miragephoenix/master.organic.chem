@@ -24,12 +24,15 @@
         <button class="theme-switch-inline" onclick="toggleTheme()" id="themeBtn">🌙 Dark Mode</button>
     </div>
 
-    <div class="filter-row">
-        <button class="filter-btn active" onclick="filterByCat('All', event)">All</button>
-        <button class="filter-btn" onclick="filterByCat('Naming', event)">Naming</button>
-        <button class="filter-btn" onclick="filterByCat('Reduction', event)">Reduction</button>
-        <button class="filter-btn" onclick="filterByCat('Oxidation', event)">Oxidation</button>
-    </div>
+  <div class="tag-bar">
+  <button class="tag-btn" onclick="filterByTag('Naming')">#Naming</button>
+  <button class="tag-btn" onclick="filterByTag('Test')">#Test</button>
+  <button class="tag-btn" onclick="filterByTag('Oxidation')">#Oxidation</button>
+  <button class="tag-btn" onclick="filterByTag('Reduction')">#Reduction</button>
+  <button class="tag-btn" onclick="filterByTag('Alkene')">#Alkene</button>
+  <button class="tag-btn" onclick="filterByTag('Alkyne')">#Alkyne</button>
+  <button class="tag-btn reset-btn" onclick="renderReactions(reactionDatabase)">Clear All</button>
+</div>
     
     <input type="text" id="mainSearch" class="search-bar" placeholder="Search by reagent or reaction name...">
     <div id="feed"></div>
@@ -256,4 +259,5 @@
 </script>
 </body>
 </html>
+
 
