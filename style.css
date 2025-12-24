@@ -573,3 +573,17 @@ body.lock-screen {
     touch-action: auto !important;
     z-index: 1000;
 }
+body.lock-screen {
+    height: 100vh;
+    overflow: hidden !important;
+    /* This prevents the "rubber-band" bounce on iOS */
+    position: fixed; 
+    width: 100%;
+}
+
+.card.active {
+    /* This ensures that even if the body is locked, 
+       you can still interact with the expanded card */
+    pointer-events: auto;
+    z-index: 9999;
+}
