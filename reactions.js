@@ -882,20 +882,18 @@ function filterByTag(tagName) {
 function toggleCard(cardElement) {
     const isOpening = !cardElement.classList.contains('active');
     
-    // Close other open cards
-    document.querySelectorAll('.card.active').forEach(c => {
-        if (c !== cardElement) c.classList.remove('active');
-    });
-
-    // Toggle the clicked card
+    // 1. Toggle the card
     cardElement.classList.toggle('active');
 
-    // Lock/Unlock ONLY when opening
     if (isOpening) {
-        document.body.style.overflow = "hidden"; // Freezes the background
+        // 2. Add the lock class to the body
+        document.body.classList.add('lock-screen');
+        
+        // 3. Smoothly bring the card to center
         cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
-        document.body.style.overflow = "auto"; // Restores normal scrolling
+        // 4. Remove the lock class when closing
+        document.body.classList.remove('lock-screen');
     }
 }
 
@@ -923,3 +921,4 @@ if (searchInput) {
         render(filtered);
     });
 }
+
