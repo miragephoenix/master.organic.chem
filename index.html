@@ -132,15 +132,25 @@
         `}).join('');
         if (window.MathJax) window.MathJax.typeset();
     }
-    function filterByTag(tagName) {
+ function filterByTag(tagName) {
     console.log("Filtering for:", tagName);
-    
-    // 1. Filter the database
+
+    // 1. Remove 'active' green class from ALL buttons
+    document.querySelectorAll('.tag-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // 2. Add 'active' class to the button you just clicked
+    const clickedBtn = Array.from(document.querySelectorAll('.tag-btn'))
+                            .find(btn => btn.innerText.includes(tagName));
+    if (clickedBtn) clickedBtn.classList.add('active');
+
+    // 3. Filter the data
     const filtered = reactionDatabase.filter(r => 
         r.tags && r.tags.includes(tagName)
     );
     
-    // 2. Call your render function to update the screen
+    // 4. Update the UI
     render(filtered); 
 }
 
@@ -270,6 +280,7 @@
 </script>
 </body>
 </html>
+
 
 
 
