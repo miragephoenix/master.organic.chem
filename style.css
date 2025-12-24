@@ -440,3 +440,10 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
   color: #c62828;
   border-color: #ffcdd2;
 }
+/* The active/selected state for filter buttons */
+.tag-btn.active {
+    background-color: #2ecc71 !important; /* Green */
+    color: white !important;
+    border-color: #27ae60 !important;
+    font-weight: bold;
+}
