@@ -856,18 +856,9 @@ applySmartTags();
 /**
  * This function is called when you click a button like #Oxidation
  */
-function filterByTag(tagName) {
-    console.log("Filtering for:", tagName);
-    
-    // 1. Filter the database for reactions that have the tag
-    const filtered = reactionDatabase.filter(r => 
-        r.tags && r.tags.includes(tagName)
-    );
-    
-    // 2. IMPORTANT: Change 'renderReactions' to whatever your 
-    // display function is named in your main script!
-    renderReactions(filtered); 
-}
+/* --- CLEANED LOGIC START --- */
+
+// 1. Unified Filter Function
 function filterByTag(tagName) {
     // UI: Handle the green button toggle
     document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
@@ -883,42 +874,43 @@ function filterByTag(tagName) {
     // Display: Update the screen
     render(filtered);
     
-    // Mobile UX: Snap back to the first card after filtering
-    const feed = document.getElementById('feed');
-    if (feed) feed.scrollTop = 0;
+    // Return view to top of page naturally
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// 2. The Flashcard Toggle (Background Lock)
 function toggleCard(cardElement) {
     const isOpening = !cardElement.classList.contains('active');
     
-    // 1. Close any other open cards first (optional, for cleaner UX)
+    // Close other open cards
     document.querySelectorAll('.card.active').forEach(c => {
         if (c !== cardElement) c.classList.remove('active');
     });
 
-    // 2. Toggle the clicked card
+    // Toggle the clicked card
     cardElement.classList.toggle('active');
 
-    // 3. Lock/Unlock the background based on state
+    // Lock/Unlock ONLY when opening
     if (isOpening) {
-        document.body.classList.add('lock-scroll');
-        // Smoothly bring the card to center
+        document.body.style.overflow = "hidden"; // Freezes the background
         cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
-        document.body.classList.remove('lock-scroll');
+        document.body.style.overflow = "auto"; // Restores normal scrolling
     }
 }
 
-// 3. The Reset Function for "Clear All"
+// 3. The "Clear All" logic
 function clearFilters() {
     document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
+    const searchInput = document.getElementById('mainSearch');
+    if (searchInput) searchInput.value = '';
+    
     render(reactionDatabase);
-    document.getElementById('feed').scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.style.overflow = "auto"; // Safety unlock
 }
 
-// Add this at the very bottom of reactions.js
-
-// 1. Search Logic
+// 4. Search Logic
 const searchInput = document.getElementById('mainSearch');
 if (searchInput) {
     searchInput.addEventListener('input', (e) => {
@@ -929,39 +921,5 @@ if (searchInput) {
         );
         
         render(filtered);
-        
-        // Reset scroll to top so the new first result snaps into view
-        document.getElementById('feed').scrollTop = 0;
     });
 }
-
-// 2. Filter Logic (for your tag buttons)
-function filterByTag(tagName) {
-    // UI: Toggle green class
-    document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
-    const clickedBtn = Array.from(document.querySelectorAll('.tag-btn'))
-                            .find(btn => btn.innerText.includes(tagName));
-    if (clickedBtn) clickedBtn.classList.add('active');
-
-    // Filter
-    const filtered = reactionDatabase.filter(r => r.tags && r.tags.includes(tagName));
-    render(filtered);
-    
-    // Snap back to top
-    document.getElementById('feed').scrollTop = 0;
-}
-
-// 3. The "Clear All" logic
-function clearFilters() {
-    document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
-    if (searchInput) searchInput.value = '';
-    render(reactionDatabase);
-    document.getElementById('feed').scrollTop = 0;
-}
-
-
-
-
-
-
-
