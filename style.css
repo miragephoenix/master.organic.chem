@@ -581,3 +581,33 @@ html, body {
     /* Prevents the card from 'tugging' the page when you reach the end of the notes */
     overscroll-behavior: contain; 
 }
+/* Restores natural scrolling */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: auto; /* Allows page to grow with content */
+    overflow-x: hidden;
+    overflow-y: auto; /* Standard scrolling */
+    position: relative; /* Removes the 'fixed' trap */
+}
+
+/* Keeps the search bar and buttons moving with the page (not sticky) */
+.search-container, .tag-bar, h1 {
+    position: static; 
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#feed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 50px;
+}
+
+/* This class will be added by JS only when a card is open */
+.lock-scroll {
+    overflow: hidden !important;
+    height: 100vh !important;
+}
