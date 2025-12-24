@@ -562,28 +562,22 @@ html, body {
     overscroll-behavior-y: none; /* This stops the 'pull-to-refresh' bounce */
 }
 
-/* Your Feed: No snapping, just smooth scrolling */
+/* The Card: Remove the snap points to get your size back */
 #feed {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    width: 100%;
     padding-top: 20px;
-    /* This is the key to smoothness without the 'clunk' */
-    -webkit-overflow-scrolling: touch; 
-    scroll-behavior: smooth;
+    /* This ensures that even if the body is locked, 
+       the card itself can still be scrolled if the notes are long */
+    overflow-y: visible; 
 }
 
-/* The Card: Remove the snap points to get your size back */
 .card {
-    width: 95%;
-    max-width: 500px; /* Restores the original card size */
-    margin: 10px auto;
-    /* This stops the card from 'pulling' the homepage when you scroll inside it */
+    width: 92%; /* Restores original size */
+    max-width: 500px;
+    margin: 15px auto;
+    /* Prevents the card from 'tugging' the page when you reach the end of the notes */
     overscroll-behavior: contain; 
-}
-
-/* Hide the scrollbar but keep the scrolling working */
-#feed::-webkit-scrollbar {
-    display: none;
 }
