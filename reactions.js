@@ -880,28 +880,40 @@ function filterByTag(tagName) {
 
 // 2. The Flashcard Toggle (Background Lock)
 
+// Function to stop the scroll event
+function preventDefault(e) {
+    e.preventDefault();
+}
+
 function toggleCard(cardElement) {
     const isOpening = !cardElement.classList.contains('active');
     
-    // 1. Close other open cards so they don't overlap
+    // Close other cards
     document.querySelectorAll('.card.active').forEach(c => {
         if (c !== cardElement) c.classList.remove('active');
     });
 
-    // 2. Toggle the card
     cardElement.classList.toggle('active');
 
-    // 3. Lock or Unlock
     if (isOpening) {
+        // 1. Lock the background scrolling at the hardware level
+        window.addEventListener('wheel', preventDefault, { passive: false });
+        window.addEventListener('touchmove', preventDefault, { passive: false });
+        
         document.body.classList.add('lock-screen');
-        // This ensures the card stays centered while the screen locks
+        
         setTimeout(() => {
             cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 50); 
+        }, 50);
     } else {
+        // 2. UNLOCK: Allow scrolling again
+        window.removeEventListener('wheel', preventDefault);
+        window.removeEventListener('touchmove', preventDefault);
+        
         document.body.classList.remove('lock-screen');
     }
 }
+
 // 3. The "Clear All" logic
 function clearFilters() {
     document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
@@ -926,6 +938,7 @@ if (searchInput) {
         render(filtered);
     });
 }
+
 
 
 
