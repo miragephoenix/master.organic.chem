@@ -298,19 +298,16 @@ const reactionDatabase = [
     diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=996&t=l",
     caption: "Product: Phenol",
     notes: ["Benzyne intermediate is NOT formed here", "Drastic conditions required"]
-  }
-];
-
-const ncertHaloData = [
+  },
   {
     name: "Darzen's Process",
     reagent: "SOCl2 (Thionyl Chloride)",
     category: "Haloalkanes",
     tags: ["Alcohol", "Haloalkane", "Purity"],
     function: "Alcohol → Pure Alkyl Chloride",
-    example: "$$\\ce{R-OH + SOCl2 -> R-Cl + SO2 ^ + HCl ^}$$",
+    example: "$\\ce{R-OH + SOCl2 -> R-Cl + SO2 ^ + HCl ^}$",
     warning: "⚠️ Best method because gaseous by-products escape.",
-    diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Reaction_of_alcohol_with_thionyl_chloride.png/300px-Reaction_of_alcohol_with_thionyl_chloride.png",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=24439&t=l",
     notes: ["Leaves behind pure alkyl halide.", "NCERT Priority."]
   },
   {
@@ -319,10 +316,21 @@ const ncertHaloData = [
     category: "Haloalkanes",
     tags: ["Naming", "Fluoride", "Halogen Exchange"],
     function: "R-Cl/Br → Alkyl Fluoride",
-    example: "$$\\ce{CH3-Br + AgF -> CH3-F + AgBr}$$",
+    example: "$\\ce{CH3-Br + AgF -> CH3-F + AgBr}$",
     warning: "⚠️ Specifically for Fluorides.",
-    diagram: "https://www.sigmaaldrich.com/deepweb/assets/sigmaaldrich/product/structures/216/232/203416.png",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6411&t=l",
     notes: ["Metallic fluorides are required."]
+  },
+  {
+    name: "Finkelstein Reaction",
+    reagent: "NaI + Dry Acetone",
+    category: "Haloalkanes",
+    tags: ["Naming", "Halogen Exchange"],
+    function: "R-Cl/Br → Alkyl Iodide",
+    example: "$\\ce{R-X + NaI ->[Acetone] R-I + NaX v}$",
+    warning: "⚠️ Acetone is used to precipitate NaX.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=5234&t=l",
+    notes: ["Classic halogen exchange."]
   },
   {
     name: "Cyanide Substitution (KCN)",
@@ -330,7 +338,7 @@ const ncertHaloData = [
     category: "Haloalkanes",
     tags: ["Ambident", "Nitrile", "Step-up"],
     function: "Alkyl Halide → Alkyl Cyanide",
-    example: "$$\\ce{R-X + KCN -> R-CN + KX}$$",
+    example: "$\\ce{R-X + KCN -> R-CN + KX}$",
     warning: "⚠️ KCN is ionic; C-attack is preferred.",
     diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=2723951&t=l",
     notes: ["Increases carbon chain."]
@@ -341,32 +349,10 @@ const ncertHaloData = [
     category: "Haloalkanes",
     tags: ["Ambident", "Isocyanide"],
     function: "Alkyl Halide → Isocyanide",
-    example: "$$\\ce{R-X + AgCN -> R-NC + AgX}$$",
+    example: "$\\ce{R-X + AgCN -> R-NC + AgX}$",
     warning: "⚠️ AgCN is covalent; N-attack occurs.",
     diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=10471&t=l",
     notes: ["Forms foul-smelling isocyanides."]
   }
 ];
 
-// 1. Wipe current Firebase custom reactions to prevent the "KCN twice" issue
-db.ref('custom_reactions').remove().then(() => {
-    console.log("🧹 Firebase Cleared. Adding fresh NCERT data...");
-
-    // 2. Filter out what is already in your hardcoded JS file
-    const jsNames = reactionDatabase.map(r => r.name.toLowerCase());
-
-    ncertHaloData.forEach(r => {
-        if (!jsNames.includes(r.name.toLowerCase())) {
-            db.ref('custom_reactions').push(r);
-            console.log(`✅ Added: ${r.name}`);
-        }
-    });
-
-    // 3. FORCE MATHJAX TO RENDER (This is likely the missing step!)
-    setTimeout(() => {
-        if (typeof MathJax !== 'undefined') {
-            MathJax.typeset(); 
-            console.log("🧪 MathJax rendering triggered!");
-        }
-    }, 2000);
-});
