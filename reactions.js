@@ -795,6 +795,28 @@ const reactionDatabase = [
   }
 ];
 
+function applySmartTags() {
+    reactionDatabase.forEach(r => {
+        const text = (r.name + r.reagent + r.function + (r.category || "")).toLowerCase();
+        if (!r.tags) r.tags = [];
+
+        if (["oxida", "kmno4", "pcc", "cro3", "tollens", "fehling", "ozonolysis"].some(k => text.includes(k))) {
+            if (!r.tags.includes("Oxidation")) r.tags.push("Oxidation");
+        }
+        if (["reduc", "nabh4", "lialh4", "h2/", "sncl2", "clemmensen", "wolff", "stephen"].some(k => text.includes(k))) {
+            if (!r.tags.includes("Reduction")) r.tags.push("Reduction");
+        }
+        if (text.includes("alkene") || r.category === "Alkenes") {
+            if (!r.tags.includes("Alkene")) r.tags.push("Alkene");
+        }
+        if (text.includes("alkyne") || r.category === "Alkynes") {
+            if (!r.tags.includes("Alkyne")) r.tags.push("Alkyne");
+        }
+    });
+}
+
+// Initialize tags immediately
+applySmartTags();
 
 
 
