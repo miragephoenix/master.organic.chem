@@ -792,6 +792,39 @@ const reactionDatabase = [
     warning: "⚠️ Basic hydrolysis is irreversible and called Saponification.",
     diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=176&t=l",
     notes: ["Acid hydrolysis is an equilibrium reaction."]
+  },
+  {
+    name: "Sandmeyer Reaction",
+    reagent: "Cu2Cl2/HCl or Cu2Br2/HBr",
+    category: "Amines",
+    tags: ["Naming", "Haloarene"],
+    function: "Diazonium Salt → Chlorobenzene/Bromobenzene",
+    example: "$\\ce{Ar-N2+Cl- ->[Cu2X2] Ar-X + N2}$",
+    warning: "⚠️ More efficient than Gatterman reaction.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=104934&t=l",
+    notes: ["Introduces Cl, Br, or CN into the benzene ring."]
+  },
+  {
+    name: "Balz-Schiemann Reaction",
+    reagent: "HBF4 / Heat",
+    category: "Amines",
+    tags: ["Naming", "Fluorination"],
+    function: "Diazonium Salt → Fluorobenzene",
+    example: "$\\ce{Ar-N2+Cl- + HBF4 -> Ar-F + BF3 + N2}$",
+    warning: "⚠️ Intermediate diazonium fluoroborate is stable at room temp.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=245&t=l",
+    notes: ["Best method to prepare Fluorobenzene."]
+  },
+  {
+    name: "Coupling Reaction (Yellow Dye)",
+    reagent: "Aniline + Diazonium Salt (pH 4-5)",
+    category: "Tests",
+    tags: ["Test", "Naming", "Color"],
+    function: "Diazonium Salt → p-Aminoazobenzene",
+    example: "$\\ce{Ar-N2+Cl- + C6H5NH2 -> Ar-N=N-C6H4NH2}$",
+    warning: "⚠️ Forms a bright YELLOW dye.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=104934&t=l",
+    notes: ["An electrophilic aromatic substitution reaction."]
   }
 ];
 
@@ -835,6 +868,7 @@ function filterByTag(tagName) {
     // display function is named in your main script!
     renderReactions(filtered); 
 }
+
 
 
 
