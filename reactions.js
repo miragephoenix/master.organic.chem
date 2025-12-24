@@ -888,28 +888,27 @@ function filterByTag(tagName) {
     if (feed) feed.scrollTop = 0;
 }
 
-// 2. The Smooth Scroll Lock Logic
-// 2. Updated Scroll Lock Logic
 function toggleCard(cardElement) {
-    const isNowOpen = !cardElement.classList.contains('active');
+    const isOpening = !cardElement.classList.contains('active');
     
-    // Toggle the card display
+    // 1. Close any other open cards first (optional, for cleaner UX)
+    document.querySelectorAll('.card.active').forEach(c => {
+        if (c !== cardElement) c.classList.remove('active');
+    });
+
+    // 2. Toggle the clicked card
     cardElement.classList.toggle('active');
-    
-    if (isNowOpen) {
-        // 1. Center the card for the user
+
+    // 3. Lock/Unlock the background based on state
+    if (isOpening) {
+        document.body.classList.add('lock-scroll');
+        // Smoothly bring the card to center
         cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // 2. LOCK background: Prevent the homepage from moving
-        document.body.style.overflow = "hidden";
-        // This stops "pull-to-refresh" and background dragging on mobile
-        document.body.style.touchAction = "none"; 
     } else {
-        // 3. UNLOCK background: Let the user scroll the feed again
-        document.body.style.overflow = "auto";
-        document.body.style.touchAction = "auto";
+        document.body.classList.remove('lock-scroll');
     }
 }
+
 // 3. The Reset Function for "Clear All"
 function clearFilters() {
     document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
@@ -959,6 +958,7 @@ function clearFilters() {
     render(reactionDatabase);
     document.getElementById('feed').scrollTop = 0;
 }
+
 
 
 
