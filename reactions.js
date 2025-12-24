@@ -353,6 +353,183 @@ const reactionDatabase = [
     warning: "⚠️ AgCN is covalent; N-attack occurs.",
     diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=10471&t=l",
     notes: ["Forms foul-smelling isocyanides."]
+  },
+  {
+    name: "Acid-Catalyzed Hydration",
+    reagent: "Dilute H2SO4 (H3O+)",
+    category: "Alcohols",
+    tags: ["Alkene", "Hydration", "Markovnikov"],
+    function: "Alkene → Alcohol",
+    example: "$\\ce{CH3-CH=CH2 + H2O ->[H+] CH3-CH(OH)-CH3}$",
+    warning: "⚠️ Follows Markovnikov's Rule; Carbocation rearrangement possible.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=702&t=l",
+    notes: ["Step 1: Protonation to Carbocation.", "Step 2: Nucleophilic attack of H2O."]
+  },
+  {
+    name: "Reduction of Carbonyls",
+    reagent: "NaBH4 or LiAlH4",
+    category: "Alcohols",
+    tags: ["Reduction", "Aldehyde", "Ketone"],
+    function: "Aldehyde → 1° Alcohol; Ketone → 2° Alcohol",
+    example: "$\\ce{R-CHO ->[NaBH4] R-CH2OH}$",
+    warning: "⚠️ NaBH4 is milder; doesn't reduce Acids/Esters.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=439177&t=l",
+    notes: ["Catalytic hydrogenation (H2/Ni) also works."]
+  },
+  {
+    name: "Grignard Alcohol Synthesis",
+    reagent: "RMgX + Carbonyl",
+    category: "Alcohols",
+    tags: ["Grignard", "Carbon-Carbon Bond"],
+    function: "Aldehyde/Ketone → 1°/2°/3° Alcohols",
+    example: "$\\ce{HCHO + RMgX -> R-CH2OH}$",
+    warning: "⚠️ Formaldehyde gives 1°, Other Aldehydes give 2°, Ketones give 3°.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=23724&t=l",
+    notes: ["Followed by hydrolysis (H2O/H+)."]
+  },
+  {
+    name: "Cumene Process",
+    reagent: "O2 (Air) + Dilute Acid",
+    category: "Phenols",
+    tags: ["Industrial", "Oxidation", "Byproduct"],
+    function: "Cumene → Phenol + Acetone",
+    example: "$\\ce{C6H5-CH(CH3)2 ->[O2][H2O/H+] C6H5OH + CH3COCH3}$",
+    warning: "⚠️ Most important industrial method for Phenol.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=7406&t=l",
+    notes: ["Acetone is a valuable byproduct."]
+  },
+  {
+    name: "Benzene Sulphonic Acid Path",
+    reagent: "Oleum + Molten NaOH",
+    category: "Phenols",
+    tags: ["Sulphonation", "Phenoxide"],
+    function: "Benzene → Phenol",
+    example: "$\\ce{C6H6 ->[Oleum] C6H5SO3H ->[NaOH][H+] C6H5OH}$",
+    warning: "⚠️ Requires high temp for molten NaOH.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6619&t=l",
+    notes: ["Sodium salt is acidified at the end."]
+  },
+  {
+    name: "Aspirin Synthesis",
+    reagent: "Salicylic Acid + Acetic Anhydride",
+    category: "Phenols",
+    tags: ["Esterification", "Medicine"],
+    function: "Phenol Group Acetylation",
+    example: "$\\ce{C6H4(OH)COOH + (CH3CO)2O -> C6H4(OCOCH3)COOH}$",
+    warning: "⚠️ Acetylsalicylic acid is the chemical name.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=2244&t=l",
+    notes: ["Acetic acid is the byproduct."]
+  },
+  {
+    name: "Lucas Test",
+    reagent: "Conc. HCl + Anhydrous ZnCl2",
+    category: "Tests",
+    tags: ["Identification", "Alcohol", "Turbidity"],
+    function: "Distinguish 1°, 2°, 3° Alcohols",
+    example: "$\\ce{R-OH + HCl ->[ZnCl2] R-Cl + H2O}$",
+    warning: "⚠️ 3°: Instant Turbidity; 2°: 5 mins; 1°: No turbidity at RT.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=24247&t=l",
+    notes: ["Based on carbocation stability."]
+  },
+  {
+    name: "Alcohol Dehydration (Temp Trap)",
+    reagent: "H2SO4 at 443K vs 413K",
+    category: "Alcohols",
+    tags: ["Temperature", "Elimination", "Substitution"],
+    function: "Alcohol → Alkene (443K) or Ether (413K)",
+    example: "$\\ce{2C2H5OH ->[413K] C2H5-O-C2H5}$; $\\ce{C2H5OH ->[443K] CH2=CH2}$",
+    warning: "⚠️ Low temp favors SN2 (Ether), High temp favors E1 (Alkene).",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=702&t=l",
+    notes: ["Primary alcohols only for ether formation."]
+  },
+  {
+    name: "Oxidation with PCC",
+    reagent: "Pyridinium Chlorochromate (PCC)",
+    category: "Alcohols",
+    tags: ["Selective", "Aldehyde"],
+    function: "1° Alcohol → Aldehyde (STOPS HERE)",
+    example: "$\\ce{R-CH2OH ->[PCC] R-CHO}$",
+    warning: "⚠️ Prevents over-oxidation to Carboxylic Acid.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=12313627&t=l",
+    notes: ["CrO3 in anhydrous medium also used."]
+  },
+  {
+    name: "Copper Dehydrogenation (573K)",
+    reagent: "Cu / 573 K",
+    category: "Alcohols",
+    tags: ["Dehydrogenation", "3-Degree Trap"],
+    function: "1° → Aldehyde; 2° → Ketone; 3° → Alkene",
+    example: "$\\ce{(CH3)3C-OH ->[Cu/573K] (CH3)2C=CH2}$",
+    warning: "⚠️ 3° alcohols undergo dehydration (NOT oxidation).",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=23978&t=l",
+    notes: ["Vapors passed over heated copper."]
+  },
+  {
+    name: "Phenol Nitration",
+    reagent: "Dilute HNO3 vs Conc. HNO3",
+    category: "Phenols",
+    tags: ["Nitration", "Picric Acid", "Steam Volatile"],
+    function: "Phenol → Nitrophenol",
+    example: "$\\ce{Phenol + Conc. HNO3 -> 2,4,6-Trinitrophenol}$",
+    warning: "⚠️ Conc. HNO3 gives Picric Acid; Dilute gives ortho/para.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6954&t=l",
+    notes: ["o-nitrophenol is steam volatile due to intramolecular H-bonding."]
+  },
+  {
+    name: "Bromine Water Test (Phenol)",
+    reagent: "Br2 Water",
+    category: "Tests",
+    tags: ["Identification", "White PPT"],
+    function: "Phenol → 2,4,6-Tribromophenol",
+    example: "$\\ce{C6H5OH + 3Br2 -> C6H2(OH)Br3 + 3HBr}$",
+    warning: "⚠️ Forms a white precipitate.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=4442&t=l",
+    notes: ["In CS2 (non-polar), only mono-bromination occurs."]
+  },
+  {
+    name: "Zinc Dust Reduction",
+    reagent: "Zinc Dust / Heat",
+    category: "Phenols",
+    tags: ["Deoxygenation", "Benzene"],
+    function: "Phenol → Benzene",
+    example: "$\\ce{C6H5OH + Zn -> C6H6 + ZnO}$",
+    warning: "⚠️ Simple way to remove the hydroxyl group.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=23974&t=l",
+    notes: ["Zinc acts as a reducing agent."]
+  },
+  {
+    name: "Oxidation to Benzoquinone",
+    reagent: "Na2Cr2O7 / H2SO4",
+    category: "Phenols",
+    tags: ["Oxidation", "Quinone"],
+    function: "Phenol → p-Benzoquinone",
+    example: "$\\ce{C6H5OH ->[Na2Cr2O7/H2SO4] O=C6H4=O}$",
+    warning: "⚠️ Produces a dark colored mixture in air.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=4650&t=l",
+    notes: ["Conjugated diketone formation."]
+  },
+  {
+    name: "Ether Cleavage by HI",
+    reagent: "HI (Hydroiodic Acid)",
+    category: "Ethers",
+    tags: ["Cleavage", "Mechanism"],
+    function: "Ether → Alcohol + Alkyl Iodide",
+    example: "$\\ce{R-O-R' + HI -> R-I + R'-OH}$",
+    warning: "⚠️ Iodine goes to the SMALLER alkyl group (SN2).",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=24841&t=l",
+    notes: ["If 3° alkyl group is present, it forms 3° Iodide (SN1)."]
+  },
+  {
+    name: "Friedel-Crafts (Anisole)",
+    reagent: "CH3Cl / AlCl3",
+    category: "Ethers",
+    tags: ["Substitution", "Anisole"],
+    function: "Alkylation/Acylation of Anisole",
+    example: "$\\ce{C6H5OCH3 + CH3Cl ->[AlCl3] p-Methoxy toluene}$",
+    warning: "⚠️ Methoxy group is ortho/para directing.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=7519&t=l",
+    notes: ["Para product is usually major."]
   }
 ];
+
 
