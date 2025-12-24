@@ -301,6 +301,111 @@ const reactionDatabase = [
   }
 ];
 
+const newNCERTData = [
+  {
+    reagent: "SOCl2 (Thionyl Chloride)",
+    name: "Darzen's Process",
+    category: "Haloalkanes",
+    tags: ["Alcohol", "Haloalkane", "Purity", "Naming"],
+    function: "Alcohol → Pure Alkyl Chloride",
+    example: "$\\ce{R-OH + SOCl2 -> R-Cl + SO2 ^ + HCl ^}$",
+    warning: "⚠️ Best method because by-products (SO2, HCl) are gases and escape.",
+    diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Reaction_of_alcohol_with_thionyl_chloride.png/300px-Reaction_of_alcohol_with_thionyl_chloride.png",
+    notes: ["Leaves behind pure alkyl halide.", "Pyridine can be added to neutralize HCl."]
+  },
+  {
+    reagent: "conc. HCl + anhyd. ZnCl2",
+    name: "Lucas Reagent Test",
+    category: "Tests",
+    tags: ["Alcohol", "Identification", "Haloalkane"],
+    function: "Distinguish 1°, 2°, 3° Alcohols",
+    example: "$\\ce{R-OH + HCl ->[ZnCl2] R-Cl + H2O}$",
+    warning: "⚠️ 3° alcohols react instantly; 1° alcohols don't react at room temp.",
+    notes: ["Turbidity appears due to insoluble alkyl chloride.", "Based on carbocation stability."]
+  },
+  {
+    reagent: "NaI + Dry Acetone",
+    name: "Finkelstein Reaction",
+    category: "Haloalkanes",
+    tags: ["Naming", "Halogen Exchange", "Iodide"],
+    function: "Alkyl Chloride/Bromide → Alkyl Iodide",
+    example: "$\\ce{R-X + NaI ->[Acetone] R-I + NaX v}$",
+    warning: "⚠️ Dry acetone is required to precipitate NaX.",
+    notes: ["Follows SN2 mechanism.", "Example of Le Chatelier's principle in action."]
+  },
+  {
+    reagent: "AgF / Hg2F2 / CoF2",
+    name: "Swarts Reaction",
+    category: "Haloalkanes",
+    tags: ["Naming", "Fluoride", "Halogen Exchange"],
+    function: "Alkyl Bromide/Chloride → Alkyl Fluoride",
+    example: "$\\ce{CH3-Br + AgF -> CH3-F + AgBr}$",
+    warning: "⚠️ Only reliable way to synthesize alkyl fluorides in NCERT.",
+    notes: ["Metallic fluorides are used.", "Reaction is highly specific for F insertion."]
+  },
+  {
+    reagent: "KCN (Ethanolic)",
+    name: "Cyanide Substitution",
+    category: "Haloalkanes",
+    tags: ["Ambident", "Nitrile", "Step-up"],
+    function: "Alkyl Halide → Alkyl Cyanide",
+    example: "$\\ce{R-X + KCN -> R-CN + KX}$",
+    warning: "⚠️ KCN is ionic; Carbon attacks because C-C bond is stronger.",
+    notes: ["Increases carbon chain length by one.", "Product is a Nitrile."]
+  },
+  {
+    reagent: "AgCN",
+    name: "Isocyanide Formation",
+    category: "Haloalkanes",
+    tags: ["Ambident", "Isocyanide", "Covalent"],
+    function: "Alkyl Halide → Alkyl Isocyanide",
+    example: "$\\ce{R-X + AgCN -> R-NC + AgX}$",
+    warning: "⚠️ AgCN is covalent; Nitrogen is the only atom free to donate electrons.",
+    notes: ["Product is an Isocyanide (Carbylamine).", "Key NCERT trap question."]
+  },
+  {
+    reagent: "alc. KOH + Heat",
+    name: "Dehydrohalogenation",
+    category: "Alkenes",
+    tags: ["Elimination", "Beta-elimination", "Hydrocarbon"],
+    function: "Haloalkane → Alkene",
+    example: "$\\ce{CH3CH2Br ->[alc. KOH][\Delta] CH2=CH2}$",
+    warning: "⚠️ Follows Saytzeff Rule: More substituted alkene is major.",
+    notes: ["Base abstracts the Beta-hydrogen.", "Competes with substitution."]
+  },
+  {
+    reagent: "Mg / Dry Ether",
+    name: "Grignard Reagent Prep",
+    category: "Organometallics",
+    tags: ["Grignard", "Hydrocarbon", "Highly Reactive"],
+    function: "Alkyl Halide → R-MgX",
+    example: "$\\ce{R-X + Mg ->[Dry Ether] R-MgX}$",
+    warning: "⚠️ Keep away from moisture! Even traces of water produce Alkanes.",
+    notes: ["The C-Mg bond is highly polar covalent.", "Starting point for many organic syntheses."]
+  },
+  {
+    reagent: "Na / Dry Ether (Aryl)",
+    name: "Fittig Reaction",
+    category: "Haloarenes",
+    tags: ["Naming", "Biphenyl", "Coupling"],
+    function: "2 Aryl Halides → Biphenyl",
+    example: "$\\ce{2C6H5Cl + 2Na -> C6H5-C6H5 + 2NaCl}$",
+    warning: "⚠️ Similar to Wurtz but for aromatic rings.",
+    notes: ["Product is diphenyl/biphenyl.", "Used for aryl-aryl coupling."]
+  }
+];
+
+// Logic to check existing names in your reactionDatabase
+const existingNames = reactionDatabase.map(r => r.name);
+
+newNCERTData.forEach(newReaction => {
+    if (!existingNames.includes(newReaction.name)) {
+        db.ref('custom_reactions').push(newReaction);
+        console.log(`✅ Added: ${newReaction.name}`);
+    } else {
+        console.log(`⏭️ Skipped (Already Exists): ${newReaction.name}`);
+    }
+});
 
 
 
