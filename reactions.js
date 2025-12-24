@@ -605,8 +605,196 @@ const reactionDatabase = [
     warning: "⚠️ Used commercially because LiAlH4 is too expensive for industry.",
     diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=702&t=l",
     notes: ["Step 1: Esterification. Step 2: Hydrogenation."]
+  },
+  {
+    name: "Rosenmund Reduction",
+    reagent: "H2 / Pd-BaSO4 (Lindlar-like)",
+    category: "Aldehydes",
+    tags: ["Acyl Chloride", "Partial Reduction", "Naming"],
+    function: "Acyl Chloride → Aldehyde",
+    example: "$\\ce{R-COCl + H2 ->[Pd-BaSO4/S] R-CHO + HCl}$",
+    warning: "⚠️ Pd is 'poisoned' with BaSO4 or Sulfur to stop reduction at aldehyde.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=240&t=l",
+    notes: ["Used to prepare benzaldehyde and aliphatic aldehydes.", "Formaldehyde cannot be prepared this way."]
+  },
+  {
+    name: "Stephen Reaction",
+    reagent: "SnCl2 + HCl",
+    category: "Aldehydes",
+    tags: ["Nitrile", "Imine", "Naming"],
+    function: "Nitrile → Aldehyde",
+    example: "$\\ce{R-CN ->[SnCl2 + HCl] R-CH=NH ->[H3O+] R-CHO}$",
+    warning: "⚠️ Intermediate is an imine hydrochloride.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=240&t=l",
+    notes: ["Followed by hydrolysis.", "Alternative to DIBAL-H."]
+  },
+  {
+    name: "DIBAL-H Reduction",
+    reagent: "Diisobutylaluminium Hydride",
+    category: "Aldehydes",
+    tags: ["Selective", "Nitrile", "Ester"],
+    function: "Nitrile/Ester → Aldehyde",
+    example: "$\\ce{R-CN ->[DIBAL-H][H2O] R-CHO}$",
+    warning: "⚠️ Selective: Does not reduce double bonds or carboxylic acids.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=240&t=l",
+    notes: ["Lower temperatures are usually required.", "Very high yield for esters."]
+  },
+  {
+    name: "Etard Reaction",
+    reagent: "CrO2Cl2 (Chromyl Chloride)",
+    category: "Aldehydes",
+    tags: ["Toluene", "Oxidation", "Naming"],
+    function: "Toluene → Benzaldehyde",
+    example: "$\\ce{C6H5-CH3 ->[CrO2Cl2][CS2] C6H5-CHO}$",
+    warning: "⚠️ A brown chromium complex is formed as an intermediate.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=240&t=l",
+    notes: ["Specific for converting Methyl group on ring to Aldehyde."]
+  },
+  {
+    name: "Gatterman-Koch Reaction",
+    reagent: "CO + HCl / Anhyd. AlCl3",
+    category: "Aldehydes",
+    tags: ["Benzene", "Naming", "Carbonylation"],
+    function: "Benzene → Benzaldehyde",
+    example: "$\\ce{C6H6 + CO + HCl ->[AlCl3/CuCl] C6H5-CHO}$",
+    warning: "⚠️ Requires high pressure of Carbon Monoxide.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=240&t=l",
+    notes: ["Electrophile is effectively [HCO]+."]
+  },
+  {
+    name: "Ketone from Dialkylcadmium",
+    reagent: "R2Cd + 2R'COCl",
+    category: "Ketones",
+    tags: ["Acyl Chloride", "Organometallic"],
+    function: "Acyl Chloride → Ketone",
+    example: "$\\ce{2R'COCl + R2Cd -> 2R'COR + CdCl2}$",
+    warning: "⚠️ Better than Grignard because Cadmium reagents don't react with the product Ketone.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=180&t=l",
+    notes: ["R2Cd is prepared from Grignard: 2RMgX + CdCl2."]
+  },
+  {
+    name: "Cyanohydrin Formation",
+    reagent: "HCN / OH-",
+    category: "Aldehydes",
+    tags: ["Addition", "Nitrile", "Step-up"],
+    function: "Carbonyl → Cyanohydrin",
+    example: "$\\ce{R-CO-R + HCN -> R2C(OH)CN}$",
+    warning: "⚠️ Pure HCN is slow; addition of base (OH-) speeds it up by forming CN- ions.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6813&t=l",
+    notes: ["Useful for adding a carbon atom to the chain."]
+  },
+  {
+    name: "Bisulphite Adduct",
+    reagent: "Saturated NaHSO3",
+    category: "Tests",
+    tags: ["Purification", "White Crystalline"],
+    function: "Purification of Aldehydes",
+    example: "$\\ce{R-CHO + NaHSO3 <=> R-CH(OH)SO3Na}$",
+    warning: "⚠️ Sterically hindered ketones do not react.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=23665763&t=l",
+    notes: ["Water-soluble crystalline solid.", "Product can be converted back to carbonyl with acid/alkali."]
+  },
+  {
+    name: "Acetal & Ketal Formation",
+    reagent: "Alcohol + Dry HCl gas",
+    category: "Aldehydes",
+    tags: ["Protection", "Alcohol"],
+    function: "Aldehyde/Ketone → Acetal/Ketal",
+    example: "$\\ce{RCHO + 2R'OH ->[HCl] RCH(OR')2 + H2O}$",
+    warning: "⚠️ Reversible reaction; Dry HCl gas is used to remove water and drive it forward.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=12140&t=l",
+    notes: ["Ketones often use Ethylene Glycol to form cyclic ketals."]
+  },
+  {
+    name: "Semicarbazone Formation",
+    reagent: "Semicarbazide (NH2NHCONH2)",
+    category: "Tests",
+    tags: ["Derivatives", "Identification"],
+    function: "Carbonyl → Semicarbazone",
+    example: "$\\ce{R2C=O + NH2NHCONH2 -> R2C=N-NHCONH2 + H2O}$",
+    warning: "⚠️ Only the 'hydrazine' end of semicarbazide is nucleophilic!",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6816&t=l",
+    notes: ["Solid derivatives used to identify specific liquid carbonyls."]
+  },
+  {
+    name: "Tollens' Test",
+    reagent: "Ammoniacal Silver Nitrate",
+    category: "Tests",
+    tags: ["Silver Mirror", "Aldehyde only"],
+    function: "Distinguish Aldehydes from Ketones",
+    example: "$\\ce{R-CHO + 2[Ag(NH3)2]+ + 3OH- -> R-COO- + 2Ag v + 2H2O + 4NH3}$",
+    warning: "⚠️ Forms a shiny silver mirror on the tube walls.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=23954&t=l",
+    notes: ["Positive for both aliphatic and aromatic aldehydes."]
+  },
+  {
+    name: "Fehling's Test",
+    reagent: "Fehling A (CuSO4) + Fehling B (Rochelle Salt)",
+    category: "Tests",
+    tags: ["Red PPT", "Aliphatic only"],
+    function: "Distinguish Aliphatic Aldehydes",
+    example: "$\\ce{R-CHO + 2Cu^2+ + 5OH- -> R-COO- + Cu2O v + 3H2O}$",
+    warning: "⚠️ Aromatic aldehydes (like Benzaldehyde) do NOT give this test!",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=10330&t=l",
+    notes: ["Red precipitate is Cuprous Oxide (Cu2O)."]
+  },
+  {
+    name: "Alkylbenzene Oxidation",
+    reagent: "Alkaline KMnO4 / Heat",
+    category: "Carboxylic Acids",
+    tags: ["Aromatic", "Oxidation"],
+    function: "Alkylbenzene → Benzoic Acid",
+    example: "$\\ce{Ar-R ->[KMnO4/KOH][\Delta] Ar-COOK ->[H3O+] Ar-COOH}$",
+    warning: "⚠️ Works for any alkyl group (1° or 2°) with at least one benzylic hydrogen.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=243&t=l",
+    notes: ["Tertiary alkyl groups (no benzylic H) are NOT oxidized."]
+  },
+  {
+    name: "Grignard Acid Synthesis",
+    reagent: "Dry Ice (Solid CO2)",
+    category: "Carboxylic Acids",
+    tags: ["Grignard", "Addition", "Step-up"],
+    function: "Grignard → Carboxylic Acid",
+    example: "$\\ce{R-MgX + CO2 ->[Dry Ether] R-COOMgX ->[H3O+] R-COOH}$",
+    warning: "⚠️ Increases carbon chain length by one.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=176&t=l",
+    notes: ["Followed by acidic hydrolysis."]
+  },
+  {
+    name: "Hell-Volhard-Zelinsky (HVZ)",
+    reagent: "X2 / Red Phosphorus",
+    category: "Carboxylic Acids",
+    tags: ["Alpha-Halogenation", "Naming"],
+    function: "Alpha-Hydrogen → Halogen",
+    example: "$\\ce{R-CH2-COOH ->[X2/Red P][H2O] R-CH(X)-COOH}$",
+    warning: "⚠️ Only for acids with Alpha-hydrogens.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=24522&t=l",
+    notes: ["X can be Chlorine or Bromine."]
+  },
+  {
+    name: "Decarboxylation",
+    reagent: "Soda Lime (NaOH + CaO)",
+    category: "Alkanes",
+    tags: ["Step-down", "Gas Evolution"],
+    function: "Sodium Salt → Alkane",
+    example: "$\\ce{R-COONa ->[NaOH, CaO][\Delta] R-H + Na2CO3}$",
+    warning: "⚠️ Loses the entire -COONa group as carbonate.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6324&t=l",
+    notes: ["Commonly used to shorten the carbon chain."]
+  },
+  {
+    name: "Ester Hydrolysis",
+    reagent: "Dilute Acid or Alkali",
+    category: "Carboxylic Acids",
+    tags: ["Ester", "Saponification"],
+    function: "Ester → Acid + Alcohol",
+    example: "$\\ce{R-COOR' + H2O <=> R-COOH + R'-OH}$",
+    warning: "⚠️ Basic hydrolysis is irreversible and called Saponification.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=176&t=l",
+    notes: ["Acid hydrolysis is an equilibrium reaction."]
   }
 ];
+
 
 
 
