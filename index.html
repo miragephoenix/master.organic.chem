@@ -132,6 +132,17 @@
         `}).join('');
         if (window.MathJax) window.MathJax.typeset();
     }
+    function filterByTag(tagName) {
+    console.log("Filtering for:", tagName);
+    
+    // 1. Filter the database
+    const filtered = reactionDatabase.filter(r => 
+        r.tags && r.tags.includes(tagName)
+    );
+    
+    // 2. Call your render function to update the screen
+    render(filtered); 
+}
 
     function toggleExpand(index) {
         const d = document.getElementById(`details-${index}`);
@@ -259,5 +270,6 @@
 </script>
 </body>
 </html>
+
 
 
