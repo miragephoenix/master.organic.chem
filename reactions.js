@@ -868,6 +868,42 @@ function filterByTag(tagName) {
     // display function is named in your main script!
     renderReactions(filtered); 
 }
+function filterByTag(tagName) {
+    // UI: Handle the green button toggle
+    document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
+    const clickedBtn = Array.from(document.querySelectorAll('.tag-btn'))
+                            .find(btn => btn.innerText.includes(tagName));
+    if (clickedBtn) clickedBtn.classList.add('active');
+
+    // Data: Filter the reactions
+    const filtered = reactionDatabase.filter(r => 
+        r.tags && r.tags.includes(tagName)
+    );
+    
+    // Display: Update the screen
+    render(filtered);
+    
+    // Mobile UX: Snap back to the first card after filtering
+    const feed = document.getElementById('feed');
+    if (feed) feed.scrollTop = 0;
+}
+
+// 2. The Smooth Scroll Lock Logic
+function toggleCard(cardElement) {
+    cardElement.classList.toggle('active');
+    
+    if(cardElement.classList.contains('active')) {
+        // Center the card perfectly when opened
+        cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
+// 3. The Reset Function for "Clear All"
+function clearFilters() {
+    document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
+    render(reactionDatabase);
+    document.getElementById('feed').scrollTop = 0;
+}
 
 
 
