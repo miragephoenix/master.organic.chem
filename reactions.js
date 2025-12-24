@@ -879,20 +879,26 @@ function filterByTag(tagName) {
 }
 
 // 2. The Flashcard Toggle (Background Lock)
+
 function toggleCard(cardElement) {
     const isOpening = !cardElement.classList.contains('active');
     
-    // 1. Toggle the card
+    // 1. Close other open cards so they don't overlap
+    document.querySelectorAll('.card.active').forEach(c => {
+        if (c !== cardElement) c.classList.remove('active');
+    });
+
+    // 2. Toggle the card
     cardElement.classList.toggle('active');
 
+    // 3. Lock or Unlock
     if (isOpening) {
-        // 2. Add the lock class to the body
         document.body.classList.add('lock-screen');
-        
-        // 3. Smoothly bring the card to center
-        cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // This ensures the card stays centered while the screen locks
+        setTimeout(() => {
+            cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 50); 
     } else {
-        // 4. Remove the lock class when closing
         document.body.classList.remove('lock-screen');
     }
 }
@@ -920,5 +926,6 @@ if (searchInput) {
         render(filtered);
     });
 }
+
 
 
