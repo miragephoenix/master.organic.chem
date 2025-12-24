@@ -511,32 +511,79 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
     box-shadow: none !important;
     margin-bottom: 10px;
 }
-/* 1. Lock the Body to prevent 'Body Bounce' */
+
+/* 1. Prevent the whole page from sliding */
 html, body {
-    height: 100%;
+    height: 100vh;
+    width: 100vw;
     margin: 0;
-    overflow: hidden; /* This stops the homepage from sliding */
-    overscroll-behavior: none; /* Disables the 'pull-to-refresh' bounce */
+    overflow: hidden; 
+    position: fixed;
 }
 
-/* 2. Turn the Feed into a 'Reels' Track */
+/* 2. Fix the Search Bar to the top */
+.search-bar {
+    position: fixed;
+    top: 60px; /* Adjust based on where your title/buttons are */
+    left: 5%;
+    width: 90%;
+    z-index: 1000;
+    padding: 12px;
+    border-radius: 25px;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    background: var(--bg-color, white); /* Adapts to your theme */
+}
+
+/* 3. The 'Reel' Track */
 #feed {
     height: 100vh;
     overflow-y: scroll;
-    scroll-snap-type: y mandatory; /* This enables the 'Snap' effect */
+    scroll-snap-type: y mandatory; /* The Snap Physics */
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch; /* Momentum scrolling for iOS */
-    padding-top: 80px; /* Space for your fixed header */
+    -webkit-overflow-scrolling: touch;
+    padding-top: 140px; /* IMPORTANT: Space so the first card isn't under the search bar */
+    padding-bottom: 100px;
+    box-sizing: border-box;
 }
 
-/* 3. Make each card a 'Snap Point' */
+/* 4. The Snap Points */
 .card {
-    scroll-snap-align: center; /* Card will lock into the center of the screen */
-    scroll-snap-stop: always;   /* Prevents skipping cards when flicking fast */
-    margin: 20px auto;
+    scroll-snap-align: center; /* Card centers on screen */
+    scroll-snap-stop: always;
+    margin: 30px auto;
     width: 90%;
-    max-width: 400px;
-    /* Prevent text selection while swiping */
-    user-select: none;
-    -webkit-user-select: none;
+    max-width: 450px;
+    overscroll-behavior: contain; /* Prevents scroll leakage */
+}
+/* Reset the body to be solid but not 'hidden' in a way that breaks layout */
+html, body {
+    margin: 0;
+    padding: 0;
+    overscroll-behavior-y: none; /* This stops the 'pull-to-refresh' bounce */
+}
+
+/* Your Feed: No snapping, just smooth scrolling */
+#feed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding-top: 20px;
+    /* This is the key to smoothness without the 'clunk' */
+    -webkit-overflow-scrolling: touch; 
+    scroll-behavior: smooth;
+}
+
+/* The Card: Remove the snap points to get your size back */
+.card {
+    width: 95%;
+    max-width: 500px; /* Restores the original card size */
+    margin: 10px auto;
+    /* This stops the card from 'pulling' the homepage when you scroll inside it */
+    overscroll-behavior: contain; 
+}
+
+/* Hide the scrollbar but keep the scrolling working */
+#feed::-webkit-scrollbar {
+    display: none;
 }
