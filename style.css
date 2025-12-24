@@ -548,3 +548,15 @@ html, body {
     /* Keeps the notes from 'leaking' scroll to the background */
     overscroll-behavior: contain; 
 }
+/* This only activates when you open a flashcard */
+body.lock-screen {
+    overflow: hidden !important;
+    touch-action: none; /* Crucial for mobile! It stops the 'swipe' from moving the page */
+    height: 100%;
+}
+
+/* But we must allow the CARD itself to still be touchable */
+.card.active {
+    touch-action: auto; 
+    z-index: 9999;
+}
