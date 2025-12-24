@@ -511,3 +511,32 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
     box-shadow: none !important;
     margin-bottom: 10px;
 }
+/* 1. Lock the Body to prevent 'Body Bounce' */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* This stops the homepage from sliding */
+    overscroll-behavior: none; /* Disables the 'pull-to-refresh' bounce */
+}
+
+/* 2. Turn the Feed into a 'Reels' Track */
+#feed {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory; /* This enables the 'Snap' effect */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Momentum scrolling for iOS */
+    padding-top: 80px; /* Space for your fixed header */
+}
+
+/* 3. Make each card a 'Snap Point' */
+.card {
+    scroll-snap-align: center; /* Card will lock into the center of the screen */
+    scroll-snap-stop: always;   /* Prevents skipping cards when flicking fast */
+    margin: 20px auto;
+    width: 90%;
+    max-width: 400px;
+    /* Prevent text selection while swiping */
+    user-select: none;
+    -webkit-user-select: none;
+}
