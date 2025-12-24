@@ -905,6 +905,48 @@ function clearFilters() {
     document.getElementById('feed').scrollTop = 0;
 }
 
+// Add this at the very bottom of reactions.js
+
+// 1. Search Logic
+const searchInput = document.getElementById('mainSearch');
+if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = reactionDatabase.filter(r => 
+            r.name.toLowerCase().includes(term) || 
+            r.reagent.toLowerCase().includes(term)
+        );
+        
+        render(filtered);
+        
+        // Reset scroll to top so the new first result snaps into view
+        document.getElementById('feed').scrollTop = 0;
+    });
+}
+
+// 2. Filter Logic (for your tag buttons)
+function filterByTag(tagName) {
+    // UI: Toggle green class
+    document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
+    const clickedBtn = Array.from(document.querySelectorAll('.tag-btn'))
+                            .find(btn => btn.innerText.includes(tagName));
+    if (clickedBtn) clickedBtn.classList.add('active');
+
+    // Filter
+    const filtered = reactionDatabase.filter(r => r.tags && r.tags.includes(tagName));
+    render(filtered);
+    
+    // Snap back to top
+    document.getElementById('feed').scrollTop = 0;
+}
+
+// 3. The "Clear All" logic
+function clearFilters() {
+    document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
+    if (searchInput) searchInput.value = '';
+    render(reactionDatabase);
+    document.getElementById('feed').scrollTop = 0;
+}
 
 
 
