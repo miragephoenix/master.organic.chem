@@ -817,6 +817,22 @@ function applySmartTags() {
 
 // Initialize tags immediately
 applySmartTags();
+/**
+ * This function is called when you click a button like #Oxidation
+ */
+function filterByTag(tagName) {
+    console.log("Filtering for:", tagName);
+    
+    // 1. Filter the database for reactions that have the tag
+    const filtered = reactionDatabase.filter(r => 
+        r.tags && r.tags.includes(tagName)
+    );
+    
+    // 2. IMPORTANT: Change 'renderReactions' to whatever your 
+    // display function is named in your main script!
+    renderReactions(filtered); 
+}
+
 
 
 
