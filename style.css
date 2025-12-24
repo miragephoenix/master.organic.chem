@@ -410,7 +410,7 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
   overflow-x: auto;
   gap: 10px;
   padding: 15px 5%;
-  background: #ffffff;
+  background: #F4F7F6;
   scrollbar-width: none; /* Hides scrollbar for Firefox */
   -ms-overflow-style: none; /* Hides scrollbar for IE/Edge */
 } 
@@ -424,21 +424,24 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
   border: 1px solid #dfe1e5;
   border-radius: 20px;
   padding: 8px 20px;
-  font-size: 14px;
+  font-size: 15px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s ease;
+    font-weight: bold;
 }
 
 .tag-btn:hover {
   background: #e8eaed;
   border-color: #bdc1c6;
+    font-weight: bold;
 }
 
 .reset-btn {
   background: #ffebee;
   color: #c62828;
   border-color: #ffcdd2;
+    font-weight: bold;
 }
 /* The active/selected state for filter buttons */
 .tag-btn.active {
