@@ -529,7 +529,84 @@ const reactionDatabase = [
     warning: "⚠️ Methoxy group is ortho/para directing.",
     diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=7519&t=l",
     notes: ["Para product is usually major."]
+  },
+  {
+    name: "Phosphorus Halide Reactions",
+    reagent: "PCl3 / PCl5 / Red P + X2",
+    category: "Haloalkanes",
+    tags: ["Alcohol", "Preparation", "Substitution"],
+    function: "Alcohol → Alkyl Halide",
+    example: "$\\ce{3R-OH + PCl3 -> 3R-Cl + H3PO3}$",
+    warning: "⚠️ PCl5 gives POCl3 as a byproduct; PCl3 gives H3PO3.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=24387&t=l",
+    notes: ["Red P + Br2/I2 is used for alkyl bromides/iodides.", "Higher yield than using HX."]
+  },
+  {
+    name: "Iodobenzene Synthesis",
+    reagent: "KI (Potassium Iodide)",
+    category: "Haloalkanes",
+    tags: ["Diazonium", "Iodide", "No Catalyst"],
+    function: "Diazonium Salt → Iodobenzene",
+    example: "$\\ce{C6H5N2+Cl- + KI -> C6H5I + KCl + N2}$",
+    warning: "⚠️ Unlike Sandmeyer, this does NOT require Cuprous (Cu) salts.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=7285&t=l",
+    notes: ["Simple shaking with KI is enough.", "Easiest way to put Iodine on a ring."]
+  },
+  {
+    name: "Zaitsev's Rule (Saytzeff)",
+    reagent: "Alcoholic KOH",
+    category: "Theory",
+    tags: ["Elimination", "Major Product", "Alkene"],
+    function: "Determining major alkene in Dehydrohalogenation",
+    example: "$\\ce{CH3-CH2-CH(Br)-CH3 ->[alc. KOH] CH3-CH=CH-CH3}$ (Major)",
+    warning: "⚠️ The 'more substituted' alkene is the major product.",
+    diagram: "https://upload.wikimedia.org/wikipedia/commons/3/3f/Zaitsev_Elimination.png",
+    notes: ["The more alkyl groups on the double bond, the more stable the alkene.", "Also applies to alcohol dehydration."]
+  },
+  {
+    name: "Chloroform Oxidation (Phosgene)",
+    reagent: "O2 + Light",
+    category: "Haloalkanes",
+    tags: ["Poison", "Storage", "Chloroform"],
+    function: "Formation of Phosgene gas",
+    example: "$\\ce{2CHCl3 + O2 ->[light] 2COCl2 + 2HCl}$",
+    warning: "⚠️ Phosgene (COCl2) is a deadly poisonous gas.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6371&t=l",
+    notes: ["Bottles are filled to the brim and kept dark to prevent air contact.", "1% Ethanol is added to convert phosgene to harmless diethyl carbonate."]
+  },
+  {
+    name: "Phenol from Diazonium Salt",
+    reagent: "Warm Water / Dilute Acid",
+    category: "Phenols",
+    tags: ["Diazonium", "Hydrolysis"],
+    function: "Diazonium Salt → Phenol",
+    example: "$\\ce{C6H5N2+Cl- + H2O ->[warm] C6H5OH + N2 + HCl}$",
+    warning: "⚠️ The solution must be warmed gently.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=996&t=l",
+    notes: ["The starting material is Aniline (via Diazotization)."]
+  },
+  {
+    name: "Phenol Acidity (Substituent Effects)",
+    reagent: "Electron Withdrawing/Donating Groups",
+    category: "Theory",
+    tags: ["Acidity", "Inductive Effect", "Resonance"],
+    function: "Predicting Acidity of substituted phenols",
+    warning: "⚠️ Nitro groups (-NO2) at Ortho/Para increase acidity significantly.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6954&t=l",
+    notes: ["p-Nitrophenol > o-Nitrophenol > Phenol > p-Cresol.", "Electron withdrawing groups stabilize the phenoxide ion."]
+  },
+  {
+    name: "Ester Reduction (Commercial)",
+    reagent: "H2 / Catalyst (after esterification)",
+    category: "Alcohols",
+    tags: ["Industrial", "Ester", "Reduction"],
+    function: "Carboxylic Acid → Alcohol (via Ester)",
+    example: "$\\ce{RCOOH ->[R'OH] RCOOR' ->[H2/Pd] RCH2OH + R'OH}$",
+    warning: "⚠️ Used commercially because LiAlH4 is too expensive for industry.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=702&t=l",
+    notes: ["Step 1: Esterification. Step 2: Hydrogenation."]
   }
 ];
+
 
 
