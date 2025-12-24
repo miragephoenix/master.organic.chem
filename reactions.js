@@ -889,15 +889,27 @@ function filterByTag(tagName) {
 }
 
 // 2. The Smooth Scroll Lock Logic
+// 2. Updated Scroll Lock Logic
 function toggleCard(cardElement) {
+    const isNowOpen = !cardElement.classList.contains('active');
+    
+    // Toggle the card display
     cardElement.classList.toggle('active');
     
-    if(cardElement.classList.contains('active')) {
-        // Center the card perfectly when opened
+    if (isNowOpen) {
+        // 1. Center the card for the user
         cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // 2. LOCK background: Prevent the homepage from moving
+        document.body.style.overflow = "hidden";
+        // This stops "pull-to-refresh" and background dragging on mobile
+        document.body.style.touchAction = "none"; 
+    } else {
+        // 3. UNLOCK background: Let the user scroll the feed again
+        document.body.style.overflow = "auto";
+        document.body.style.touchAction = "auto";
     }
 }
-
 // 3. The Reset Function for "Clear All"
 function clearFilters() {
     document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
@@ -947,6 +959,7 @@ function clearFilters() {
     render(reactionDatabase);
     document.getElementById('feed').scrollTop = 0;
 }
+
 
 
 
