@@ -447,3 +447,11 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
     border-color: #27ae60 !important;
     font-weight: bold;
 }
+/* This makes the button green when clicked */
+.tag-btn.active {
+    background-color: #2ecc71 !important; 
+    color: white !important;
+    border-color: #27ae60 !important;
+    box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3);
+    transform: translateY(-1px);
+}
