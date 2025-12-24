@@ -896,7 +896,6 @@ function toggleCard(cardElement) {
         document.body.classList.remove('lock-screen');
     }
 }
-
 // 3. The "Clear All" logic
 function clearFilters() {
     document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
@@ -921,4 +920,5 @@ if (searchInput) {
         render(filtered);
     });
 }
+
 
