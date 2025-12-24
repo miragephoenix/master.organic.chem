@@ -812,6 +812,9 @@ function applySmartTags() {
         if (text.includes("alkyne") || r.category === "Alkynes") {
             if (!r.tags.includes("Alkyne")) r.tags.push("Alkyne");
         }
+      if (text.includes("test") || text.includes("distinguish") || text.includes("identification") || text.includes("iodoform")) {
+            if (!r.tags.includes("Test")) r.tags.push("Test");
+        }
     });
 }
 
@@ -832,6 +835,7 @@ function filterByTag(tagName) {
     // display function is named in your main script!
     renderReactions(filtered); 
 }
+
 
 
 
