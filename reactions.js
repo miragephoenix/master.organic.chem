@@ -308,124 +308,80 @@ const ncertHaloData = [
     category: "Haloalkanes",
     tags: ["Alcohol", "Haloalkane", "Purity"],
     function: "Alcohol → Pure Alkyl Chloride",
-    example: "$\\ce{R-OH + SOCl2 -> R-Cl + SO2 ^ + HCl ^}$",
-    warning: "⚠️ Best method because gaseous by-products escape.",
+    example: "\\(\\ce{R-OH + SOCl2 -> R-Cl + SO2 ^ + HCl ^}\\)",
+    warning: "⚠️ Best method because gaseous by-products (SO2, HCl) escape.",
     diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Reaction_of_alcohol_with_thionyl_chloride.png/300px-Reaction_of_alcohol_with_thionyl_chloride.png",
     notes: ["Leaves behind pure alkyl halide.", "NCERT Priority."]
   },
   {
-    name: "Lucas Reagent Test",
-    reagent: "conc. HCl + anhyd. ZnCl2",
-    category: "Tests",
-    tags: ["Alcohol", "Identification"],
-    function: "Distinguish 1°, 2°, 3° Alcohols",
-    example: "$\\ce{R-OH + HCl ->[ZnCl2] R-Cl + H2O}$",
-    warning: "⚠️ 3° reacts instantly; 1° needs heat/time.",
-    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6212&t=l",
-    notes: ["Turbidity = Formation of R-Cl."]
+    name: "Swarts Reaction",
+    reagent: "AgF / Hg2F2 / CoF2 / SbF3",
+    category: "Haloalkanes",
+    tags: ["Naming", "Fluoride", "Halogen Exchange"],
+    function: "Alkyl Bromide/Chloride → Alkyl Fluoride",
+    example: "\\(\\ce{CH3-Br + AgF -> CH3-F + AgBr}\\)",
+    warning: "⚠️ Specifically used for Fluoride synthesis (others are too violent).",
+    diagram: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_xNq4u5hP_8f_m9m5v1Gj7E_0Z-F_l7Z2w&s",
+    notes: ["Metallic fluorides are required.", "Reaction involves Halogen Exchange."]
   },
   {
     name: "Finkelstein Reaction",
     reagent: "NaI + Dry Acetone",
     category: "Haloalkanes",
-    tags: ["Naming", "Halogen Exchange"],
+    tags: ["Naming", "Halogen Exchange", "Iodide"],
     function: "R-Cl/Br → Alkyl Iodide",
-    example: "$\\ce{R-X + NaI ->[Acetone] R-I + NaX v}$",
-    warning: "⚠️ Acetone precipitates NaX (Le Chatelier's Principle).",
-    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=5234&t=l",
-    notes: ["Classic halogen exchange."]
+    example: "\\(\\ce{R-X + NaI ->[Acetone] R-I + NaX v}\\)",
+    warning: "⚠️ Acetone precipitates NaX, pushing the reaction forward (Le Chatelier).",
+    diagram: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6-m_W77n6YF_v9Y-v1W5Gj7E_0Z-F_l7Z2w&s",
+    notes: ["Follows SN2 mechanism.", "Yields are high due to precipitation."]
   },
   {
-    name: "Swarts Reaction",
-    reagent: "AgF / Hg2F2 / CoF2",
-    category: "Haloalkanes",
-    tags: ["Naming", "Fluoride"],
-    function: "R-Cl/Br → Alkyl Fluoride",
-    example: "$\\ce{CH3-Br + AgF -> CH3-F + AgBr}$",
-    warning: "⚠️ Only reliable way to make fluorides.",
-    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6411&t=l",
-    notes: ["Metallic fluorides are required."]
-  },
-  {
-    name: "Cyanide Trap (KCN)",
+    name: "Cyanide Substitution (KCN)",
     reagent: "KCN (Ethanolic)",
     category: "Haloalkanes",
     tags: ["Ambident", "Nitrile", "Step-up"],
     function: "Alkyl Halide → Alkyl Cyanide",
-    example: "$\\ce{R-X + KCN -> R-CN + KX}$",
-    warning: "⚠️ KCN is ionic; Carbon attacks because C-C bond is stable.",
-    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=2723951&t=l",
-    notes: ["Increases carbon chain by one."]
+    example: "\\(\\ce{R-X + KCN -> R-CN + KX}\\)",
+    warning: "⚠️ KCN is ionic; C-C bond is more stable than C-N bond.",
+    diagram: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_xNq4u5hP_8f_m9m5v1Gj7E_0Z-F_l7Z2w&s",
+    notes: ["Increases carbon chain by one.", "Product is a Cyanide/Nitrile."]
   },
   {
-    name: "Isocyanide Trap (AgCN)",
+    name: "Isocyanide Formation (AgCN)",
     reagent: "AgCN",
     category: "Haloalkanes",
     tags: ["Ambident", "Isocyanide"],
     function: "Alkyl Halide → Isocyanide",
-    example: "$\\ce{R-X + AgCN -> R-NC + AgX}$",
-    warning: "⚠️ AgCN is covalent; only Nitrogen is free to attack.",
-    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=10471&t=l",
-    notes: ["Forms foul-smelling isocyanides."]
+    example: "\\(\\ce{R-X + AgCN -> R-NC + AgX}\\)",
+    warning: "⚠️ AgCN is covalent; only Nitrogen has a lone pair free to attack.",
+    diagram: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_xNq4u5hP_8f_m9m5v1Gj7E_0Z-F_l7Z2w&s",
+    notes: ["Forms foul-smelling isocyanides.", "Crucial NCERT Distinction."]
   },
   {
-    name: "Nitrite Trap (KNO2)",
-    reagent: "KNO2",
-    category: "Haloalkanes",
-    tags: ["Ambident", "Nitrite"],
-    function: "Alkyl Halide → Alkyl Nitrite",
-    example: "$\\ce{R-X + KNO2 -> R-O-N=O + KX}$",
-    warning: "⚠️ Ionic character: Oxygen is the donor atom.",
-    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=24430&t=l",
-    notes: ["Forms Alkyl Nitrite (O-linkage)."]
-  },
-  {
-    name: "Nitro Trap (AgNO2)",
+    name: "Nitroalkane Prep (AgNO2)",
     reagent: "AgNO2",
     category: "Haloalkanes",
-    tags: ["Ambident", "Nitroalkane"],
+    tags: ["Ambident", "Nitro"],
     function: "Alkyl Halide → Nitroalkane",
-    example: "$\\ce{R-X + AgNO2 -> R-NO2 + AgX}$",
-    warning: "⚠️ Covalent character: Nitrogen is the donor atom.",
-    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=10336&t=l",
-    notes: ["Forms Nitroalkane (N-linkage)."]
-  },
-  {
-    name: "Grignard Formation",
-    reagent: "Mg / Dry Ether",
-    category: "Organometallics",
-    tags: ["Grignard", "Hydrocarbon"],
-    function: "Alkyl Halide → R-MgX",
-    example: "$\\ce{R-X + Mg ->[Dry Ether] R-MgX}$",
-    warning: "⚠️ Avoid water! Moisture converts it into Alkane.",
-    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6380&t=l",
-    notes: ["The C-Mg bond is highly polar."]
-  },
-  {
-    name: "Fittig Reaction",
-    reagent: "2Na / Dry Ether (Aryl)",
-    category: "Haloarenes",
-    tags: ["Naming", "Biphenyl"],
-    function: "2 Aryl Halides → Biphenyl",
-    example: "$\\ce{2Ar-X + 2Na -> Ar-Ar + 2NaX}$",
-    warning: "⚠️ Only for Aryl halides.",
-    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=7095&t=l",
-    notes: ["Product is Diphenyl."]
+    example: "\\(\\ce{R-X + AgNO2 -> R-NO2 + AgX}\\)",
+    warning: "⚠️ N-attack occurs because Ag-O bond is covalent.",
+    diagram: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6-m_W77n6YF_v9Y-v1W5Gj7E_0Z-F_l7Z2w&s",
+    notes: ["Product is Nitroalkane.", "N is the donor atom."]
   },
   {
     name: "Wurtz-Fittig Reaction",
-    reagent: "2Na / Dry Ether (Mixed)",
+    reagent: "2Na / Dry Ether",
     category: "Haloarenes",
-    tags: ["Naming", "Alkylbenzene"],
+    tags: ["Naming", "Alkylbenzene", "Coupling"],
     function: "Aryl Halide + Alkyl Halide → Alkylbenzene",
-    example: "$\\ce{Ar-X + R-X + 2Na -> Ar-R + 2NaX}$",
-    warning: "⚠️ Mixed coupling of aryl and alkyl groups.",
-    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=11477&t=l",
-    notes: ["Example: Benzene + CH3Cl → Toluene."]
+    example: "\\(\\ce{Ar-X + R-X + 2Na ->[dry ether] Ar-R + 2NaX}\\)",
+    warning: "⚠️ Mixed coupling; used to add an alkyl group to a benzene ring.",
+    diagram: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_xNq4u5hP_8f_m9m5v1Gj7E_0Z-F_l7Z2w&s",
+    notes: ["Example: Chlorobenzene + Methyl Chloride → Toluene."]
   }
 ];
 
-// CLEANING LOGIC: Checks both hardcoded DB and Firebase
+// CLEANING LOGIC: Checks both hardcoded DB and Firebase to prevent duplicates
 db.ref('custom_reactions').once('value', (snapshot) => {
     const firebaseData = snapshot.val() || {};
     const firebaseNames = Object.values(firebaseData).map(r => r.name.toLowerCase());
@@ -434,9 +390,10 @@ db.ref('custom_reactions').once('value', (snapshot) => {
     ncertHaloData.forEach(r => {
         if (!firebaseNames.includes(r.name.toLowerCase()) && !jsNames.includes(r.name.toLowerCase())) {
             db.ref('custom_reactions').push(r);
-            console.log(`✅ Added: ${r.name}`);
+            console.log(`✅ Successfully added: ${r.name}`);
         } else {
-            console.log(`⏭️ Skipped: ${r.name} (Duplicate)`);
+            console.log(`⏭️ Skipped duplicate: ${r.name}`);
         }
     });
 });
+
