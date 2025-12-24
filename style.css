@@ -512,102 +512,41 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: 
     margin-bottom: 10px;
 }
 
-/* 1. Prevent the whole page from sliding */
-html, body {
-    height: 100vh;
-    width: 100vw;
-    margin: 0;
-    overflow: hidden; 
-    position: fixed;
-}
-
-/* 2. Fix the Search Bar to the top */
-.search-bar {
-    position: fixed;
-    top: 60px; /* Adjust based on where your title/buttons are */
-    left: 5%;
-    width: 90%;
-    z-index: 1000;
-    padding: 12px;
-    border-radius: 25px;
-    border: 1px solid rgba(128, 128, 128, 0.2);
-    background: var(--bg-color, white); /* Adapts to your theme */
-}
-
-/* 3. The 'Reel' Track */
-#feed {
-    height: 100vh;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory; /* The Snap Physics */
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    padding-top: 140px; /* IMPORTANT: Space so the first card isn't under the search bar */
-    padding-bottom: 100px;
-    box-sizing: border-box;
-}
-
-/* 4. The Snap Points */
-.card {
-    scroll-snap-align: center; /* Card centers on screen */
-    scroll-snap-stop: always;
-    margin: 30px auto;
-    width: 90%;
-    max-width: 450px;
-    overscroll-behavior: contain; /* Prevents scroll leakage */
-}
-/* Reset the body to be solid but not 'hidden' in a way that breaks layout */
+/* 1. Global Reset - Only one scrollbar allowed */
 html, body {
     margin: 0;
     padding: 0;
-    overscroll-behavior-y: none; /* This stops the 'pull-to-refresh' bounce */
-}
-
-/* The Card: Remove the snap points to get your size back */
-#feed {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding-top: 20px;
-    /* This ensures that even if the body is locked, 
-       the card itself can still be scrolled if the notes are long */
-    overflow-y: visible; 
-}
-
-.card {
-    width: 92%; /* Restores original size */
-    max-width: 500px;
-    margin: 15px auto;
-    /* Prevents the card from 'tugging' the page when you reach the end of the notes */
-    overscroll-behavior: contain; 
-}
-/* Restores natural scrolling */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: auto; /* Allows page to grow with content */
+    height: auto !important; /* Forces the page to grow naturally */
     overflow-x: hidden;
-    overflow-y: auto; /* Standard scrolling */
-    position: relative; /* Removes the 'fixed' trap */
+    overflow-y: auto !important; /* Only the system scrollbar */
 }
 
-/* Keeps the search bar and buttons moving with the page (not sticky) */
-.search-container, .tag-bar, h1 {
-    position: static; 
-    width: 100%;
-    margin-bottom: 20px;
+/* 2. Search Bar - Regular position (Not Sticky) */
+.search-bar, .search-container {
+    position: relative !important; /* It will now move with the page */
+    width: 90%;
+    margin: 20px auto;
+    display: block;
 }
 
+/* 3. The Feed - No internal scrolling */
 #feed {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    width: 100%;
     padding-bottom: 50px;
 }
 
-/* This class will be added by JS only when a card is open */
-.lock-scroll {
-    overflow: hidden !important;
-    height: 100vh !important;
+/* 4. The Card - Back to original size */
+.card {
+    width: 95%;
+    max-width: 600px;
+    margin: 10px auto;
+}
+
+/* 5. The Background Lock Class */
+.no-scroll {
+    overflow: hidden !important; /* Only used when a card is open */
 }
