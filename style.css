@@ -587,3 +587,43 @@ body.lock-screen {
     pointer-events: auto;
     z-index: 9999;
 }
+.card {
+    /* Increase width and max-width to fill the screen */
+    width: 95%; 
+    max-width: 700px; 
+    margin: 20px auto;
+    
+    /* Better spacing and look */
+    padding: 25px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03); /* Subtle dark glass look */
+    border: 1px solid rgba(46, 204, 113, 0.3); /* Green border */
+    
+    /* Shadow to lift the card off the background */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect for laptops */
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(46, 204, 113, 0.2);
+    border-color: #2ecc71;
+}
+
+/* Make text inside look better */
+.card h3 {
+    font-size: 1.8rem; /* Bigger Reagent Name */
+    margin: 0 0 10px 0;
+}
+
+.card p {
+    font-size: 1.2rem; /* Bigger Reaction Name */
+    margin: 5px 0;
+    opacity: 0.9;
+}
+
+.card small {
+    font-size: 1rem;
+    color: #888;
+}
