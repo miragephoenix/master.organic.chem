@@ -955,6 +955,54 @@ if (searchInput) {
         render(filtered);
     });
 }
+function openFlashcardPage(index) {
+    const r = reactionDatabase[index];
+    const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
+
+    // 1. Hide the body overflow (locks background)
+    document.body.style.overflow = "hidden";
+
+    // 2. Populate the full-screen view
+    const content = document.getElementById('flashcard-fullscreen-content');
+    content.innerHTML = `
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: var(--accent); font-size: 2.5rem; margin-bottom: 5px;">${r.reagent}</h1>
+            <h2 style="opacity: 0.8; margin-top: 0;">${r.name || ''}</h2>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px;">
+            <p style="color: #2ecc71; font-weight: bold;">Description:</p>
+            <p style="font-size: 1.1rem; line-height: 1.6;">${r.function || 'Details for this reaction...'}</p>
+        </div>
+
+        ${r.diagram ? `<div style="text-align:center; margin: 30px 0;"><img src="${r.diagram}" style="max-width:100%; border-radius:15px; box-shadow: 0 0 20px rgba(46,204,113,0.2);"></div>` : ''}
+
+        <div style="background: #111; padding: 20px; border-radius: 15px; border-left: 5px solid #2ecc71; margin-bottom: 20px;">
+            <strong style="color: #2ecc71;">Example & Mechanism:</strong>
+            <p style="margin-top: 10px; line-height: 1.5;">${r.example || 'No example provided.'}</p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; margin-bottom: 40px;">
+            <h3 style="margin-top:0;">Community Hacks</h3>
+            <div id="full-notes-list" style="margin-bottom: 15px; font-size: 0.95rem; color: #ccc;">
+                Loading hacks...
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="full-note-input" placeholder="Add a hack..." style="flex:1; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white;">
+                <button onclick="postNote('${cleanKey}', ${index})" style="background: #2ecc71; color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer;">Post</button>
+            </div>
+        </div>
+    `;
+
+    // 3. Show the page
+    document.getElementById('flashcard-page').style.display = 'block';
+}
+
+function closeFlashcardPage() {
+    // Hide the page and restore body scroll
+    document.getElementById('flashcard-page').style.display = 'none';
+    document.body.style.overflow = "auto";
+}
 
 
 
