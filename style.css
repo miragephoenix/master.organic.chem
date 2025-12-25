@@ -679,3 +679,13 @@ body.lock-screen {
         max-width: 900px; /* Makes it even wider on big screens */
     }
 }
+#flashcard-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000; /* Or your dark theme color */
+    z-index: 99999; /* Higher than everything else */
+    overflow-y: auto;
+}
