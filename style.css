@@ -689,3 +689,17 @@ body.lock-screen {
     z-index: 99999; /* Higher than everything else */
     overflow-y: auto;
 }
+/* Hide scrollbar for the Flashcard Reel but keep functionality */
+#flashcard-deck::-webkit-scrollbar {
+    display: none;
+}
+#flashcard-deck {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Prevent accidental text highlighting when tapping cards */
+#studyOverlay {
+    user-select: none;
+    -webkit-user-select: none;
+}
