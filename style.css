@@ -627,3 +627,55 @@ body.lock-screen {
     font-size: 1rem;
     color: #888;
 }
+/* This makes the container take up the whole screen width */
+#feed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px 0;
+}
+
+/* This makes the cards themselves bigger */
+.card {
+    width: 95%; /* Fills the screen width on mobile */
+    max-width: 800px; /* Much wider on laptops to stop negative space */
+    margin: 20px auto;
+    padding: 25px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.05); 
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    box-sizing: border-box; /* Ensures padding doesn't break the width */
+    transition: all 0.3s ease;
+}
+
+/* Makes the reagent name larger */
+.card h3 {
+    font-size: 1.8rem !important; 
+    margin-bottom: 10px !important;
+}
+
+/* Makes the reaction name larger */
+.card p {
+    font-size: 1.2rem !important;
+}
+
+/* Ensures the expanded details also use the full width */
+.card .details, [id^="details-"] {
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+/* Makes images inside cards fill the space nicely */
+.reaction-diagram {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+@media (min-width: 1000px) {
+    .card {
+        max-width: 900px; /* Makes it even wider on big screens */
+    }
+}
