@@ -6,7 +6,12 @@
     <script>
       window.MathJax = {
         tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], packages: {'[+]': ['mhchem']} },
-        loader: { load: ['[tex]/mhchem'] }
+        startup: {
+            ready: () => {
+                MathJax.startup.defaultReady();
+                console.log('MathJax is loaded, but waiting for content.');
+            }
+        }
       };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -64,7 +69,7 @@
 <div id="studyOverlay" style="display:none; position: fixed; inset: 0; background: #000; flex-direction: column; z-index: 5000;">
     <button onclick="exitStudyMode()" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.2); color:white; border:none; border-radius:50%; width:40px; height:40px; font-weight:bold; cursor:pointer; z-index: 6000;">✕</button>
     
-    <div id="flashcard-deck" style="height: 100vh; width: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; -webkit-overflow-scrolling: touch;">
+    <div id="flashcard-deck" style="height: 100vh; width: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch;">
         </div>
 
     <div id="hint-text" style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.5); pointer-events:none; font-family:sans-serif; text-align:center;">
@@ -96,6 +101,7 @@
         const data = snapshot.val();
         const custom = [];
         for(let id in data) custom.push({...data[id], firebaseId: id});
+        // Ensure reactionDatabase exists before trying to spread it
         allReactions = (typeof reactionDatabase !== 'undefined') ? [...reactionDatabase, ...custom] : custom;
         runSearch();
     });
@@ -137,10 +143,13 @@
                 </div>
             </div>
         `}).join('');
-        if (window.MathJax) window.MathJax.typeset();
+        // Ensure MathJax runs on the main feed too
+        if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise([feed]).catch((err) => console.log('MathJax error:', err));
+        }
     }
 
-    // --- REEL STYLE FLASHCARD LOGIC ---
+    // --- REEL STYLE FLASHCARD LOGIC (UPDATED) ---
     function startStudyMode() {
         if (!allReactions.length) return alert("No reactions to study!");
         studyData = [...allReactions].sort(() => Math.random() - 0.5);
@@ -149,14 +158,16 @@
         document.getElementById('studyOverlay').style.display = 'flex';
         document.body.style.overflow = 'hidden'; // Lock background
 
+        // UPDATED CSS INLINE: changed width from 85% to 94% for wider cards
         deck.innerHTML = studyData.map((r, i) => {
+            // Ensure scroll-snap-stop is set to always to increase friction
             return `
-            <div style="scroll-snap-align: start; height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; perspective: 1000px;">
-                <div class="flashcard-inner" onclick="this.classList.toggle('flipped')" style="position: relative; width: 85%; max-width: 400px; height: 65%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer;">
+            <div style="scroll-snap-align: start; scroll-snap-stop: always; height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; perspective: 1000px;">
+                <div class="flashcard-inner" onclick="this.classList.toggle('flipped')" style="position: relative; width: 94%; max-width: 400px; height: 65%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer;">
                     
                     <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #1a1a1a; border: 2px solid #2ecc71; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; text-align: center;">
                         <small style="color:#2ecc71; letter-spacing:2px; font-weight:bold;">REAGENT</small>
-                        <h1 style="font-size: 2.8rem; color: white; margin: 15px 0;">${r.reagent || ''}</h1>
+                        <h1 style="font-size: 2.8rem; color: white; margin: 15px 0;">$${r.reagent || ''}$</h1>
                         <p style="color: #888;">Tap to reveals answer</p>
                     </div>
 
@@ -168,6 +179,7 @@
                              <strong style="color:#2ecc71;">Hack:</strong>
                              <p style="color:#ccc; margin: 5px 0 0 0; font-size:0.9rem;">${r.notes || 'No specific notes.'}</p>
                         </div>
+                         ${r.example ? `<div style="margin-top:15px; color:white;"><strong style="color:#2ecc71;">Example:</strong><br>$${r.example}$</div>` : ''}
                     </div>
 
                 </div>
@@ -175,7 +187,7 @@
             `;
         }).join('');
 
-        // Inject the flip CSS dynamically so the user doesn't have to edit style.css
+        // Inject the flip CSS dynamically
         if (!document.getElementById('flip-style')) {
             const style = document.createElement('style');
             style.id = 'flip-style';
@@ -183,7 +195,12 @@
             document.head.appendChild(style);
         }
 
-        if (window.MathJax) window.MathJax.typeset();
+        // UPDATED: Use typesetPromise to ensure MathJax renders the new dynamic content
+        if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise([deck]).then(() => {
+                console.log('Flashcard MathJax rendered');
+            }).catch((err) => console.log('MathJax error:', err));
+        }
     }
 
     function exitStudyMode() {
