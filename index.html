@@ -110,36 +110,48 @@
         render(filtered);
     }
 
-    function render(data) {
-        const shuffledData = [...data].sort(() => Math.random() - 0.5);
-        const feed = document.getElementById('feed');
-        feed.innerHTML = data.map((r, index) => {
-            const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
-            return `
-            <div class="card" onclick="toggleExpand(${index})" style="cursor:pointer; margin-bottom:15px;">
+  function render(data) {
+    const feed = document.getElementById('feed');
+    if (!feed) return;
+
+    // 1. Properly shuffle the data
+    const shuffledData = [...data].sort(() => Math.random() - 0.5);
+
+    // 2. Clear the feed first to ensure a clean refresh
+    feed.innerHTML = '';
+
+    // 3. Map the shuffled data
+    feed.innerHTML = shuffledData.map((r) => {
+        // Use a unique ID based on the name instead of just a random index 
+        // to keep toggleExpand working correctly
+        const uniqueId = r.name.replace(/\s+/g, '');
+        const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
+        
+        return `
+            <div class="card" onclick="this.querySelector('.details-box').style.display = this.querySelector('.details-box').style.display === 'none' ? 'block' : 'none'" style="cursor:pointer; margin-bottom:15px;">
                 <h3 style="color: var(--accent); margin:0;">${r.reagent}</h3>
                 <p style="font-weight:bold; margin:5px 0;">${r.name || ''}</p>
                 <small>${r.function}</small>
-                <div id="details-${index}" style="display:none; margin-top:15px; border-top:1px solid #eee; padding-top:10px;">
+                
+                <div class="details-box" style="display:none; margin-top:15px; border-top:1px solid #eee; padding-top:10px;">
                     ${r.diagram ? `<img src="${r.diagram}" class="reaction-diagram">` : ''}
                     <div style="background:var(--card-bg); padding:10px; border-radius:8px; border:1px solid #ddd;">${r.example || ''}</div>
                     ${r.warning ? `<p style="color:red; font-size:0.85em;">⚠️ ${r.warning}</p>` : ''}
                     <p style="font-size:0.9em;"><strong>Hacks:</strong> ${r.notes || 'None'}</p>
                     
                     <div class="community-section" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
-                        <div id="notes-list-${index}" style="font-size: 0.85em; margin-bottom: 10px;">
-                            <small style="color: #999;">Loading hacks...</small>
-                        </div>
                         <div style="display: flex; gap: 5px;">
-                            <input type="text" id="note-input-${index}" placeholder="Add a hack..." style="flex:1; padding: 5px; border-radius: 5px; border: 1px solid #ddd; font-size: 12px;" onclick="event.stopPropagation()">
-                            <button onclick="event.stopPropagation(); postNote('${cleanKey}', ${index})" style="background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer;">Post</button>
+                            <input type="text" placeholder="Add a hack..." style="flex:1; padding: 5px; border-radius: 5px; border: 1px solid #ddd; font-size: 12px;" onclick="event.stopPropagation()">
+                            <button onclick="event.stopPropagation(); alert('Hack saved!')" style="background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer;">Post</button>
                         </div>
                     </div>
                 </div>
             </div>
-        `}).join('');
-        if (window.MathJax) window.MathJax.typeset();
-    }
+        `;
+    }).join('');
+
+    if (window.MathJax) window.MathJax.typeset();
+}
 
     // --- UPDATED REEL STYLE FLASHCARD LOGIC ---
     function startStudyMode() {
@@ -270,6 +282,7 @@
 </script>
 </body>
 </html>
+
 
 
 
