@@ -825,6 +825,138 @@ const reactionDatabase = [
     warning: "⚠️ Forms a bright YELLOW dye.",
     diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=104934&t=l",
     notes: ["An electrophilic aromatic substitution reaction."]
+  },
+  {
+    name: "Reduction of Nitro Compounds",
+    reagent: "H2/Pd or Sn/HCl or Fe/HCl",
+    category: "Amines",
+    tags: ["Preparation", "Reduction"],
+    function: "Nitrobenzene → Aniline",
+    example: "$\\ce{Ar-NO2 ->[Fe/HCl] Ar-NH2}$",
+    warning: "⚠️ Fe/HCl is preferred as FeCl2 formed gets hydrolysed to release HCl, requiring only small amounts of acid.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=7472&t=l",
+    notes: ["Can also be used for aliphatic nitroalkanes."]
+  },
+  {
+    name: "Ammonolysis (Hoffmann's)",
+    reagent: "Ethanolic Ammonia (NH3)",
+    category: "Amines",
+    tags: ["Preparation", "Nucleophilic Substitution"],
+    function: "Alkyl Halide → Mixture of Amines",
+    example: "$\\ce{R-X ->[NH3] R-NH2 ->[RX] R2NH ->[RX] R3N ->[RX] R4N+X-}$",
+    warning: "⚠️ Results in a mixture of 1°, 2°, 3° amines and quaternary salts.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=222&t=l",
+    notes: ["Use excess NH3 to get Primary amine as the major product."]
+  },
+  {
+    name: "Reduction of Nitriles",
+    reagent: "LiAlH4 or H2 / Ni",
+    category: "Amines",
+    tags: ["Preparation", "Step-up"],
+    function: "Nitrile → 1° Amine",
+    example: "$\\ce{R-CN ->[LiAlH4] R-CH2-NH2}$",
+    warning: "⚠️ Excellent for 'ascent of series' (adding one carbon to the chain).",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=104748&t=l",
+    notes: ["Forms a primary amine with one more carbon than the starting halide (if made from KCN)."]
+  },
+  {
+    name: "Gabriel Phthalimide Synthesis",
+    reagent: "1. KOH, 2. RX, 3. NaOH(aq)",
+    category: "Amines",
+    tags: ["Preparation", "Naming", "Pure 1° Amine"],
+    function: "Phthalimide → 1° Aliphatic Amine",
+    example: "$\\ce{C6H4(CO)2NH ->[KOH][-H2O] C6H4(CO)2NK ->[RX] C6H4(CO)2NR ->[NaOH(aq)] R-NH2}$",
+    warning: "⚠️ Aromatic amines (Aniline) CANNOT be prepared this way (Aryl halides don't undergo SN reaction).",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=68077&t=l",
+    notes: ["Produces very pure primary aliphatic amines."]
+  },
+  {
+    name: "Carbylamine Reaction",
+    reagent: "CHCl3 + Ethanolic KOH",
+    category: "Tests",
+    tags: ["Test", "Naming", "Foul Smell"],
+    function: "Test for 1° Amines (Aliphatic/Aromatic)",
+    example: "$\\ce{R-NH2 + CHCl3 + 3KOH ->[Heat] R-NC + 3KCl + 3H2O}$",
+    warning: "⚠️ Produces extremely FOUL-smelling Isocyanides. 2° and 3° amines do NOT give this test.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6212&t=l",
+    notes: ["Also known as the Isocyanide Test."]
+  },
+  {
+    name: "Reaction with Nitrous Acid",
+    reagent: "NaNO2 + HCl (In situ HNO2)",
+    category: "Amines",
+    tags: ["Alcohol formation", "Gas Evolution"],
+    function: "Distinguish Aliphatic from Aromatic",
+    example: "$\\ce{R-NH2 ->[HNO2] [R-N2+Cl-] ->[H2O] R-OH + N2 ^ + HCl}$",
+    warning: "⚠️ Aliphatic diazonium salts are unstable and decompose to release Nitrogen gas (bubbles).",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=23668&t=l",
+    notes: ["Aromatic amines form stable diazonium salts at 0-5°C instead of gas."]
+  },
+  {
+    name: "Acylation of Amines",
+    reagent: "Acid Chloride / Anhydride + Pyridine",
+    category: "Amines",
+    tags: ["Protection", "Amide Formation"],
+    function: "Amine → Amide",
+    example: "$\\ce{R-NH2 + CH3COCl ->[Pyridine] R-NHCOCH3 + HCl}$",
+    warning: "⚠️ Pyridine (base) is added to remove HCl and shift equilibrium forward.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=31268&t=l",
+    notes: ["Called 'Benzoylation' if Benzoyl Chloride is used (Schotten-Baumann)."]
+  },
+  {
+    name: "Aniline Bromination",
+    reagent: "Bromine Water (Br2/H2O)",
+    category: "Amines",
+    tags: ["Electrophilic substitution", "White PPT"],
+    function: "Aniline → 2,4,6-Tribromoaniline",
+    example: "$\\ce{C6H5NH2 + 3Br2 ->[H2O] C6H2(Br)3NH2 + 3HBr}$",
+    warning: "⚠️ Forms a White Precipitate immediately due to high reactivity of Aniline.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=7442&t=l",
+    notes: ["To get monobromo (para), you must first protect -NH2 by acetylation."]
+  },
+  {
+    name: "Aniline Nitration (The Trap)",
+    reagent: "Conc. HNO3 + Conc. H2SO4",
+    category: "Amines",
+    tags: ["Electrophilic substitution", "Meta-product"],
+    function: "Direct Nitration of Aniline",
+    example: "$\\ce{Aniline ->[HNO3/H2SO4] p(51\\%) + m(47\\%) + o(2\\%)}$",
+    warning: "⚠️ Significant meta-product (47%) forms because Aniline gets protonated to meta-directing Anilinium ion!",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=7472&t=l",
+    notes: ["For pure Para-nitroaniline, protect with acetic anhydride first."]
+  },
+  {
+    name: "Aniline Sulphonation",
+    reagent: "Conc. H2SO4 / 453-473K",
+    category: "Amines",
+    tags: ["Zwitterion", "Electrophilic substitution"],
+    function: "Aniline → Sulphanilic Acid",
+    example: "$\\ce{C6H5NH2 ->[H2SO4] C6H5NH3+HSO4- ->[Heat] NH2-C6H4-SO3H}$",
+    warning: "⚠️ Sulphanilic acid exists as a Zwitterion: $^+\\ce{NH3-C6H4-SO3-}$.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=67554&t=l",
+    notes: ["Aniline does NOT undergo Friedel-Crafts reaction due to salt formation with AlCl3."]
+  },
+  {
+    name: "Coupling Reaction (Orange Dye)",
+    reagent: "Phenol + Diazonium Salt (pH 9-10)",
+    category: "Tests",
+    tags: ["Test", "Color", "Dye"],
+    function: "Diazonium Salt → p-Hydroxyazobenzene",
+    example: "$\\ce{Ar-N2+Cl- + C6H5OH ->[OH-] Ar-N=N-C6H4-OH}$",
+    warning: "⚠️ Forms a bright ORANGE dye.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=104934&t=l",
+    notes: ["Reaction is carried out in basic medium."]
+  },
+  {
+    name: "Basic Strength Theory",
+    reagent: "Aqueous Phase (pK_b)",
+    category: "Theory",
+    tags: ["Basicity", "Inductive Effect", "Solvation"],
+    function: "Order of basicity for alkyl amines",
+    example: "Ethyl: $\\ce{(C2H5)2NH > (C2H5)3N > C2H5NH2 > NH3}$",
+    warning: "⚠️ The order changes for Methyl: $\\ce{(CH3)2NH > CH3NH2 > (CH3)3N > NH3}$.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=222&t=l",
+    notes: ["The order is a result of Inductive (+I), Solvation, and Steric Hindrance effects."]
   }
 ];
 
@@ -1023,6 +1155,7 @@ function closeFlashcardPage() {
     document.getElementById('feed').style.display = 'flex';
     document.getElementById('mainSearch').style.display = 'block';
 }
+
 
 
 
