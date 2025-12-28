@@ -957,6 +957,197 @@ const reactionDatabase = [
     warning: "⚠️ The order changes for Methyl: $\\ce{(CH3)2NH > CH3NH2 > (CH3)3N > NH3}$.",
     diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=222&t=l",
     notes: ["The order is a result of Inductive (+I), Solvation, and Steric Hindrance effects."]
+  },
+  {
+    name: "Wurtz-Fittig Reaction",
+    reagent: "Na / Dry Ether",
+    category: "Hydrocarbons",
+    tags: ["Aromatic", "Alkylbenzene", "Coupling"],
+    function: "Aryl Halide + Alkyl Halide → Alkylbenzene",
+    example: "$\\ce{C6H5Cl + CH3Cl + 2Na ->[dry ether] C6H5-CH3 + 2NaCl}$",
+    warning: "⚠️ Mixtures of products (R-R, Ar-Ar, Ar-R) can form, but Ar-R is easy to separate.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=1140&t=l",
+    notes: ["Extension of Wurtz for aromatic rings.", "Example: Synthesis of Toluene."]
+  },
+  {
+    name: "Fittig Reaction",
+    reagent: "Na / Dry Ether",
+    category: "Hydrocarbons",
+    tags: ["Aromatic", "Biphenyl", "Coupling"],
+    function: "2 Aryl Halides → Biphenyl",
+    example: "$\\ce{2C6H5Cl + 2Na ->[dry ether] C6H5-C6H5 + 2NaCl}$",
+    warning: "⚠️ Only for coupling two aromatic rings.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=7095&t=l",
+    notes: ["Used to prepare Diphenyl/Biphenyl."]
+  },
+  {
+    name: "Birch Reduction (Alkynes)",
+    reagent: "Na or Li / Liquid NH3",
+    category: "Hydrocarbons",
+    tags: ["Alkyne", "Trans-Alkene", "Reduction"],
+    function: "Alkyne → Trans-Alkene",
+    example: "$\\ce{R-C#C-R ->[Na/liq. NH3] R-CH=CH-R}$ (Trans)",
+    warning: "⚠️ Gives TRANS product (Lindlar gives CIS).",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6331&t=l",
+    notes: ["Does not work for terminal alkynes (they form salts).", "Involves solvated electrons (blue solution)."]
+  },
+  {
+    name: "Kharasch Effect (Peroxide Effect)",
+    reagent: "HBr + Peroxide (R-O-O-R)",
+    category: "Hydrocarbons",
+    tags: ["Addition", "Anti-Markovnikov", "Free Radical"],
+    function: "Alkene → Alkyl Bromide (Anti-Mark)",
+    example: "$\\ce{CH3-CH=CH2 + HBr ->[Peroxide] CH3-CH2-CH2Br}$",
+    warning: "⚠️ ONLY works for HBr. HCl and HI do not show this effect!",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=8001&t=l",
+    notes: ["Mechanism: Free Radical Addition.", "Major product is 1-bromopropane."]
+  },
+  {
+    name: "Reductive Ozonolysis",
+    reagent: "1. O3, 2. Zn / H2O or (CH3)2S",
+    category: "Hydrocarbons",
+    tags: ["Cleavage", "Aldehyde", "Ketone"],
+    function: "Alkene → Aldehyde / Ketone",
+    example: "$\\ce{R-CH=CH-R ->[O3][Zn/H2O] 2R-CHO}$",
+    warning: "⚠️ Zn prevents further oxidation of aldehydes to acids.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=240&t=l",
+    notes: ["Used to locate the position of double bonds."]
+  },
+  {
+    name: "Oxidative Ozonolysis",
+    reagent: "1. O3, 2. H2O2",
+    category: "Hydrocarbons",
+    tags: ["Cleavage", "Carboxylic Acid"],
+    function: "Alkene → Carboxylic Acid / Ketone",
+    example: "$\\ce{R-CH=CH-R ->[O3][H2O2] 2R-COOH}$",
+    warning: "⚠️ Aldehydes are oxidized to Carboxylic Acids here.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=176&t=l",
+    notes: ["Similar to hot KMnO4 cleavage."]
+  },
+  {
+    name: "Kolbe's Electrolysis",
+    reagent: "Electricity / Aq. Salt",
+    category: "Hydrocarbons",
+    tags: ["Alkane", "Electrolysis", "Step-up"],
+    function: "2 R-COONa → R-R + 2CO2",
+    example: "$\\ce{2CH3COONa + 2H2O ->[Electrolysis] C2H6 + 2CO2 + H2 + 2NaOH}$",
+    warning: "⚠️ Ethane is formed at the ANODE. pH of solution increases.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6324&t=l",
+    notes: ["Methane cannot be prepared.", "Anode: Alkane + CO2 | Cathode: H2 gas."]
+  },
+  {
+    name: "Frankland Reaction",
+    reagent: "Zinc (Zn) / Ether",
+    category: "Hydrocarbons",
+    tags: ["Alkane", "Coupling", "Organometallic"],
+    function: "Alkyl Halide → Higher Alkane",
+    example: "$\\ce{2R-X + Zn -> R-R + ZnX2}$",
+    warning: "⚠️ Similar to Wurtz, but uses Zinc instead of Sodium.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=6440&t=l",
+    notes: ["Used when a milder reducing agent than Sodium is needed."]
+  },
+  {
+    name: "Peroxide Effect Exception (Theory)",
+    reagent: "HCl or HI + Peroxide",
+    category: "Theory",
+    tags: ["Trap", "HBr only", "Free Radical"],
+    function: "Explain why Anti-Mark fails for HCl/HI",
+    example: "$\\ce{CH3-CH=CH2 + HCl ->[Peroxide] CH3-CHCl-CH3}$ (Still Mark!)",
+    warning: "⚠️ Only HBr shows Anti-Markovnikov with peroxide!",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=313&t=l",
+    notes: ["HCl bond is too strong to break.", "HI bond is weak, but I· radicals combine to form I2 instead of attacking the alkene."]
+  },
+  {
+    name: "Acidity of Terminal Alkynes",
+    reagent: "NaNH2 or Na metal",
+    category: "Hydrocarbons",
+    tags: ["Alkyne", "Acidic H", "Gas Evolution"],
+    function: "Identify Terminal Alkynes",
+    example: "$\\ce{R-C#C-H + Na -> R-C#C^-Na^+ + 1/2 H2 ^}$",
+    warning: "⚠️ Internal alkynes (R-C≡C-R) do NOT react as they lack acidic hydrogen!",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=23954&t=l",
+    notes: ["The 's' character of sp hybridized carbon (50%) makes it highly electronegative."]
+  },
+  {
+    name: "Aromatization (Hydroforming)",
+    reagent: "Cr2O3 / V2O5 / Mo2O3 at 773K",
+    category: "Hydrocarbons",
+    tags: ["Alkane", "Benzene", "Industrial"],
+    function: "n-Hexane → Benzene",
+    example: "$\\ce{C6H14 ->[773K, 10-20 atm][Cr2O3] C6H6 + 4H2}$",
+    warning: "⚠️ Requires at least 6 carbons in a straight chain.",
+    diagram: "https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=241&t=l",
+    notes: ["n-Heptane gives Toluene under these conditions."]
+  },
+  {
+    name: "Oxymercuration-Demercuration (OMDM)",
+    reagent: "1. Hg(OAc)2, H2O / 2. NaBH4",
+    category: "Hydrocarbons",
+    tags: ["Alkene", "Alcohol", "Markovnikov"],
+    function: "Alkene → Alcohol (NO rearrangement)",
+    example: "$\\ce{R-CH=CH2 ->[Hg(OAc)2][NaBH4] R-CH(OH)-CH3}$",
+    warning: "⚠️ Follows Markovnikov's rule but prevents carbocation rearrangement!",
+    notes: ["Better than acid-catalyzed hydration for branched alkenes.", "Forms a cyclic mercurinium ion intermediate."]
+  },
+  {
+    name: "Allylic Bromination (NBS)",
+    reagent: "NBS / hv (Light)",
+    category: "Hydrocarbons",
+    tags: ["Bromination", "Allylic", "Free Radical"],
+    function: "Alkene → Allylic Bromide",
+    example: "$\\ce{CH2=CH-CH3 ->[NBS][hv] CH2=CH-CH2Br}$",
+    warning: "⚠️ The double bond remains intact; substitution only happens at the alpha-carbon.",
+    notes: ["NBS = N-Bromosuccinimide.", "High yield for allylic and benzylic positions."]
+  },
+  {
+    name: "Birch Reduction (Benzene)",
+    reagent: "Na / Liq. NH3 + Ethanol",
+    category: "Hydrocarbons",
+    tags: ["Aromatic", "Reduction", "Diene"],
+    function: "Benzene → 1,4-Cyclohexadiene",
+    example: "$\\ce{C6H6 ->[Na/Liq. NH3][EtOH] C6H4}$ (Non-conjugated diene)",
+    warning: "⚠️ Electron Withdrawing Groups (EWG) lead to different products than Donating Groups (EDG)!",
+    notes: ["Reduces the ring to a non-conjugated diene.", "Important for JEE Advanced and Mains 2024."]
+  },
+  {
+    name: "1,4-Addition (Butadiene)",
+    reagent: "HBr / 40°C (High Temp)",
+    category: "Hydrocarbons",
+    tags: ["Diene", "Thermodynamic", "Conjugated"],
+    function: "1,3-Butadiene → 1-Bromo-2-butene",
+    example: "$\\ce{CH2=CH-CH=CH2 + HBr ->[40 ^oC] CH3-CH=CH-CH2Br}$",
+    warning: "⚠️ High Temp = 1,4-Addition (Thermodynamic); Low Temp = 1,2-Addition (Kinetic).",
+    notes: ["At 40°C, the more stable internal alkene is the major product."]
+  },
+  {
+    name: "Isomerisation of Alkanes",
+    reagent: "Anhy. AlCl3 / HCl",
+    category: "Hydrocarbons",
+    tags: ["Alkane", "Branching", "Industrial"],
+    function: "n-Alkane → Branched Alkane",
+    example: "$\\ce{CH3(CH2)4CH3 ->[AlCl3/HCl] 2-Methylpentane + 3-Methylpentane}$",
+    warning: "⚠️ Used to increase the Octane number of fuels.",
+    notes: ["Commonly found in 2023-2024 JEE papers."]
+  },
+  {
+    name: "Tollens' Test for Alkynes",
+    reagent: "Ammoniacal AgNO3",
+    category: "Tests",
+    tags: ["Terminal Alkyne", "White PPT", "Silver"],
+    function: "Distinguish Terminal vs Internal Alkynes",
+    example: "$\\ce{R-C#C-H + [Ag(NH3)2]+ -> R-C#C-Ag v}$ (White PPT)",
+    warning: "⚠️ ONLY for terminal alkynes. Internal alkynes give no reaction.",
+    notes: ["Forms a silver acetylide precipitate."]
+  },
+  {
+    name: "Ammoniacal Cuprous Chloride Test",
+    reagent: "Cu2Cl2 + NH4OH",
+    category: "Tests",
+    tags: ["Terminal Alkyne", "Red PPT"],
+    function: "Test for Terminal Acidic Hydrogen",
+    example: "$\\ce{R-C#C-H ->[Cu2Cl2/NH4OH] R-C#C-Cu v}$ (Red PPT)",
+    warning: "⚠️ Another test that fails for 2-Butyne but works for 1-Butyne.",
+    notes: ["Resulting copper acetylide is a reddish-brown precipitate."]
   }
 ];
 
@@ -1155,6 +1346,7 @@ function closeFlashcardPage() {
     document.getElementById('feed').style.display = 'flex';
     document.getElementById('mainSearch').style.display = 'block';
 }
+
 
 
 
