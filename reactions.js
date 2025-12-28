@@ -1148,6 +1148,56 @@ const reactionDatabase = [
     example: "$\\ce{R-C#C-H ->[Cu2Cl2/NH4OH] R-C#C-Cu v}$ (Red PPT)",
     warning: "⚠️ Another test that fails for 2-Butyne but works for 1-Butyne.",
     notes: ["Resulting copper acetylide is a reddish-brown precipitate."]
+  },
+  {
+    name: "Ipso Substitution (Picric Acid)",
+    reagent: "Conc. HNO3 + Conc. H2SO4",
+    category: "Phenols",
+    tags: ["Nitration", "Ipso Effect", "Trap"],
+    function: "Phenol-2,4-disulphonic acid → Picric Acid",
+    example: "$\\ce{C6H3(OH)(SO3H)2 ->[Conc. HNO3] C6H2(OH)(NO2)3}$",
+    warning: "⚠️ Statement II in your notes: Phenol-2,4-disulphonic acid is treated with Conc. HNO3 to get picric acid via Ipso effect.",
+    notes: ["Picric acid is 2,4,6-trinitrophenol, NOT trinitrotoluene."]
+  },
+  {
+    name: "Acylation of Phenol",
+    reagent: "CH3COCl / Pyridine",
+    category: "Phenols",
+    tags: ["Esterification", "Protection"],
+    function: "Phenol → Phenyl Acetate",
+    example: "$\\ce{C6H5OH + CH3COCl ->[Pyridine] C6H5-OCOCH3}$",
+    warning: "⚠️ Reaction occurs at the -OH group, not the ring.",
+    notes: ["Often followed by a Fries rearrangement in JEE questions."]
+  },
+  {
+    name: "Selective Reduction (LiBH4)",
+    reagent: "LiBH4",
+    category: "Reagents",
+    tags: ["Selective", "Reduction", "Ester"],
+    function: "Reduces Esters/Lactones but NOT Carboxylic Acids",
+    example: "$\\ce{HOOC-(CH2)_n-COOEt ->[LiBH4] HOOC-(CH2)_n-CH2OH}$",
+    warning: "⚠️ LiBH4 is more selective than LiAlH4; it leaves -COOH groups alone.",
+    notes: ["High-yield trap for multi-functional group questions."]
+  },
+  {
+    name: "Ether Cleavage (Excess HI)",
+    reagent: "Conc. HI (Excess) / Heat",
+    category: "Ethers",
+    tags: ["Cleavage", "Substitution"],
+    function: "R-O-R' → R-I + R'-I",
+    example: "$\\ce{CH3-O-C(CH3)3 ->[Excess HI] CH3-I + (CH3)3C-I}$",
+    warning: "⚠️ With excess HI, both the alcohol and ether parts convert to iodides.",
+    notes: ["If the ether has a 3° group, it follows the SN1 pathway."]
+  },
+  {
+    name: "Phthalein Dye Test",
+    reagent: "Phthalic Anhydride + Conc. H2SO4",
+    category: "Tests",
+    tags: ["Phenol ID", "Indicator", "Pink"],
+    function: "Identify Phenolic groups",
+    example: "Phenol + Phthalic Anhydride $\\ce{->[Conc. H2SO4][NaOH]}$ Phenolphthalein (Pink)",
+    warning: "⚠️ Requires a free para-position in the phenol to work.",
+    notes: ["Phenolphthalein is colorless in acid and pink in base."]
   }
 ];
 
@@ -1346,6 +1396,7 @@ function closeFlashcardPage() {
     document.getElementById('feed').style.display = 'flex';
     document.getElementById('mainSearch').style.display = 'block';
 }
+
 
 
 
