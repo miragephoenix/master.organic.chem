@@ -1198,6 +1198,16 @@ const reactionDatabase = [
     example: "Phenol + Phthalic Anhydride $\\ce{->[Conc. H2SO4][NaOH]}$ Phenolphthalein (Pink)",
     warning: "⚠️ Requires a free para-position in the phenol to work.",
     notes: ["Phenolphthalein is colorless in acid and pink in base."]
+  },
+  {
+    name: "Grignard Reagent Synthesis",
+    reagent: "R-X + Mg in Dry Ether",
+    category: "Naming",
+    tags: ["Grignard"],
+    function: "Form Grignard Reagent",
+    example: "R-X $\\ce{->[Mg][Dry Ether]}$ R-MgX",
+    warning: "No warning",
+    notes: ["No notes"]
   }
 ];
 
@@ -1396,6 +1406,7 @@ function closeFlashcardPage() {
     document.getElementById('feed').style.display = 'flex';
     document.getElementById('mainSearch').style.display = 'block';
 }
+
 
 
 
