@@ -1208,7 +1208,7 @@ const reactionDatabase = [
     example: "R-X $\\ce{->[Mg][Dry Ether]}$ R-MgX",
     warning: "No warning",
     notes: ["No notes"]
-  }
+  },
   {
     name: "Controlled Oxidation of Methane",
     reagent: "Cu / 523K / 100 atm",
@@ -1494,6 +1494,7 @@ function closeFlashcardPage() {
     document.getElementById('feed').style.display = 'flex';
     document.getElementById('mainSearch').style.display = 'block';
 }
+
 
 
 
