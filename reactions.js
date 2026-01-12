@@ -1209,6 +1209,94 @@ const reactionDatabase = [
     warning: "No warning",
     notes: ["No notes"]
   }
+  {
+    name: "Controlled Oxidation of Methane",
+    reagent: "Cu / 523K / 100 atm",
+    category: "Hydrocarbons",
+    tags: ["Alkane", "Oxidation", "Industrial"],
+    function: "Methane → Methanol",
+    example: "$\\ce{2CH4 + O2 ->[Cu/523K/100atm] 2CH3OH}$",
+    warning: "⚠️ Using Mo2O3 gives Methanal; (CH3COO)2Mn gives Ethanoic acid.",
+    diagram: "",
+    notes: ["Industrial method for methanol production."]
+  },
+  {
+    name: "Gattermann-Koch Reaction",
+    reagent: "CO + HCl / Anhy. AlCl3",
+    category: "Aromatic",
+    tags: ["Benzene", "Formylation", "Aldehyde"],
+    function: "Benzene → Benzaldehyde",
+    example: "$\\ce{C6H6 + CO + HCl ->[AlCl3/CuCl] C6H5CHO}$",
+    warning: "⚠️ CuCl is used to stabilize the formyl cation intermediate.",
+    diagram: "",
+    notes: ["Introduces a -CHO group directly to the benzene ring."]
+  },
+  {
+    name: "Mulliken-Barker Test",
+    reagent: "1. Zn/NH4Cl, 2. Tollen's Reagent",
+    category: "Tests",
+    tags: ["Nitro Group", "Silver Mirror", "Identification"],
+    function: "Detects Aromatic Nitro (-NO2) group",
+    example: "$\\ce{C6H5NO2 ->[Zn/NH4Cl] C6H5NHOH ->[AgNO3/NH3] Ag (v)}$",
+    warning: "⚠️ A black precipitate or silver mirror confirms the Nitro group.",
+    diagram: "",
+    notes: ["Reduction to phenylhydroxylamine allows it to reduce Tollen's reagent."]
+  },
+  {
+    name: "BHC (Lindane) Formation",
+    reagent: "Cl2 / UV Light",
+    category: "Aromatic",
+    tags: ["Addition", "Insecticide", "Benzene"],
+    function: "Benzene → Benzene Hexachloride (Gammaxene)",
+    example: "$\\ce{C6H6 + 3Cl2 ->[hv] C6H6Cl6}$",
+    warning: "⚠️ Addition reaction—aromaticity is lost.",
+    diagram: "",
+    notes: ["Used as an insecticide; the gamma-isomer is the most potent."]
+  },
+  {
+    name: "Hell-Volhard-Zelinsky (HVZ)",
+    reagent: "X2 / Red Phosphorus",
+    category: "Carboxylic Acids",
+    tags: ["Alpha-Halogenation", "Substitution"],
+    function: "Carboxylic Acid → alpha-Halo Carboxylic Acid",
+    example: "$\\ce{CH3COOH ->[Cl2/Red P] Cl-CH2COOH}$",
+    warning: "⚠️ Only works for acids with alpha-hydrogens.",
+    diagram: "",
+    notes: ["Red phosphorus forms Phosphorus Trihalide (PX3) in situ."]
+  },
+  {
+    name: "Selective Reduction (LiBH4)",
+    reagent: "LiBH4",
+    category: "Reagents",
+    tags: ["Selective", "Ester", "Alcohol"],
+    function: "Reduces Esters but leaves Carboxylic Acids intact",
+    example: "$\\ce{HOOC-CH2-COOEt ->[LiBH4] HOOC-CH2-CH2OH}$",
+    warning: "⚠️ LiAlH4 is too strong; it would reduce the COOH group as well.",
+    diagram: "",
+    notes: ["Critical 'trick' reagent in multi-step JEE synthesis."]
+  },
+  {
+    name: "Ipso Substitution (Picric Acid)",
+    reagent: "1. Conc. H2SO4, 2. Conc. HNO3",
+    category: "Phenols",
+    tags: ["Nitration", "Picric Acid"],
+    function: "Phenol → 2,4,6-trinitrophenol",
+    example: "$\\ce{C6H5OH ->[H2SO4] C6H4(OH)(SO3H)2 ->[HNO3] C6H2(OH)(NO2)3}$",
+    warning: "⚠️ Avoid direct nitration to prevent ring oxidation.",
+    diagram: "",
+    notes: ["The sulfonic groups are replaced (Ipso) by nitro groups."]
+  },
+  {
+    name: "Benzyne Intermediate (NAS)",
+    reagent: "NaNH2 / Liquid NH3",
+    category: "Aromatic",
+    tags: ["Nucleophilic Substitution", "Benzyne"],
+    function: "Aryl Halide → Aniline",
+    example: "$\\ce{C6H5Cl ->[NaNH2/NH3] C6H5NH2}$",
+    warning: "⚠️ Elimination-Addition mechanism, not Addition-Elimination.",
+    diagram: "",
+    notes: ["Can result in 'cine-substitution' products."]
+  }
 ];
 
 function applySmartTags() {
@@ -1406,6 +1494,7 @@ function closeFlashcardPage() {
     document.getElementById('feed').style.display = 'flex';
     document.getElementById('mainSearch').style.display = 'block';
 }
+
 
 
 
