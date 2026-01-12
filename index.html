@@ -73,76 +73,79 @@
 </div>
 
 <script>
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+  const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDIW-SJkO5j4PwN1SDjMxGD_aQdoDHD6CU",
-        authDomain: "organic-chem-b2ff8.firebaseapp.com",
-        projectId: "organic-chem-b2ff8",
-        databaseURL: "https://organic-chem-b2ff8-default-rtdb.firebaseio.com",
-        storageBucket: "organic-chem-b2ff8.firebasestorage.app",
-        messagingSenderId: "799844686854",
-        appId: "1:799844686854:web:b9014316afd5ba5233f787"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+const firebaseConfig = {
+    apiKey: "AIzaSyDIW-SJkO5j4PwN1SDjMxGD_aQdoDHD6CU",
+    authDomain: "organic-chem-b2ff8.firebaseapp.com",
+    projectId: "organic-chem-b2ff8",
+    databaseURL: "https://organic-chem-b2ff8-default-rtdb.firebaseio.com",
+    storageBucket: "organic-chem-b2ff8.firebasestorage.app",
+    messagingSenderId: "799844686854",
+    appId: "1:799844686854:web:b9014316afd5ba5233f787"
+};
 
-    let allReactions = [];
-    let studyData = [];
-    let currentFilter = 'All';
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-    db.ref('custom_reactions').on('value', (snapshot) => {
-        const data = snapshot.val();
-        const custom = [];
-        for(let id in data) custom.push({...data[id], firebaseId: id});
-        allReactions = (typeof reactionDatabase !== 'undefined') ? [...reactionDatabase, ...custom] : custom;
-        runSearch();
+let allReactions = [];
+let studyData = [];
+let currentFilter = 'All';
+
+// Sync with Firebase and Reaction Database
+db.ref('custom_reactions').on('value', (snapshot) => {
+    const data = snapshot.val();
+    const custom = [];
+    for (let id in data) custom.push({ ...data[id], firebaseId: id });
+    
+    // Ensure reactionDatabase exists (from your external file)
+    allReactions = (typeof reactionDatabase !== 'undefined') ? [...reactionDatabase, ...custom] : custom;
+    runSearch();
+});
+
+function runSearch() {
+    const query = document.getElementById('mainSearch').value.toLowerCase();
+    const filtered = allReactions.filter(r => {
+        const matchesSearch = (r.reagent?.toLowerCase().includes(query)) || (r.name?.toLowerCase().includes(query));
+        const matchesFilter = (currentFilter === 'All' || r.category === currentFilter);
+        return matchesSearch && matchesFilter;
     });
+    render(filtered);
+}
 
-    function runSearch() {
-        const query = document.getElementById('mainSearch').value.toLowerCase();
-        const filtered = allReactions.filter(r => {
-            const matchesSearch = (r.reagent?.toLowerCase().includes(query)) || (r.name?.toLowerCase().includes(query));
-            const matchesFilter = (currentFilter === 'All' || r.category === currentFilter);
-            return matchesSearch && matchesFilter;
-        });
-        render(filtered);
-    }
-
-  function render(data) {
+function render(data) {
     const feed = document.getElementById('feed');
     if (!feed) return;
 
-    // 1. Properly shuffle the data
+    // Shuffle data for a fresh feel
     const shuffledData = [...data].sort(() => Math.random() - 0.5);
-
-    // 2. Clear the feed first to ensure a clean refresh
     feed.innerHTML = '';
 
-    // 3. Map the shuffled data
     feed.innerHTML = shuffledData.map((r) => {
-        // Use a unique ID based on the name instead of just a random index 
-        // to keep toggleExpand working correctly
-        const uniqueId = r.name.replace(/\s+/g, '');
+        // Unique ID to keep inputs/notes connected to the right reaction
+        const uniqueId = r.name ? r.name.replace(/\s+/g, '') : Math.random().toString(36).substr(2, 9);
         const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
-        
+
         return `
-            <div class="card" onclick="this.querySelector('.details-box').style.display = this.querySelector('.details-box').style.display === 'none' ? 'block' : 'none'" style="cursor:pointer; margin-bottom:15px;">
+            <div class="card" onclick="toggleDetails(this, '${cleanKey}', '${uniqueId}')" style="cursor:pointer; margin-bottom:15px;">
                 <h3 style="color: var(--accent); margin:0;">${r.reagent}</h3>
                 <p style="font-weight:bold; margin:5px 0;">${r.name || ''}</p>
                 <small>${r.function}</small>
                 
                 <div class="details-box" style="display:none; margin-top:15px; border-top:1px solid #eee; padding-top:10px;">
-                    ${r.diagram ? `<img src="${r.diagram}" class="reaction-diagram">` : ''}
-                    <div style="background:var(--card-bg); padding:10px; border-radius:8px; border:1px solid #ddd;">${r.example || ''}</div>
+                    ${r.diagram ? `<img src="${r.diagram}" class="reaction-diagram" style="width:100%; border-radius:8px; margin-bottom:10px;">` : ''}
+                    <div style="background:var(--card-bg); padding:10px; border-radius:8px; border:1px solid #ddd; margin-bottom:10px;">${r.example || ''}</div>
                     ${r.warning ? `<p style="color:red; font-size:0.85em;">⚠️ ${r.warning}</p>` : ''}
-                    <p style="font-size:0.9em;"><strong>Hacks:</strong> ${r.notes || 'None'}</p>
+                    <p style="font-size:0.9em;"><strong>Teacher's Hack:</strong> ${r.notes || 'None'}</p>
+                    
+                    <div id="notes-list-${uniqueId}" style="margin-top:10px; border-top: 1px solid #eee; padding-top:10px;">
+                        </div>
                     
                     <div class="community-section" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
                         <div style="display: flex; gap: 5px;">
-                            <input type="text" placeholder="Add a hack..." style="flex:1; padding: 5px; border-radius: 5px; border: 1px solid #ddd; font-size: 12px;" onclick="event.stopPropagation()">
-                            <button onclick="event.stopPropagation(); alert('Hack saved!')" style="background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer;">Post</button>
+                            <input type="text" id="note-input-${uniqueId}" placeholder="Add a hack..." style="flex:1; padding: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 12px;" onclick="event.stopPropagation()">
+                            <button onclick="event.stopPropagation(); postNote('${cleanKey}', '${uniqueId}')" style="background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer;">Post</button>
                         </div>
                     </div>
                 </div>
@@ -153,135 +156,129 @@
     if (window.MathJax) window.MathJax.typeset();
 }
 
-    // --- UPDATED REEL STYLE FLASHCARD LOGIC ---
-    function startStudyMode() {
-        if (!allReactions.length) return alert("No reactions to study!");
-        studyData = [...allReactions].sort(() => Math.random() - 0.5);
-        
-        const deck = document.getElementById('flashcard-deck');
-        document.getElementById('studyOverlay').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
+// Fixed Toggle Logic
+function toggleDetails(cardElement, cleanKey, uniqueId) {
+    const details = cardElement.querySelector('.details-box');
+    const isOpening = details.style.display === 'none';
+    details.style.display = isOpening ? 'block' : 'none';
+    
+    if (isOpening) {
+        loadNotes(cleanKey, uniqueId);
+    }
+}
 
-        deck.innerHTML = studyData.map((r, i) => {
-            return `
-            <div style="scroll-snap-align: start; scroll-snap-stop: always; height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; perspective: 1000px;">
-                <div class="flashcard-inner" onclick="this.classList.toggle('flipped')" style="position: relative; width: 99%; max-width: 650px; height: 72%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; cursor: pointer;">
-                    
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #1a1a1a; border: 2px solid #2ecc71; border-radius: 25px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; text-align: center; box-shadow: 0 0 20px rgba(46, 204, 113, 0.2);">
-                        <small style="color:#2ecc71; letter-spacing:3px; font-weight:bold; margin-bottom:10px;">REAGENT</small>
-                        <h1 style="font-size: 2.5rem; color: white; margin: 0; word-break: break-word; font-family: sans-serif;">${r.reagent || ''}</h1>
-                        <p style="color: #666; margin-top: 20px; font-size: 0.9rem;">Tap to reveal answer</p>
+// Study Mode Logic
+function startStudyMode() {
+    if (!allReactions.length) return alert("No reactions to study!");
+    studyData = [...allReactions].sort(() => Math.random() - 0.5);
+    
+    const deck = document.getElementById('flashcard-deck');
+    document.getElementById('studyOverlay').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+
+    deck.innerHTML = studyData.map((r) => `
+        <div style="scroll-snap-align: start; scroll-snap-stop: always; height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; perspective: 1000px;">
+            <div class="flashcard-inner" onclick="this.classList.toggle('flipped')" style="position: relative; width: 95%; max-width: 600px; height: 75%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer;">
+                <div class="face front" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #1a1a1a; border: 2px solid #2ecc71; border-radius: 25px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;">
+                    <small style="color:#2ecc71; font-weight:bold; letter-spacing:2px;">REAGENT</small>
+                    <h1 style="color: white; font-size: 2.2rem; margin: 20px 0;">${r.reagent || ''}</h1>
+                    <p style="color: #666;">Tap to flip</p>
+                </div>
+                <div class="face back" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #1a1a1a; border: 2px solid #2ecc71; border-radius: 25px; transform: rotateY(180deg); display: flex; flex-direction: column; padding: 25px; overflow-y: auto;">
+                    <h2 style="color:#2ecc71; margin-bottom: 10px;">${r.name || 'Reaction'}</h2>
+                    <p style="color: white; margin-bottom: 15px;">${r.function || ''}</p>
+                    ${r.diagram ? `<img src="${r.diagram}" style="width:100%; border-radius:12px; margin-bottom:15px; background:white;">` : ''}
+                    <div style="background: rgba(46, 204, 113, 0.1); padding: 15px; border-radius: 12px; border-left: 4px solid #2ecc71;">
+                        <strong style="color:#2ecc71;">Hack:</strong>
+                        <p style="color:#ddd; margin: 5px 0 0 0;">${r.notes || 'No specific notes.'}</p>
                     </div>
-
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #1a1a1a; border: 2px solid #2ecc71; border-radius: 25px; transform: rotateY(180deg); display: flex; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto;">
-                        <h2 style="color:#2ecc71; margin-top:0; font-size: 1.4rem;">${r.name || 'Reaction'}</h2>
-                        <div style="color: white; font-size: 1.05rem; line-height: 1.5; margin-bottom:15px;">${r.function || ''}</div>
-                        
-                        ${r.diagram ? `<img src="${r.diagram}" style="width:100%; border-radius:12px; margin-bottom:15px; border:1px solid #333; background: #fff;">` : ''}
-                        
-                        <div style="background: rgba(46, 204, 113, 0.1); padding: 15px; border-radius: 12px; border-left: 4px solid #2ecc71; margin-bottom: 15px;">
-                             <strong style="color:#2ecc71;">Hack:</strong>
-                             <p style="color:#ddd; margin: 5px 0 0 0; font-size:0.95rem;">${r.notes || 'No specific notes.'}</p>
-                        </div>
-
-                        ${r.example ? `<div style="color: #fff; font-size: 0.9rem; padding: 10px; border-top: 1px dashed #444;"><strong>Example:</strong><br>${r.example}</div>` : ''}
-                    </div>
-
                 </div>
             </div>
-            `;
-        }).join('');
+        </div>
+    `).join('');
 
-        if (!document.getElementById('flip-style')) {
-            const style = document.createElement('style');
-            style.id = 'flip-style';
-            style.innerHTML = `.flipped { transform: rotateY(180deg) !important; } #flashcard-deck::-webkit-scrollbar { display: none; }`;
-            document.head.appendChild(style);
+    if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([deck]);
+    }
+}
+
+function exitStudyMode() {
+    document.getElementById('studyOverlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Community Note Functions
+function postNote(reagentKey, uniqueId) {
+    const input = document.getElementById(`note-input-${uniqueId}`);
+    const noteText = input.value.trim();
+    if (!noteText) return;
+
+    db.ref('community_notes/' + reagentKey).push({
+        text: noteText,
+        timestamp: Date.now()
+    }).then(() => {
+        input.value = "";
+        alert('Hack saved!');
+        loadNotes(reagentKey, uniqueId);
+    }).catch(err => console.error("Firebase Error:", err));
+}
+
+function loadNotes(reagentKey, uniqueId) {
+    db.ref('community_notes/' + reagentKey).limitToLast(5).once('value', (snap) => {
+        const container = document.getElementById(`notes-list-${uniqueId}`);
+        if (!container) return;
+        
+        const data = snap.val();
+        if (!data) {
+            container.innerHTML = "<small style='color:#999;'>No community hacks yet. Be the first!</small>";
+            return;
         }
 
-        // --- TRIGGER MATHJAX RENDERER ---
-        if (window.MathJax && window.MathJax.typesetPromise) {
-            window.MathJax.typesetPromise([deck]).catch((err) => console.log(err));
+        let html = "<strong>Community Hacks:</strong>";
+        for (let id in data) {
+            html += `<div style="background:rgba(46, 204, 113, 0.1); padding:8px; border-radius:6px; margin-top:6px; font-size:0.9em; border: 1px solid rgba(46,204,113,0.2);">💡 ${data[id].text}</div>`;
         }
-    }
+        container.innerHTML = html;
+    });
+}
 
-    function exitStudyMode() {
-        document.getElementById('studyOverlay').style.display = 'none';
-        document.body.style.overflow = 'auto';
-        document.getElementById('flashcard-deck').innerHTML = '';
-    }
+// Form & Search Handlers
+function toggleForm() {
+    const f = document.getElementById('formOverlay');
+    f.style.display = (f.style.display === 'flex') ? 'none' : 'flex';
+}
 
-    function toggleExpand(index) {
-        const d = document.getElementById(`details-${index}`);
-        const isOpening = d.style.display === 'none';
-        d.style.display = isOpening ? 'block' : 'none';
-        if(isOpening) {
-            const r = allReactions[index];
-            const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
-            loadNotes(cleanKey, index);
-        }
-    }
+function addReaction() {
+    const reagent = document.getElementById('newReagent').value;
+    if (!reagent) return alert("Reagent is required!");
+    
+    db.ref('custom_reactions').push({
+        reagent,
+        name: document.getElementById('newName').value,
+        function: document.getElementById('newFunction').value,
+        warning: document.getElementById('newWarning').value,
+        diagram: document.getElementById('newDiagram').value,
+        notes: document.getElementById('newNotes').value,
+        category: 'General'
+    }).then(() => {
+        toggleForm();
+        document.getElementById('newReagent').value = '';
+    });
+}
 
-    function filterByTag(tagName) {
-        document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
-        const clickedBtn = Array.from(document.querySelectorAll('.tag-btn')).find(btn => btn.innerText.includes(tagName));
-        if (clickedBtn) clickedBtn.classList.add('active');
-        const filtered = allReactions.filter(r => r.tags && r.tags.includes(tagName));
-        render(filtered); 
-    }
+function toggleTheme() {
+    const h = document.documentElement;
+    const t = h.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    h.setAttribute('data-theme', t);
+    localStorage.setItem('theme', t);
+    document.getElementById('themeBtn').innerText = t === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
+}
 
-    function postNote(reagentKey, index) {
-        const input = document.getElementById(`note-input-${index}`);
-        const noteText = input.value;
-        if(!noteText) return;
-        db.ref('community_notes/' + reagentKey).push({ text: noteText, timestamp: Date.now() }).then(() => {
-            input.value = "";
-            loadNotes(reagentKey, index);
-        });
-    }
-
-    function loadNotes(reagentKey, index) {
-        db.ref('community_notes/' + reagentKey).limitToLast(5).once('value', (snap) => {
-            const container = document.getElementById(`notes-list-${index}`);
-            const data = snap.val();
-            if(!data) { container.innerHTML = "<small style='color:#999;'>No community hacks yet.</small>"; return; }
-            let html = "<strong>Community Hacks:</strong>";
-            for(let id in data) { html += `<div style="background:rgba(46, 204, 113, 0.1); padding:5px; border-radius:4px; margin-top:4px; font-size:0.9em;">💡 ${data[id].text}</div>`; }
-            container.innerHTML = html;
-        });
-    }
-
-    function toggleForm() {
-        const f = document.getElementById('formOverlay');
-        f.style.display = (f.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    function addReaction() {
-        const reagent = document.getElementById('newReagent').value;
-        if(!reagent) return alert("Reagent is required!");
-        db.ref('custom_reactions').push({
-            reagent,
-            name: document.getElementById('newName').value,
-            function: document.getElementById('newFunction').value,
-            warning: document.getElementById('newWarning').value,
-            diagram: document.getElementById('newDiagram').value,
-            notes: document.getElementById('newNotes').value,
-            category: 'General'
-        }).then(() => { toggleForm(); });
-    }
-
-    function toggleTheme() {
-        const h = document.documentElement;
-        const t = h.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        h.setAttribute('data-theme', t);
-        localStorage.setItem('theme', t);
-        document.getElementById('themeBtn').innerText = t === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
-    }
-
-    document.getElementById('mainSearch').addEventListener('input', runSearch);
+document.getElementById('mainSearch').addEventListener('input', runSearch);
 </script>
 </body>
 </html>
+
 
 
 
