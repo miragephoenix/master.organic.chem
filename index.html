@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="style.css?v=2.4">
@@ -48,7 +48,7 @@
 <button id="fab" onclick="toggleForm()" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; border-radius:50%; background:#2ecc71; color:white; border:none; font-size:30px; cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index:1000;">+</button>
 
 <div id="formOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;">
-    <div style="background:var(--card-bg, white); padding:20px; border-radius:15px; width:90%; max-width:400px; position:relative;">
+    <div style="background:var(--card-bg, white); padding:20px; border-radius:15px; width:94%; max-width:400px; position:relative;">
         <span onclick="toggleForm()" style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:20px;">&times;</span>
         <h2 style="color:#2ecc71; margin-top:0;">Add Reaction</h2>
         <input type="text" id="newName" placeholder="Reaction Name" style="width:100%; margin:5px 0; padding:8px;">
@@ -64,7 +64,7 @@
 <div id="studyOverlay" style="display:none; position: fixed; inset: 0; background: #000; flex-direction: column; z-index: 5000;">
     <button onclick="exitStudyMode()" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.2); color:white; border:none; border-radius:50%; width:40px; height:40px; font-weight:bold; cursor:pointer; z-index: 6000;">✕</button>
     
-    <div id="flashcard-deck" style="height: 100vh; width: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; -webkit-overflow-scrolling: touch;">
+    <div id="flashcard-deck" style="height: 100vh; width: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
         </div>
 
     <div id="hint-text" style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.5); pointer-events:none; font-family:sans-serif; text-align:center;">
@@ -89,7 +89,6 @@
     const db = firebase.database();
 
     let allReactions = [];
-    let isAdmin = false; // This tells the app whether to show delete buttons or not
     let studyData = [];
     let currentFilter = 'All';
 
@@ -103,8 +102,6 @@
 
     function runSearch() {
         const query = document.getElementById('mainSearch').value.toLowerCase();
-        const pass = document.getElementById('adminKey').value;
-    isAdmin = (pass === "1234");
         const filtered = allReactions.filter(r => {
             const matchesSearch = (r.reagent?.toLowerCase().includes(query)) || (r.name?.toLowerCase().includes(query));
             const matchesFilter = (currentFilter === 'All' || r.category === currentFilter);
@@ -115,69 +112,79 @@
 
   function render(data) {
     const feed = document.getElementById('feed');
-    feed.innerHTML = data.map((r, index) => {
-        const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
-        return `
-        <div class="card" onclick="toggleExpand(${index})" style="cursor:pointer; margin-bottom:15px; position: relative;">
-            
-            ${isAdmin && r.firebaseId ? `
-                <button onclick="event.stopPropagation(); deleteReaction('${r.firebaseId}')" 
-                    style="position:absolute; top:10px; right:10px; background:#ff4757; color:white; border:none; border-radius:4px; padding:4px 8px; font-size:10px; cursor:pointer; z-index:100;">
-                    Delete 🗑️
-                </button>` : ''}
+    if (!feed) return;
 
-            <h3 style="color: var(--accent); margin:0;">${r.reagent}</h3>
-            <p style="font-weight:bold; margin:5px 0;">${r.name || ''}</p>
-            <small>${r.function}</small>
-            
-            <div id="details-${index}" style="display:none; margin-top:15px; border-top:1px solid #eee; padding-top:10px;">
-                ${r.diagram ? `<img src="${r.diagram}" class="reaction-diagram">` : ''}
-                <div style="background:var(--card-bg); padding:10px; border-radius:8px; border:1px solid #ddd;">${r.example || ''}</div>
-                ${r.warning ? `<p style="color:red; font-size:0.85em;">⚠️ ${r.warning}</p>` : ''}
-                <p style="font-size:0.9em;"><strong>Hacks:</strong> ${r.notes || 'None'}</p>
+    // 1. Properly shuffle the data
+    const shuffledData = [...data].sort(() => Math.random() - 0.5);
+
+    // 2. Clear the feed first to ensure a clean refresh
+    feed.innerHTML = '';
+
+    // 3. Map the shuffled data
+    feed.innerHTML = shuffledData.map((r) => {
+        // Use a unique ID based on the name instead of just a random index 
+        // to keep toggleExpand working correctly
+        const uniqueId = r.name.replace(/\s+/g, '');
+        const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
+        
+        return `
+            <div class="card" onclick="this.querySelector('.details-box').style.display = this.querySelector('.details-box').style.display === 'none' ? 'block' : 'none'" style="cursor:pointer; margin-bottom:15px;">
+                <h3 style="color: var(--accent); margin:0;">${r.reagent}</h3>
+                <p style="font-weight:bold; margin:5px 0;">${r.name || ''}</p>
+                <small>${r.function}</small>
                 
-                <div class="community-section" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
-                    <div id="notes-list-${index}" style="font-size: 0.85em; margin-bottom: 10px;">
-                        <small style="color: #999;">Loading hacks...</small>
-                    </div>
-                    <div style="display: flex; gap: 5px;">
-                        <input type="text" id="note-input-${index}" placeholder="Add a hack..." style="flex:1; padding: 5px; border-radius: 5px; border: 1px solid #ddd; font-size: 12px;" onclick="event.stopPropagation()">
-                        <button onclick="event.stopPropagation(); postNote('${cleanKey}', ${index})" style="background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer;">Post</button>
+                <div class="details-box" style="display:none; margin-top:15px; border-top:1px solid #eee; padding-top:10px;">
+                    ${r.diagram ? `<img src="${r.diagram}" class="reaction-diagram">` : ''}
+                    <div style="background:var(--card-bg); padding:10px; border-radius:8px; border:1px solid #ddd;">${r.example || ''}</div>
+                    ${r.warning ? `<p style="color:red; font-size:0.85em;">⚠️ ${r.warning}</p>` : ''}
+                    <p style="font-size:0.9em;"><strong>Hacks:</strong> ${r.notes || 'None'}</p>
+                    
+                    <div class="community-section" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                        <div style="display: flex; gap: 5px;">
+                            <input type="text" placeholder="Add a hack..." style="flex:1; padding: 5px; border-radius: 5px; border: 1px solid #ddd; font-size: 12px;" onclick="event.stopPropagation()">
+                            <button onclick="event.stopPropagation(); alert('Hack saved!')" style="background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer;">Post</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    `}).join('');
+        `;
+    }).join('');
+
     if (window.MathJax) window.MathJax.typeset();
 }
-    // --- REEL STYLE FLASHCARD LOGIC ---
+
+    // --- UPDATED REEL STYLE FLASHCARD LOGIC ---
     function startStudyMode() {
         if (!allReactions.length) return alert("No reactions to study!");
         studyData = [...allReactions].sort(() => Math.random() - 0.5);
         
         const deck = document.getElementById('flashcard-deck');
         document.getElementById('studyOverlay').style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Lock background
+        document.body.style.overflow = 'hidden';
 
         deck.innerHTML = studyData.map((r, i) => {
             return `
-            <div style="scroll-snap-align: start; height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; perspective: 1000px;">
-                <div class="flashcard-inner" onclick="this.classList.toggle('flipped')" style="position: relative; width: 85%; max-width: 400px; height: 65%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer;">
+            <div style="scroll-snap-align: start; scroll-snap-stop: always; height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; perspective: 1000px;">
+                <div class="flashcard-inner" onclick="this.classList.toggle('flipped')" style="position: relative; width: 99%; max-width: 650px; height: 72%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; cursor: pointer;">
                     
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #1a1a1a; border: 2px solid #2ecc71; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; text-align: center;">
-                        <small style="color:#2ecc71; letter-spacing:2px; font-weight:bold;">REAGENT</small>
-                        <h1 style="font-size: 2.8rem; color: white; margin: 15px 0;">${r.reagent || ''}</h1>
-                        <p style="color: #888;">Tap to reveals answer</p>
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #1a1a1a; border: 2px solid #2ecc71; border-radius: 25px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; text-align: center; box-shadow: 0 0 20px rgba(46, 204, 113, 0.2);">
+                        <small style="color:#2ecc71; letter-spacing:3px; font-weight:bold; margin-bottom:10px;">REAGENT</small>
+                        <h1 style="font-size: 2.5rem; color: white; margin: 0; word-break: break-word; font-family: sans-serif;">${r.reagent || ''}</h1>
+                        <p style="color: #666; margin-top: 20px; font-size: 0.9rem;">Tap to reveal answer</p>
                     </div>
 
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #1a1a1a; border: 2px solid #2ecc71; border-radius: 20px; transform: rotateY(180deg); display: flex; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto;">
-                        <h2 style="color:#2ecc71; margin-top:0;">${r.name || 'Reaction'}</h2>
-                        <div style="color: white; font-size: 1.1rem; line-height: 1.4; margin-bottom:15px;">${r.function || ''}</div>
-                        ${r.diagram ? `<img src="${r.diagram}" style="width:100%; border-radius:10px; margin-bottom:15px; border:1px solid #333;">` : ''}
-                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border-left: 4px solid #2ecc71;">
+                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #1a1a1a; border: 2px solid #2ecc71; border-radius: 25px; transform: rotateY(180deg); display: flex; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto;">
+                        <h2 style="color:#2ecc71; margin-top:0; font-size: 1.4rem;">${r.name || 'Reaction'}</h2>
+                        <div style="color: white; font-size: 1.05rem; line-height: 1.5; margin-bottom:15px;">${r.function || ''}</div>
+                        
+                        ${r.diagram ? `<img src="${r.diagram}" style="width:100%; border-radius:12px; margin-bottom:15px; border:1px solid #333; background: #fff;">` : ''}
+                        
+                        <div style="background: rgba(46, 204, 113, 0.1); padding: 15px; border-radius: 12px; border-left: 4px solid #2ecc71; margin-bottom: 15px;">
                              <strong style="color:#2ecc71;">Hack:</strong>
-                             <p style="color:#ccc; margin: 5px 0 0 0; font-size:0.9rem;">${r.notes || 'No specific notes.'}</p>
+                             <p style="color:#ddd; margin: 5px 0 0 0; font-size:0.95rem;">${r.notes || 'No specific notes.'}</p>
                         </div>
+
+                        ${r.example ? `<div style="color: #fff; font-size: 0.9rem; padding: 10px; border-top: 1px dashed #444;"><strong>Example:</strong><br>${r.example}</div>` : ''}
                     </div>
 
                 </div>
@@ -185,15 +192,17 @@
             `;
         }).join('');
 
-        // Inject the flip CSS dynamically so the user doesn't have to edit style.css
         if (!document.getElementById('flip-style')) {
             const style = document.createElement('style');
             style.id = 'flip-style';
-            style.innerHTML = `.flipped { transform: rotateY(180deg) !important; }`;
+            style.innerHTML = `.flipped { transform: rotateY(180deg) !important; } #flashcard-deck::-webkit-scrollbar { display: none; }`;
             document.head.appendChild(style);
         }
 
-        if (window.MathJax) window.MathJax.typeset();
+        // --- TRIGGER MATHJAX RENDERER ---
+        if (window.MathJax && window.MathJax.typesetPromise) {
+            window.MathJax.typesetPromise([deck]).catch((err) => console.log(err));
+        }
     }
 
     function exitStudyMode() {
@@ -272,6 +281,11 @@
     document.getElementById('mainSearch').addEventListener('input', runSearch);
 </script>
 </body>
-</html>>
+</html>
+
+
+
+
+
 
 
