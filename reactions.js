@@ -1494,6 +1494,14 @@ function closeFlashcardPage() {
     document.getElementById('feed').style.display = 'flex';
     document.getElementById('mainSearch').style.display = 'block';
 }
+function deleteReaction(id) {
+    if (confirm("Are you sure you want to permanently delete this?")) {
+        db.ref('custom_reactions/' + id).remove()
+            .then(() => alert("Reaction removed!"))
+            .catch(err => alert("Error: " + err.message));
+    }
+}
+
 
 
 
