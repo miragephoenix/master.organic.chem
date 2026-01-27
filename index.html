@@ -89,6 +89,7 @@
     const db = firebase.database();
 
     let allReactions = [];
+    let isAdmin = false; // This tells the app whether to show delete buttons or not
     let studyData = [];
     let currentFilter = 'All';
 
@@ -102,6 +103,8 @@
 
     function runSearch() {
         const query = document.getElementById('mainSearch').value.toLowerCase();
+        const pass = document.getElementById('adminKey').value;
+    isAdmin = (pass === "1234");
         const filtered = allReactions.filter(r => {
             const matchesSearch = (r.reagent?.toLowerCase().includes(query)) || (r.name?.toLowerCase().includes(query));
             const matchesFilter = (currentFilter === 'All' || r.category === currentFilter);
@@ -110,36 +113,43 @@
         render(filtered);
     }
 
-    function render(data) {
-        const feed = document.getElementById('feed');
-        feed.innerHTML = data.map((r, index) => {
-            const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
-            return `
-            <div class="card" onclick="toggleExpand(${index})" style="cursor:pointer; margin-bottom:15px;">
-                <h3 style="color: var(--accent); margin:0;">${r.reagent}</h3>
-                <p style="font-weight:bold; margin:5px 0;">${r.name || ''}</p>
-                <small>${r.function}</small>
-                <div id="details-${index}" style="display:none; margin-top:15px; border-top:1px solid #eee; padding-top:10px;">
-                    ${r.diagram ? `<img src="${r.diagram}" class="reaction-diagram">` : ''}
-                    <div style="background:var(--card-bg); padding:10px; border-radius:8px; border:1px solid #ddd;">${r.example || ''}</div>
-                    ${r.warning ? `<p style="color:red; font-size:0.85em;">⚠️ ${r.warning}</p>` : ''}
-                    <p style="font-size:0.9em;"><strong>Hacks:</strong> ${r.notes || 'None'}</p>
-                    
-                    <div class="community-section" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
-                        <div id="notes-list-${index}" style="font-size: 0.85em; margin-bottom: 10px;">
-                            <small style="color: #999;">Loading hacks...</small>
-                        </div>
-                        <div style="display: flex; gap: 5px;">
-                            <input type="text" id="note-input-${index}" placeholder="Add a hack..." style="flex:1; padding: 5px; border-radius: 5px; border: 1px solid #ddd; font-size: 12px;" onclick="event.stopPropagation()">
-                            <button onclick="event.stopPropagation(); postNote('${cleanKey}', ${index})" style="background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer;">Post</button>
-                        </div>
+  function render(data) {
+    const feed = document.getElementById('feed');
+    feed.innerHTML = data.map((r, index) => {
+        const cleanKey = (r.reagent || 'unknown').replace(/\s+/g, '_').replace(/[.#$/[\]]/g, "_");
+        return `
+        <div class="card" onclick="toggleExpand(${index})" style="cursor:pointer; margin-bottom:15px; position: relative;">
+            
+            ${isAdmin && r.firebaseId ? `
+                <button onclick="event.stopPropagation(); deleteReaction('${r.firebaseId}')" 
+                    style="position:absolute; top:10px; right:10px; background:#ff4757; color:white; border:none; border-radius:4px; padding:4px 8px; font-size:10px; cursor:pointer; z-index:100;">
+                    Delete 🗑️
+                </button>` : ''}
+
+            <h3 style="color: var(--accent); margin:0;">${r.reagent}</h3>
+            <p style="font-weight:bold; margin:5px 0;">${r.name || ''}</p>
+            <small>${r.function}</small>
+            
+            <div id="details-${index}" style="display:none; margin-top:15px; border-top:1px solid #eee; padding-top:10px;">
+                ${r.diagram ? `<img src="${r.diagram}" class="reaction-diagram">` : ''}
+                <div style="background:var(--card-bg); padding:10px; border-radius:8px; border:1px solid #ddd;">${r.example || ''}</div>
+                ${r.warning ? `<p style="color:red; font-size:0.85em;">⚠️ ${r.warning}</p>` : ''}
+                <p style="font-size:0.9em;"><strong>Hacks:</strong> ${r.notes || 'None'}</p>
+                
+                <div class="community-section" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                    <div id="notes-list-${index}" style="font-size: 0.85em; margin-bottom: 10px;">
+                        <small style="color: #999;">Loading hacks...</small>
+                    </div>
+                    <div style="display: flex; gap: 5px;">
+                        <input type="text" id="note-input-${index}" placeholder="Add a hack..." style="flex:1; padding: 5px; border-radius: 5px; border: 1px solid #ddd; font-size: 12px;" onclick="event.stopPropagation()">
+                        <button onclick="event.stopPropagation(); postNote('${cleanKey}', ${index})" style="background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer;">Post</button>
                     </div>
                 </div>
             </div>
-        `}).join('');
-        if (window.MathJax) window.MathJax.typeset();
-    }
-
+        </div>
+    `}).join('');
+    if (window.MathJax) window.MathJax.typeset();
+}
     // --- REEL STYLE FLASHCARD LOGIC ---
     function startStudyMode() {
         if (!allReactions.length) return alert("No reactions to study!");
@@ -263,4 +273,5 @@
 </script>
 </body>
 </html>>
+
 
